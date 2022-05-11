@@ -1,0 +1,169 @@
+﻿<Window x:Class="AutoVega4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutoVega4"
+        mc:Ignorable="d"
+        Title="AutoVega 4" Height="673" Width="873">
+    <Window.Resources>
+        <Style x:Key="RectangleStyle1" TargetType="{x:Type Rectangle}"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+    <Grid Background="#FF203864">
+        <TextBox x:Name="testname_tb" HorizontalAlignment="Left" Height="23" Margin="154,89,0,0" TextWrapping="Wrap" Text="Kaya17-AutoVega_21Jan_1805" VerticalAlignment="Top" Width="194" Background="#FF6D95E6" Foreground="White" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center"/>
+        <TextBox x:Name="operator_tb" Height="23" Margin="376,89,370.4,0" TextWrapping="Wrap" Text="Scan Your Badge" VerticalAlignment="Top" Background="#FF6D95E6" SelectionBrush="#FF120303" Foreground="White" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" TextChanged="operator_tb_TextChanged"/>
+        <TextBox x:Name="kit_tb" HorizontalAlignment="Left" Height="23" Margin="526,89,0,0" TextWrapping="Wrap" Text="Scan Kit QR Code" VerticalAlignment="Top" Width="133" Background="#FF6D95E6" Foreground="White" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="kit_tb_TextChanged"/>
+        <TextBox x:Name="reader_tb" HorizontalAlignment="Left" Height="23" Margin="694,89,0,0" TextWrapping="Wrap" Text="Scan Reader QR Code" VerticalAlignment="Top" Width="150" Background="#FF6D95E6" Foreground="White" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="reader_tb_TextChanged"/>
+        <Rectangle Fill="#FF6D95E6" HorizontalAlignment="Left" Height="35" Margin="161,142,0,0" Stroke="Black" VerticalAlignment="Top" Width="317" Style="{DynamicResource RectangleStyle1}">
+            <Rectangle.Effect>
+                <DropShadowEffect/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Button x:Name="start_button" Content="Start Test" HorizontalAlignment="Left" Margin="496,142,0,0" VerticalAlignment="Top" Width="120" Height="35" Background="#FF6D95E6" BorderBrush="#FF6D95E6" Foreground="White" FontSize="16" FontFamily="Arial" Click="start_button_Click">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <RadioButton x:Name="Covid19_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="238,153,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.692,-2.6" Background="LightBlue" BorderBrush="Black" Height="15" Width="15" IsChecked="True" />
+        <RadioButton x:Name="Allergy_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="324,153,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.692,-2.6" Background="LightBlue" BorderBrush="Black" Height="17" IsEnabled="False"/>
+        <RadioButton x:Name="Respiratory_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="432,153,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.692,-2.6" Background="LightBlue" BorderBrush="Black" IsEnabled="False"/>
+        <TextBox x:Name="sampleNum_tb" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="4" VerticalAlignment="Top" Width="28" Margin="553,217,0,0" FontFamily="Arial" TextAlignment="Center" Background="#FF6D95E6" BorderBrush="#FF6D95E6" FontSize="16" Foreground="White" IsEnabled="False"/>
+        <TextBox x:Name="patient_tb" HorizontalAlignment="Left" Height="27" Margin="198,214,0,0" TextWrapping="Wrap" Text="Firstname_lastname" VerticalAlignment="Top" Width="190" TextAlignment="Center" Background="#FF6D95E6" BorderBrush="Gray" Foreground="White" FontSize="18" IsEnabled="False"/>
+        <Button x:Name="read_button" Content="Read Array Cartridge" HorizontalAlignment="Left" Margin="647,203,0,0" VerticalAlignment="Top" Width="200" Height="35" Background="#FF6D95E6" BorderBrush="#FF6D95E6" Foreground="White" FontSize="16" FontFamily="Arial" Click="read_button_Click">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Rectangle Fill="#FF6D95E6" HorizontalAlignment="Left" Height="251" Margin="651,264,0,0" Stroke="Black" VerticalAlignment="Top" Width="196"/>
+        <Button x:Name="quit_button" Content="Quit" HorizontalAlignment="Left" Margin="698,534,0,0" VerticalAlignment="Top" Width="120" Height="32" Background="#FF6D95E6" BorderBrush="#FF6D95E6" Foreground="White" FontSize="16" FontFamily="Arial" Click="quit_button_Click">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Rectangle Fill="#FF6D95E6" HorizontalAlignment="Left" Height="263" Margin="11,255,0,0" Stroke="Black" VerticalAlignment="Top" Width="590">
+            <Rectangle.Effect>
+                <DropShadowEffect/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <TextBlock HorizontalAlignment="Left" Margin="177,152,0,0" TextWrapping="Wrap" Text="Covid 19" VerticalAlignment="Top" Foreground="White"/>
+        <TextBlock HorizontalAlignment="Left" Margin="276,152,0,0" TextWrapping="Wrap" Text="Allergy&#x9;" VerticalAlignment="Top" Foreground="White"/>
+        <TextBlock HorizontalAlignment="Left" Margin="367,152,0,0" TextWrapping="Wrap" Text="Respiratory" VerticalAlignment="Top" Foreground="White"/>
+        <TextBlock HorizontalAlignment="Left" Margin="225,71,0,0" TextWrapping="Wrap" Text="Test Name" VerticalAlignment="Top" Foreground="#FFFF6600"/>
+        <TextBlock HorizontalAlignment="Left" Margin="403,71,0,0" TextWrapping="Wrap" Text="Operator ID" VerticalAlignment="Top" Foreground="#FFFF6600"/>
+        <TextBlock HorizontalAlignment="Left" Margin="577,71,0,0" TextWrapping="Wrap" Text="Kit ID" VerticalAlignment="Top" Foreground="#FFFF6600"/>
+        <TextBlock HorizontalAlignment="Left" Margin="745,71,0,0" TextWrapping="Wrap" Text="Reader ID" VerticalAlignment="Top" Foreground="#FFFF6600"/>
+        <TextBlock HorizontalAlignment="Left" Margin="16,198,0,0" TextWrapping="Wrap" Text="Scan QR code or enter patient name" VerticalAlignment="Top" Foreground="#FFFF6600" Width="177" TextAlignment="Center" FontSize="16"/>
+        <TextBlock HorizontalAlignment="Left" Margin="403,217,0,0" TextWrapping="Wrap" Text="Number of samples" VerticalAlignment="Top" Foreground="#FFFF6600" FontSize="16"/>
+        <TextBlock HorizontalAlignment="Left" Margin="393,13,0,0" TextWrapping="Wrap" Text="Reader Software V0.1" VerticalAlignment="Top" Foreground="#FFFF6600" FontSize="24" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Margin="253,13,0,0" TextWrapping="Wrap" Text="AUTO VEGA" VerticalAlignment="Top" Foreground="Gray" FontSize="24" FontWeight="Bold"/>
+        <TextBlock x:Name="tbA" HorizontalAlignment="Left" Margin="674,243,0,0" TextWrapping="Wrap" Text="A" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tbB" HorizontalAlignment="Left" Margin="710,243,0,0" TextWrapping="Wrap" Text="B" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tbC" HorizontalAlignment="Left" Margin="745,243,0,0" TextWrapping="Wrap" Text="C" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tbD" HorizontalAlignment="Left" Margin="781,243,0,0" TextWrapping="Wrap" Text="D" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tbE" HorizontalAlignment="Left" Margin="818,243,0,0" TextWrapping="Wrap" Text="E" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tb1" HorizontalAlignment="Left" Margin="632,278,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tb2" HorizontalAlignment="Left" Margin="632,313,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tb3" HorizontalAlignment="Left" Margin="632,346,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tb4" HorizontalAlignment="Left" Margin="632,380,0,0" TextWrapping="Wrap" Text="4" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tb5" HorizontalAlignment="Left" Margin="632,416,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tb6" HorizontalAlignment="Left" Margin="632,450,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="tb7" HorizontalAlignment="Left" Margin="632,484,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock HorizontalAlignment="Left" Margin="55,541,0,0" TextWrapping="Wrap" Text="Message Window" VerticalAlignment="Top" Foreground="#FFFF6600"/>
+        <TextBlock HorizontalAlignment="Left" Margin="115,571,0,0" TextWrapping="Wrap"
+            Text="Results will be saved in: C:\Users\public\documents\kaya17\data\kaya17-AutoVega_21Jan_1805.csv" VerticalAlignment="Top" Foreground="#FFFF6600"/>
+        <TextBlock HorizontalAlignment="Left" Margin="420,614,0,0" TextWrapping="Wrap" Text="TEST SIMPLE" VerticalAlignment="Top" Foreground="#FFFF6600" FontSize="16"/>
+        <TextBlock HorizontalAlignment="Left" Margin="333,614,0,0" TextWrapping="Wrap" Text="TEST EARLY" VerticalAlignment="Top" Foreground="Gray" FontSize="16"/>
+        <StackPanel x:Name="A" HorizontalAlignment="Left" Height="251" Margin="651,264,0,0" VerticalAlignment="Top" Width="196" Visibility="Hidden">
+            <Ellipse x:Name="a1" Width="25" Height="25" Fill="LightBlue" Margin="-140,10,0,0" />
+            <Ellipse x:Name="a2" Width="25" Height="25" Fill="LightBlue" Margin="-140,10,0,0" />
+            <Ellipse x:Name="a3" Width="25" Height="25" Fill="LightBlue" Margin="-140,10,0,0" />
+            <Ellipse x:Name="a4" Width="25" Height="25" Fill="LightBlue" Margin="-140,10,0,0" />
+            <Ellipse x:Name="a5" Width="25" Height="25" Fill="LightBlue" Margin="-140,10,0,0" />
+            <Ellipse x:Name="a6" Width="25" Height="25" Fill="LightBlue" Margin="-140,10,0,0" />
+            <Ellipse x:Name="a7" Width="25" Height="25" Fill="LightBlue" Margin="-140,10,0,0" />
+        </StackPanel>
+        <StackPanel x:Name="B" HorizontalAlignment="Left" Height="251" Margin="651,264,0,0" VerticalAlignment="Top" Width="196" Visibility="Hidden">
+            <Ellipse x:Name="b1" Width="25" Height="25" Fill="LightBlue" Margin="-70,10,0,0" />
+            <Ellipse x:Name="b2" Width="25" Height="25" Fill="LightBlue" Margin="-70,10,0,0" />
+            <Ellipse x:Name="b3" Width="25" Height="25" Fill="LightBlue" Margin="-70,10,0,0" />
+            <Ellipse x:Name="b4" Width="25" Height="25" Fill="LightBlue" Margin="-70,10,0,0" />
+            <Ellipse x:Name="b5" Width="25" Height="25" Fill="LightBlue" Margin="-70,10,0,0" />
+            <Ellipse x:Name="b6" Width="25" Height="25" Fill="LightBlue" Margin="-70,10,0,0" />
+            <Ellipse x:Name="b7" Width="25" Height="25" Fill="LightBlue" Margin="-70,10,0,0" />
+        </StackPanel>
+        <StackPanel x:Name="C" HorizontalAlignment="Left" Height="251" Margin="651,264,0,0" VerticalAlignment="Top" Width="196" Visibility="Hidden">
+            <Ellipse x:Name="c1" Width="25" Height="25" Fill="LightBlue" Margin="0,10,0,0" />
+            <Ellipse x:Name="c2" Width="25" Height="25" Fill="LightBlue" Margin="0,10,0,0" />
+            <Ellipse x:Name="c3" Width="25" Height="25" Fill="LightBlue" Margin="0,10,0,0" />
+            <Ellipse x:Name="c4" Width="25" Height="25" Fill="LightBlue" Margin="0,10,0,0" />
+            <Ellipse x:Name="c5" Width="25" Height="25" Fill="LightBlue" Margin="0,10,0,0" />
+            <Ellipse x:Name="c6" Width="25" Height="25" Fill="LightBlue" Margin="0,10,0,0" />
+            <Ellipse x:Name="c7" Width="25" Height="25" Fill="LightBlue" Margin="0,10,0,0" />
+        </StackPanel>
+        <StackPanel x:Name="D" HorizontalAlignment="Left" Height="251" Margin="651,264,0,0" VerticalAlignment="Top" Width="196" Visibility="Hidden">
+            <Ellipse x:Name="d1" Width="25" Height="25" Fill="LightBlue" Margin="70,10,0,0" />
+            <Ellipse x:Name="d2" Width="25" Height="25" Fill="LightBlue" Margin="70,10,0,0" />
+            <Ellipse x:Name="d3" Width="25" Height="25" Fill="LightBlue" Margin="70,10,0,0" />
+            <Ellipse x:Name="d4" Width="25" Height="25" Fill="LightBlue" Margin="70,10,0,0" />
+            <Ellipse x:Name="d5" Width="25" Height="25" Fill="LightBlue" Margin="70,10,0,0" />
+            <Ellipse x:Name="d6" Width="25" Height="25" Fill="LightBlue" Margin="70,10,0,0" />
+            <Ellipse x:Name="d7" Width="25" Height="25" Fill="LightBlue" Margin="70,10,0,0" />
+        </StackPanel>
+        <StackPanel x:Name="E" HorizontalAlignment="Left" Height="251" Margin="651,264,0,0" VerticalAlignment="Top" Width="196" Visibility="Hidden">
+            <Ellipse x:Name="e2" Width="25" Height="25" Fill="LightBlue" Margin="140,45,0,0" />
+            <Ellipse x:Name="e3" Width="25" Height="25" Fill="LightBlue" Margin="140,10,0,0" />
+            <Ellipse x:Name="e4" Width="25" Height="25" Fill="LightBlue" Margin="140,10,0,0" />
+            <Ellipse x:Name="e5" Width="25" Height="25" Fill="LightBlue" Margin="140,10,0,0" />
+            <Ellipse x:Name="e6" Width="25" Height="25" Fill="LightBlue" Margin="140,10,0,0" />
+            <Ellipse x:Name="e7" Width="25" Height="25" Fill="LightBlue" Margin="140,10,0,0" />
+        </StackPanel>
+        <TextBlock x:Name="read_tb" HorizontalAlignment="Left" Margin="20,257,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="message_tb" HorizontalAlignment="Left" Margin="171,534,0,0" TextWrapping="Wrap" Text="Enter sample name and press Read Array Cartridge"
+            VerticalAlignment="Top" Width="445" Height="32" FontSize="18" Background="#FF6D95E6" Foreground="White" TextAlignment="Center"/>
+        <DataGrid x:Name="results_grid" HorizontalAlignment="Left" Height="260" Margin="11,255,0,0" VerticalAlignment="Top" Width="590" ItemsSource="{Binding}" Background="#FFF0F0F0"/>
+        <TextBlock Margin="154,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{DynamicResource TextBlockStyle1}" Width="194" Height="23" TextAlignment="Center">
+            <TextBlock.Resources>
+                <Style x:Key="TextBlockStyle1" TargetType="{x:Type TextBlock}">
+                    <Setter Property="Background" Value="#2F5496" />
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Margin" Value="4,3,3,3" />
+                    <Setter Property="FontSize" Value="20" />
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+            </TextBlock.Resources>
+        </TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="154,87,0,0" TextWrapping="Wrap" Text="Kaya17-AutoVega_21Jan_1805"
+            Visibility="{Binding Text.IsEmpty(), Converter={StaticResource BooleanToVisibilityConverter}, ElementName=testname_tb}"
+            VerticalAlignment="Top" Background="#FF2F5496" Width="194" Height="23"/>
+        <Image HorizontalAlignment="Left" Height="100" Margin="20,89,0,0" VerticalAlignment="Top" Width="100" Source="Resources/Kaya17Logo_icon.ico" />
+        <TextBlock x:Name="center_A_tb" HorizontalAlignment="Left" Margin="745,248,0,0" TextWrapping="Wrap" Text="A" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <StackPanel x:Name="_4C_Stack" HorizontalAlignment="Left" Height="251" Margin="651,264,0,0" VerticalAlignment="Top" Width="196" Visibility="Hidden">
+            <Ellipse x:Name="center_a1" Width="25" Height="25" Fill="LightBlue" Margin="0,30,0,0"/>
+            <Ellipse x:Name="center_a2" Width="25" Height="25" Fill="LightBlue" Margin="0,30,0,0"/>
+            <Ellipse x:Name="center_a3" Width="25" Height="25" Fill="LightBlue" Margin="0,30,0,0"/>
+            <Ellipse x:Name="center_a4" Width="24" Height="25" Fill="LightBlue" Margin="0,30,0,0"/>
+        </StackPanel>
+        <TextBlock x:Name="center_1_tb" HorizontalAlignment="Left" Margin="640,300,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="center_2_tb" HorizontalAlignment="Left" Margin="640,354,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="center_3_tb" HorizontalAlignment="Left" Margin="640,411,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Foreground="#FFFF6600" Visibility="Hidden"/>
+        <TextBlock x:Name="center_4_tb" HorizontalAlignment="Left" Margin="640,465,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFFF6600" Text="4" Visibility="Hidden"/>
+
+    </Grid>
+</Window>
