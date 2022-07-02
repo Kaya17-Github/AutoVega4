@@ -1,0 +1,45 @@
+Todo:
+- Read array position from file
+- Add home position and coordinates
+- Add highlight for next entry box
+- Put radiobuttons in group, add GroupName
+
+Issues:
+- *How do I implement limit switch reading for multiple limit switches?*
+- How do I check limit switches and step in the same function?
+- Why did the y stepper motor start going in only one direction?
+- How do I use BooleanToVisibilityConverter?
+- How do I only create one output file?
+
+Steps:
+- On startup, create output and log files
+	- Every action gets written to log file
+- Operator ID box enabled, all other boxes disabled on startup
+- When Operator ID entry complete, enable Kit ID box
+- When Kit ID entry complete, enable Reader ID box
+- When Reader ID entry complete, test type checkbox enabled
+- Start button press gives message saying initializing and adds operator/kit/reader id and test type to output file
+	- Read parameter file
+- Initialization complete
+- Pop-up window to insert array cartridge
+- Patient info textbox/scan enabled
+- Number of samples enabled
+	- If number of samples = 30, use default scan file
+	- If number of samples < 30, use custom scan file
+- Read button enabled
+- Operator, kit, reader IDs, and test type radiobuttons disabled
+- Read array cartridge button press
+	- Reading A1
+	- Reading A1 complete
+	- Mark A1 as complete
+	- Reading B1
+	- Reading B1 complete
+	- Mark B1 as complete
+	- ...
+	- ...
+	- Reading E7 (Pop-up window warning not to open lid)
+	- Reading E7 complete (pop-up window saying reading complete OK)
+	- Mark E7 as complete
+- Reading complete
+- Pop-up window saying OK to remove cartridge
+- Saving output file in location ...

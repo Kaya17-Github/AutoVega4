@@ -112,6 +112,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestResults.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -135,6 +136,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Auto Vega\34_well_cartridge_steps.csv" />
+    <None Include="Auto Vega\cartridge_scanning_map_default_2.csv" />
+    <None Include="Auto Vega\single_well_cartridge_map.csv" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -159,5 +163,14 @@
   <ItemGroup>
     <Resource Include="Resources\Kaya17Logo_icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Auto Vega\auto_reader_ui_steps.txt" />
+    <Resource Include="Auto Vega\cartridge_scanning_map_custom.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLLs\DAQinterfaceForKaya17.dll" />
+    <Content Include="Sounds\43536__mkoenig__ultra-dnb-loop-160bpm.wav" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
