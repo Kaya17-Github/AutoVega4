@@ -660,7 +660,7 @@ namespace AutoVega4
                 }
             }
 
-            // turns motor x positive
+            /*// turns motor x positive
             for (int i = 0; i < xPos[2]; i++)
             {
                 try
@@ -683,7 +683,7 @@ namespace AutoVega4
                 {
                     MessageBox.Show(ex.Message);
                 }
-            }
+            }*/
         }
 
         private async void read_button_Click(object sender, RoutedEventArgs e)

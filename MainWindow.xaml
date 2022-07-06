@@ -10,7 +10,7 @@
         <Style x:Key="RectangleStyle1" TargetType="{x:Type Rectangle}"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
-    <Grid Background="#FFBED1F2">
+    <Grid Background="#FFBED1F2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1200" Height="900">
         <StackPanel Name="First_Row" Orientation="Horizontal">
             <Image Height="150" Margin="20,20,0,0" VerticalAlignment="Top" Width="150" Source="Resources/Kaya17Logo_icon.ico" />
             <TextBlock Margin="144,10,0,0" TextWrapping="Wrap" Text="AUTO VEGA 4" VerticalAlignment="Top" Foreground="Gray" FontSize="28" FontWeight="Bold" Width="189"/>
@@ -81,8 +81,8 @@
             </Button.Effect>
         </Button>
         <DataGrid x:Name="results_grid" HorizontalAlignment="Center" Height="260" Margin="0,255,0,0" VerticalAlignment="Top" Width="851" ItemsSource="{Binding}" Background="#FFF0F0F0" Visibility="Hidden"/>
-        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Visible"/>
-        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Visible">
+        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Hidden"/>
+        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Hidden">
             <Border Name="sampleDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="15,0,0,0">
                 <TextBlock x:Name="sampleDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Draining Sample" VerticalAlignment="Center" Height="60" Width="90" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
@@ -151,7 +151,7 @@
                 </Rectangle.RenderTransform>
             </Rectangle>
         </StackPanel>
-        <StackPanel Name="inProgress_cart34" Orientation="Vertical">
+        <StackPanel Name="inProgress_cart34" Orientation="Vertical" Visibility="Hidden">
             <StackPanel x:Name="inProgress_cart34A" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,535,0,0" Visibility="Visible">
                 <Ellipse Name="inProgressA7" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="0,0,8,0"/>
                 <Ellipse Name="inProgressA6" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="0,0,8,0"/>
@@ -197,7 +197,7 @@
                 <Ellipse Name="inProgressE2" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="0,0,0,0"/>
             </StackPanel>
         </StackPanel>
-        <Rectangle Name="inProgress_cart34_border" HorizontalAlignment="Center" Height="250" Margin="0,420,0,0" Stroke="Black" VerticalAlignment="Center" Width="350" Visibility="Visible"/>
+        <Rectangle Name="inProgress_cart34_border" HorizontalAlignment="Center" Height="250" Margin="0,527,0,0" Stroke="Black" VerticalAlignment="Top" Width="350" Visibility="Hidden"/>
         <Button x:Name="musicBtn" Margin="953,592,149,258" Content="music" Click="musicBtn_Click" Visibility="Hidden"/>
     </Grid>
 </Window>
