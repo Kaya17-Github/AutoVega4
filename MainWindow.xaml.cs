@@ -35,7 +35,7 @@ namespace AutoVega4
         bool isReading = false;
         string timeStamp;
         string testTime;
-        int drainTime = 300000; //wait for 4 minutes
+        int drainTime = 300000; //wait for 5 minutes
         int wait = 0;
 
         [DllImport(@".\DLLs\DAQinterfaceForKaya17.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -302,7 +302,7 @@ namespace AutoVega4
             // **This is here just for testing**
             Thread.Sleep(1000);*/
 
-            string[] map = File.ReadAllLines("../../Auto Vega/34_well_cartridge_steps.csv");
+            string[] map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps.csv");
             string[] positions = new string[map.Length];
             int[] xPos = new int[map.Length];
             int[] yPos = new int[map.Length];
@@ -369,7 +369,7 @@ namespace AutoVega4
 
         private void MoveToHomePosition()
         {
-            string[] map = File.ReadAllLines("../../Auto Vega/34_well_cartridge_steps.csv");
+            string[] map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps.csv");
             string[] positions = new string[map.Length];
             int[] xPos = new int[map.Length];
             int[] yPos = new int[map.Length];
@@ -619,7 +619,7 @@ namespace AutoVega4
 
         private void MoveToLoadPosition()
         {
-            string[] map = File.ReadAllLines("../../Auto Vega/34_well_cartridge_steps.csv");
+            string[] map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps.csv");
             string[] positions = new string[map.Length];
             int[] xPos = new int[map.Length];
             int[] yPos = new int[map.Length];
@@ -1401,11 +1401,11 @@ namespace AutoVega4
                 inProgress_cart34.Visibility = Visibility.Visible;
                 inProgress_cart34_border.Visibility = Visibility.Visible;
 
-                Ellipse[] inProgressEllipses = {inProgressA2,inProgressA3,inProgressA4,inProgressA5,inProgressA6,inProgressA7,
-                                                inProgressB2,inProgressB3,inProgressB4,inProgressB5,inProgressB6,inProgressB7,
-                                                inProgressC2,inProgressC3,inProgressC4,inProgressC5,inProgressC6,inProgressC7,
-                                                inProgressD2,inProgressD3,inProgressD4,inProgressD5,inProgressD6,inProgressD7,
-                                                inProgressE2,inProgressE3,inProgressE4,inProgressE5,inProgressE6,inProgressE7};
+                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,inProgressE2,inProgressD2,inProgressC2,
+                                                inProgressB2,inProgressA2,inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,
+                                                inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,inProgressA5,inProgressB5,
+                                                inProgressC5,inProgressD5,inProgressE5,inProgressE6,inProgressD6,inProgressC6,inProgressB6,
+                                                             inProgressA6,inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};
 
                 File.AppendAllText(logFilePath, "In progress boxes visible" + Environment.NewLine);
 
@@ -1469,7 +1469,7 @@ namespace AutoVega4
                     inputString += "Input: " + value + "\n";
                 }
 
-                MessageBox.Show(inputString);
+                //MessageBox.Show(inputString);
                 File.AppendAllText(logFilePath, inputString + Environment.NewLine);
 
                 IntPtr testPtr = verifyInput(testArray);
@@ -1481,15 +1481,15 @@ namespace AutoVega4
                     inputString += "Verify input: " + value + "\n";
                 }
 
-                MessageBox.Show(inputString);
+                //MessageBox.Show(inputString);
                 File.AppendAllText(logFilePath, inputString + Environment.NewLine);
 
                 bool settingsBool = testSetSettings(testArray);
 
-                MessageBox.Show("Test setSettings: " + settingsBool);
+                //MessageBox.Show("Test setSettings: " + settingsBool);
                 File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
 
-                string[] map = File.ReadAllLines("../../Auto Vega/34_well_cartridge_steps.csv");
+                string[] map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps.csv");
                 string[] positions = new string[map.Length];
                 int[] xPos = new int[map.Length];
                 int[] yPos = new int[map.Length];
@@ -1509,10 +1509,8 @@ namespace AutoVega4
                 int drawZ = zPos[5];
                 int drawPump = pump[5];
                 int dispensePump = pump[5];
-                int dispenseToReadX = 2400;
-                int dispenseToReadY = 275;
 
-                //MessageBox.Show("Moving to Drain Position");
+                /*//MessageBox.Show("Moving to Drain Position");
                 AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 3000);
                 File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
 
@@ -1531,14 +1529,14 @@ namespace AutoVega4
                 }
 
                 // Lower Pipette Tips to Drain
-                lowerZPosition(drainZ);
+                //**lowerZPosition(drainZ);
 
                 //MessageBox.Show("Wait 5 minutes for samples to drain through cartridges");
                 AutoClosingMessageBox.Show("Wait 5 minutes for samples to drain through cartridges", "Draining", 3000);
                 File.AppendAllText(logFilePath, "Wait 5 minutes for samples to drain through cartridges" + Environment.NewLine);
 
                 // Turn pump on
-                try
+                *//*try
                 {
                     // Switch to bank 2
                     using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
@@ -1604,7 +1602,7 @@ namespace AutoVega4
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                }
+                }*//*
 
                 sampleDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 sampleDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1619,7 +1617,7 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Sample Draining Complete" + Environment.NewLine);
 
                 // Lift Pipette Tips above top of bottles
-                raiseZPosition(drainZ);
+                //**raiseZPosition(drainZ);
 
                 // Move to WB Bottle
                 moveX(xPos[5] - xPos[4]);
@@ -1630,41 +1628,41 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
 
-                // Draw WB for first 2 rows
+                // Draw WB for first row (x4 wells = 2mL)
                 AutoClosingMessageBox.Show("Drawing liquid from wash buffer bottle", "Drawing WB", 3000);
                 File.AppendAllText(logFilePath, "Drawing liquid from wash buffer bottle" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
-                lowerZPosition(drawZ);
+                // Lower Z by 9400 steps
+                //**lowerZPosition(drawZ);
 
-                // Draw 3500 steps (5mL)
-                drawLiquid(drawPump);
+                // Draw 1400 steps (2mL)
+                //**drawLiquid(1400);
 
-                // Raise Z by 9000 steps
-                raiseZPosition(drawZ);
+                // Raise Z by 9400 steps
+                //**raiseZPosition(drawZ);
 
                 wbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 wbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 wbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 wbDispense_tb.Foreground = Brushes.Black;
 
-                // Dispense 500ul WB in First 2 Rows
-                for (int i = 7; i < 17; i++)
+                // Dispense 500ul WB in First Row
+                for (int i = 8; i < 12; i++)
                 {
-                    if (i == 7)
+                    if (i == 8)
                     {
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
                     else
                     {
-                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 3000);
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 500);
                     File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
 
-                    if (i == 7)
+                    if (i == 8)
                     {
                         moveX(xPos[i] - xPos[5]);
                         moveY(yPos[i] - yPos[5]);
@@ -1675,43 +1673,45 @@ namespace AutoVega4
                         moveY(yPos[i] - yPos[i - 1]);
                     }
 
-                    dispenseLiquid(pump[i]);
+                    //**dispenseLiquid(pump[i]);
                 }
 
-                // Move back to WB bottle
-                moveX(xPos[5] - xPos[16]);
-                moveY(yPos[5] - yPos[16]);
+                inProgressEllipses[3].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
-                // Draw WB for third and fourth rows
+                // Move back to WB bottle
+                moveX(xPos[5] - xPos[11]);
+                moveY(yPos[5] - yPos[11]);
+
+                // Draw WB for second and third rows
                 AutoClosingMessageBox.Show("Drawing liquid from wash buffer bottle", "Drawing WB", 3000);
                 File.AppendAllText(logFilePath, "Drawing liquid from wash buffer bottle" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
-                lowerZPosition(drawZ);
+                // Lower Z by 9400 steps
+                //**lowerZPosition(drawZ);
 
                 // Draw 3500 steps (5mL)
-                drawLiquid(drawPump);
+                //**drawLiquid(drawPump);
 
-                // Raise Z by 9000 steps
-                raiseZPosition(drawZ);
+                // Raise Z by 9400 steps
+                //**raiseZPosition(drawZ);                
 
-                // Dispense 500ul WB in third and fourth Rows
-                for (int i = 17; i < 27; i++)
+                // Dispense 500ul WB in second and third rows
+                for (int i = 12; i < 22; i++)
                 {
-                    if (i == 17)
+                    if (i == 12)
                     {
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
                     else
                     {
-                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 3000);
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 500);
                     File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
 
-                    if (i == 17)
+                    if (i == 12)
                     {
                         moveX(xPos[i] - xPos[5]);
                         moveY(yPos[i] - yPos[5]);
@@ -1722,43 +1722,45 @@ namespace AutoVega4
                         moveY(yPos[i] - yPos[i - 1]);
                     }
 
-                    dispenseLiquid(pump[i]);
+                    //**dispenseLiquid(pump[i]);
                 }
 
-                // Move back to WB bottle
-                moveX(xPos[5] - xPos[26]);
-                moveY(yPos[5] - yPos[26]);
+                inProgressEllipses[13].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
-                // Draw WB for fifth and sixth rows
+                // Move back to WB bottle
+                moveX(xPos[5] - xPos[21]);
+                moveY(yPos[5] - yPos[21]);
+
+                // Draw WB for fourth and fifth rows
                 AutoClosingMessageBox.Show("Drawing liquid from wash buffer bottle", "Drawing WB", 3000);
                 File.AppendAllText(logFilePath, "Drawing liquid from wash buffer bottle" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
-                lowerZPosition(drawZ);
+                // Lower Z by 9400 steps
+                //**lowerZPosition(drawZ);
 
                 // Draw 3500 steps (5mL)
-                drawLiquid(drawPump);
+                //**drawLiquid(drawPump);
 
-                // Raise Z by 9000 steps
-                raiseZPosition(drawZ);
+                // Raise Z by 9400 steps
+                //**raiseZPosition(drawZ);
 
-                // Dispense 500ul WB in fifth and sixth Rows
-                for (int i = 27; i < 37; i++)
+                // Dispense 500ul WB in fourth and fifth rows
+                for (int i = 22; i < 32; i++)
                 {
-                    if (i == 27)
+                    if (i == 22)
                     {
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
                     else
                     {
-                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 3000);
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 500);
                     File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
 
-                    if (i == 27)
+                    if (i == 22)
                     {
                         moveX(xPos[i] - xPos[5]);
                         moveY(yPos[i] - yPos[5]);
@@ -1769,10 +1771,59 @@ namespace AutoVega4
                         moveY(yPos[i] - yPos[i - 1]);
                     }
 
-                    dispenseLiquid(pump[i]);
+                    //**dispenseLiquid(pump[i]);
                 }
 
-                inProgressEllipses[29].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                inProgressEllipses[23].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Move back to WB bottle
+                moveX(xPos[5] - xPos[31]);
+                moveY(yPos[5] - yPos[31]);
+
+                // Draw WB for sixth and seventh rows
+                AutoClosingMessageBox.Show("Drawing liquid from wash buffer bottle", "Drawing WB", 3000);
+                File.AppendAllText(logFilePath, "Drawing liquid from wash buffer bottle" + Environment.NewLine);
+
+                // Lower Z by 9400 steps
+                //**lowerZPosition(drawZ);
+
+                // Draw 3500 steps (5mL)
+                //**drawLiquid(drawPump);
+
+                // Raise Z by 9400 steps
+                //**raiseZPosition(drawZ);
+
+                // Dispense 500ul WB in sixth and seventh rows
+                for (int i = 32; i < 42; i++)
+                {
+                    if (i == 32)
+                    {
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 500);
+                    File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
+
+                    if (i == 32)
+                    {
+                        moveX(xPos[i] - xPos[5]);
+                        moveY(yPos[i] - yPos[5]);
+                    }
+                    else
+                    {
+                        moveX(xPos[i] - xPos[i - 1]);
+                        moveY(yPos[i] - yPos[i - 1]);
+                    }
+
+                    //**dispenseLiquid(pump[i]);
+                }
+
+                inProgressEllipses[33].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 wbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 wbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1792,8 +1843,8 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
 
                 // Move back to Drain Position
-                moveX(xPos[4] - xPos[36]);
-                moveY(yPos[4] - yPos[36]);
+                moveX(xPos[4] - xPos[41]);
+                moveY(yPos[4] - yPos[41]);
 
                 wbDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 wbDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -1805,14 +1856,14 @@ namespace AutoVega4
                 }
 
                 // Lower Pipette Tips to Drain
-                lowerZPosition(drainZ);
+                //**lowerZPosition(drainZ);
 
                 //MessageBox.Show("Wait 5 minutes for WB to drain through cartridges");
                 AutoClosingMessageBox.Show("Wait 5 minutes for WB to drain through cartridges", "Draining", 3000);
                 File.AppendAllText(logFilePath, "Wait 5 minutes for WB to drain through cartridges" + Environment.NewLine);
 
                 // Turn pump on
-                try
+                *//*try
                 {
                     using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                     {
@@ -1852,7 +1903,7 @@ namespace AutoVega4
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                }
+                }*//*
 
                 wbDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 wbDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1867,28 +1918,30 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Wash buffer draining complete" + Environment.NewLine);
 
                 // Lift Pipette Tips above top of bottles
-                raiseZPosition(drainZ);
+                //**raiseZPosition(drainZ);*/
+
+                AutoClosingMessageBox.Show("Moving to RB Bottle", "Moving", 3000);
 
                 // Move to RB Bottle
-                moveX(xPos[6] - xPos[4]);
-                moveY(yPos[6] - yPos[4]);
+                moveX(xPos[6] - xPos[3]);
+                moveY(yPos[6] - yPos[3]);
 
                 for (int i = 0; i < inProgressEllipses.Length; i++)
                 {
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
 
-                // Draw RB for first 2 rows
+                // Draw RB for A1 and B1 (x2 wells = 800ul)
                 AutoClosingMessageBox.Show("Drawing liquid from read buffer bottle", "Drawing RB", 3000);
                 File.AppendAllText(logFilePath, "Drawing liquid from read buffer bottle" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
+                // Lower Z by 9400 steps
                 lowerZPosition(drawZ);
 
-                // Draw 3500 steps (5mL)
-                drawLiquid(drawPump);
+                // Draw 560 steps (800ul)
+                drawLiquid(560);
 
-                // Raise Z by 9000 steps
+                // Raise Z by 9400 steps
                 raiseZPosition(drawZ);
 
                 wbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -1896,23 +1949,23 @@ namespace AutoVega4
                 wbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 wbDispense_tb.Foreground = Brushes.Black;
 
-                // Dispense 500ul RB in First 2 Rows
-                for (int i = 7; i < 17; i++)
+                // Dispense 400ul RB in A1 and B1
+                for (int i = 8; i < 10; i++)
                 {
-                    if (i == 7)
+                    if (i == 8)
                     {
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
                     else
                     {
-                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 3000);
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 500);
                     File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
 
-                    if (i == 7)
+                    if (i == 8)
                     {
                         moveX(xPos[i] - xPos[6]);
                         moveY(yPos[i] - yPos[6]);
@@ -1927,39 +1980,39 @@ namespace AutoVega4
                 }
 
                 // Move back to RB bottle
-                moveX(xPos[6] - xPos[16]);
-                moveY(yPos[6] - yPos[16]);
+                moveX(xPos[6] - xPos[9]);
+                moveY(yPos[6] - yPos[9]);
 
-                // Draw RB for third and fourth rows
+                /*// Draw RB for second and third rows
                 AutoClosingMessageBox.Show("Drawing liquid from read buffer bottle", "Drawing RB", 3000);
                 File.AppendAllText(logFilePath, "Drawing liquid from read buffer bottle" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
+                // Lower Z by 9400 steps
                 lowerZPosition(drawZ);
 
                 // Draw 3500 steps (5mL)
                 drawLiquid(drawPump);
 
-                // Raise Z by 9000 steps
+                // Raise Z by 9400 steps
                 raiseZPosition(drawZ);
 
-                // Dispense 500ul RB in third and fourth Rows
-                for (int i = 17; i < 27; i++)
+                // Dispense 500ul RB in second and third rows
+                for (int i = 12; i < 22; i++)
                 {
-                    if (i == 17)
+                    if (i == 12)
                     {
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
                     else
                     {
-                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 3000);
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 500);
                     File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
 
-                    if (i == 17)
+                    if (i == 12)
                     {
                         moveX(xPos[i] - xPos[6]);
                         moveY(yPos[i] - yPos[6]);
@@ -1974,39 +2027,39 @@ namespace AutoVega4
                 }
 
                 // Move back to RB bottle
-                moveX(xPos[6] - xPos[26]);
-                moveY(yPos[6] - yPos[26]);
+                moveX(xPos[6] - xPos[21]);
+                moveY(yPos[6] - yPos[21]);
 
-                // Draw RB for fifth and sixth rows
+                // Draw RB for fourth and fifth Rows
                 AutoClosingMessageBox.Show("Drawing liquid from read buffer bottle", "Drawing RB", 3000);
                 File.AppendAllText(logFilePath, "Drawing liquid from read buffer bottle" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
+                // Lower Z by 9400 steps
                 lowerZPosition(drawZ);
 
                 // Draw 3500 steps (5mL)
                 drawLiquid(drawPump);
 
-                // Raise Z by 9000 steps
+                // Raise Z by 9400 steps
                 raiseZPosition(drawZ);
 
-                // Dispense 500ul RB in fifth and sixth Rows
-                for (int i = 27; i < 37; i++)
+                // Dispense 500ul RB in fourth and fifth Rows
+                for (int i = 22; i < 32; i++)
                 {
-                    if (i == 27)
+                    if (i == 22)
                     {
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
                     else
                     {
-                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                        inProgressEllipses[i - 7].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 3000);
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 500);
                     File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
 
-                    if (i == 27)
+                    if (i == 22)
                     {
                         moveX(xPos[i] - xPos[6]);
                         moveY(yPos[i] - yPos[6]);
@@ -2020,7 +2073,54 @@ namespace AutoVega4
                     dispenseLiquid(pump[i]);
                 }
 
-                inProgressEllipses[29].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                // Move back to RB bottle
+                moveX(xPos[6] - xPos[31]);
+                moveY(yPos[6] - yPos[31]);*/
+
+                // Draw RB for sixth and seventh Rows
+                AutoClosingMessageBox.Show("Drawing liquid from read buffer bottle", "Drawing RB", 1000);
+                File.AppendAllText(logFilePath, "Drawing liquid from read buffer bottle" + Environment.NewLine);
+
+                // Lower Z by 9400 steps
+                lowerZPosition(drawZ);
+
+                // Draw 2800 steps (4mL)
+                drawLiquid(drawPump);
+
+                // Raise Z by 9400 steps
+                raiseZPosition(drawZ);
+
+                // Dispense 400ul RB in sixth and seventh Rows
+                for (int i = 32; i < 42; i++)
+                {
+                    if (i == 32)
+                    {
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 500);
+                    File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
+
+                    if (i == 32)
+                    {
+                        moveX(xPos[i] - xPos[6]);
+                        moveY(yPos[i] - yPos[6]);
+                    }
+                    else
+                    {
+                        moveX(xPos[i] - xPos[i - 1]);
+                        moveY(yPos[i] - yPos[i - 1]);
+                    }
+
+                    dispenseLiquid(pump[i]);
+                }
+
+                inProgressEllipses[33].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 wbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 wbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2035,7 +2135,7 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
 
-                // TODO: Check for lid closed
+                /*// TODO: Check for lid closed
                 MessageBox.Show("Please make sure lid is closed before continuing.");
 
                 reading_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -2047,11 +2147,9 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 3000);
                 File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
 
-                // TODO: Add 30 well reading code here
-
                 // Move to A1 Reading
-                moveX(xPos[8] - xPos[5]);
-                moveY(yPos[8] - yPos[5]);
+                moveX((xPos[8] + xPos[7]) - xPos[41]);
+                moveY((yPos[8] + yPos[7]) - yPos[41]);
 
                 // TODO: Add Board initialization function here
                 StringBuilder sb = new StringBuilder(5000);
@@ -2059,156 +2157,27 @@ namespace AutoVega4
 
                 MessageBox.Show("Test initializeBoard: " + initializeBoardBool + "\n" + sb.ToString());
                 File.AppendAllText(logFilePath, "Test initializeBoard: " + initializeBoardBool + Environment.NewLine);
-
-                cart1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                //MessageBox.Show("Reading A1");
-                AutoClosingMessageBox.Show("Reading A1", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading A1" + Environment.NewLine);
-
+                
                 // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA1 = new StringBuilder(10000);
-
-                IntPtr testBoardValuePtrA1 = testGetBoardValue(sbA1, sbA1.Capacity);
-                double[] testArrayA1 = new double[5];
-                Marshal.Copy(testBoardValuePtrA1, testArrayA1, 0, 5);
-                string inputStringA1 = "";
-                inputStringA1 += "Return Value: m_dAvgValue = " + testArrayA1[0] + "\n";
-                //avgValues.Append(testArrayA1[0]);
-                //avgValues[1] = testArrayA1[0];
-                inputStringA1 += "Return Value: m_dCumSum = " + testArrayA1[1] + "\n";
-                inputStringA1 += "Return Value: m_dLEDtmp = " + testArrayA1[2] + "\n";
-                inputStringA1 += "Return Value: m_dPDtmp = " + testArrayA1[3] + "\n";
-                inputStringA1 += "Return Value: testGetBoardValue = " + testArrayA1[4] + "\n";
-
-                MessageBox.Show(inputStringA1 + sbA1.ToString());
-
-                cart1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                cart2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                // Move to R2 (Reading A2)
-                moveY(yPos[9] - yPos[8]);
-
-                //MessageBox.Show("Reading A2");
-                AutoClosingMessageBox.Show("Reading A2", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading A2" + Environment.NewLine);
-
-                // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA2 = new StringBuilder(10000);
-
-                IntPtr testBoardValuePtrA2 = testGetBoardValue(sbA2, sbA2.Capacity);
-                double[] testArrayA2 = new double[5];
-                Marshal.Copy(testBoardValuePtrA2, testArrayA2, 0, 5);
-                string inputStringA2 = "";
-                inputStringA2 += "Return Value: m_dAvgValue = " + testArrayA2[0] + "\n";
-                //avgValues.Append(testArrayA2[0]);
-                //avgValues[2] = testArrayA2[0];
-                inputStringA2 += "Return Value: m_dCumSum = " + testArrayA2[1] + "\n";
-                inputStringA2 += "Return Value: m_dLEDtmp = " + testArrayA2[2] + "\n";
-                inputStringA2 += "Return Value: m_dPDtmp = " + testArrayA2[3] + "\n";
-                inputStringA2 += "Return Value: testGetBoardValue = " + testArrayA2[4] + "\n";
-
-                MessageBox.Show(inputStringA2 + sbA2.ToString());
-
-                cart2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                cart3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                // Move to R3 (Reading A3)
-                moveY(yPos[10] - yPos[9]);
-
-                //MessageBox.Show("Reading A3");
-                AutoClosingMessageBox.Show("Reading A3", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading A3" + Environment.NewLine);
-
-                // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA3 = new StringBuilder(10000);
-
-                IntPtr testBoardValuePtrA3 = testGetBoardValue(sbA3, sbA3.Capacity);
-                double[] testArrayA3 = new double[5];
-                Marshal.Copy(testBoardValuePtrA3, testArrayA3, 0, 5);
-                string inputStringA3 = "";
-                inputStringA3 += "Return Value: m_dAvgValue = " + testArrayA3[0] + "\n";
-                //avgValues.Append(testArrayA3[0]);
-                //avgValues[3] = testArrayA3[0];
-                inputStringA3 += "Return Value: m_dCumSum = " + testArrayA3[1] + "\n";
-                inputStringA3 += "Return Value: m_dLEDtmp = " + testArrayA3[2] + "\n";
-                inputStringA3 += "Return Value: m_dPDtmp = " + testArrayA3[3] + "\n";
-                inputStringA3 += "Return Value: testGetBoardValue = " + testArrayA3[4] + "\n";
-
-                MessageBox.Show(inputStringA3 + sbA3.ToString());
-
-                cart3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                cart4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                // Move to R4 (Reading A4)
-                moveY(yPos[11] - yPos[10]);
-
-                //MessageBox.Show("Reading A4");
-                AutoClosingMessageBox.Show("Reading A4", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading A4" + Environment.NewLine);
-
-                // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA4 = new StringBuilder(10000);
-
-                IntPtr testBoardValuePtrA4 = testGetBoardValue(sbA4, sbA4.Capacity);
-                double[] testArrayA4 = new double[5];
-                Marshal.Copy(testBoardValuePtrA4, testArrayA4, 0, 5);
-                string inputStringA4 = "";
-                inputStringA4 += "Return Value: m_dAvgValue = " + testArrayA4[0] + "\n";
-                //avgValues.Append(testArrayA4[0]);
-                //avgValues[4] = testArrayA4[0];
-                inputStringA4 += "Return Value: m_dCumSum = " + testArrayA4[1] + "\n";
-                inputStringA4 += "Return Value: m_dLEDtmp = " + testArrayA4[2] + "\n";
-                inputStringA4 += "Return Value: m_dPDtmp = " + testArrayA4[3] + "\n";
-                inputStringA4 += "Return Value: testGetBoardValue = " + testArrayA4[4] + "\n";
-
-                MessageBox.Show(inputStringA4 + sbA4.ToString());
-
-                cart4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //MessageBox.Show("All cartridges read");
-                AutoClosingMessageBox.Show("All cartridges read", "Reading Complete", 3000);
-                File.AppendAllText(logFilePath, "All cartridges read" + Environment.NewLine);
-
-                // TODO: add close tasks and channels function here
-                testCloseTasksAndChannels();
-
-                //MessageBox.Show("Moving back to load position");
-                AutoClosingMessageBox.Show("Moving back to load position", "Moving", 3000);
-                File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
-
-                // Move back to Load Position
-                moveX(xPos[6] - xPos[11]);
-                moveY(yPos[6] - yPos[11]);
-
-                //MessageBox.Show("Reading complete, displaying results");
-                AutoClosingMessageBox.Show("Reading complete, displaying results", "Results", 3000);
-                File.AppendAllText(logFilePath, "Reading complete, displaying results" + Environment.NewLine);
-
-                // Remove In Progress Boxes and Show Test Results Grid
-                inProgressBG_r.Visibility = Visibility.Hidden;
-                inProgress_stack.Visibility = Visibility.Hidden;
-                inProgress_carts.Visibility = Visibility.Hidden;
-                inProgress_carts_borders.Visibility = Visibility.Hidden;
-
-                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
-
-                results_grid.Visibility = Visibility.Visible;
-
-                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
-
-                // Display Results
-
-                for (int i = 2; i < 6; i++)
+                for (int i = 0; i < 34; i++)
                 {
-                    double[] avgValues = { testArrayA1[0], testArrayA2[0], testArrayA3[0], testArrayA4[0] };
+                    AutoClosingMessageBox.Show("Reading " + positions[i + 8], "Reading", 3000);
 
+                    *//*// Create stringbuilder (log message, may need > 10000)
+                    StringBuilder sb2 = new StringBuilder(10000);
+
+                    // Define double array w/ 5 values
+                    double[] readingArray = new double[5];
+
+                    // Define intptr to get board values and call testGetBoardValue
+                    IntPtr dllBoardValuePtr = testGetBoardValue(sb2, sb2.Capacity);
+
+                    // Use Marshal.Copy to copy board values to double array to use in calculations
+                    Marshal.Copy(dllBoardValuePtr, readingArray, 0, 5);
+
+                    // Calculate result values and add to results_grid
                     // threshold and bgd_rdg from parameter file
-                    double averageSignal = avgValues[i - 2];
+                    double averageSignal = readingArray[0];
 
                     // calculate raw_avg = (averageSignal - afeShiftFactor)*afeScaleFactor
                     double raw_avg = (averageSignal - afeShiftFactor) * afeScaleFactor;
@@ -2228,11 +2197,11 @@ namespace AutoVega4
                         testResult = "POS";
                     }
 
-                    string sampleName = positions[i];
+                    string sampleName = positions[i + 8];
 
                     testResults.Add(new TestResults()
                     {
-                        WellName = positions[i],
+                        WellName = positions[i + 8],
                         BackgroundReading = bgd_rdg.ToString(),
                         Threshold = threshold.ToString(),
                         RawAvg = raw_avg.ToString(),
@@ -2242,11 +2211,57 @@ namespace AutoVega4
                     });
 
                     results_grid.ItemsSource = testResults;
-                    results_grid.Items.Refresh();
+
+                    File.AppendAllText(logFilePath, "Well " + positions[i + 8] + " avg value = " + readingArray[0] + Environment.NewLine);
+                    File.AppendAllText(logFilePath, sb2 + Environment.NewLine);*//*
+
+                    // Go to next well and repeat
+                    if (i != 34)
+                    {
+                        moveX(xPos[i + 9] - xPos[i + 8]);
+                        moveY(yPos[i + 9] - yPos[i + 8]);
+                    }
+                    // If at last well, stop stepping
+                    else
+                    {
+                        break;
+                    }
                 }
 
+                //MessageBox.Show("All cartridges read");
+                AutoClosingMessageBox.Show("All cartridges read", "Reading Complete", 3000);
+                File.AppendAllText(logFilePath, "All cartridges read" + Environment.NewLine);
+
+                // TODO: add close tasks and channels function here
+                testCloseTasksAndChannels();
+
+                //MessageBox.Show("Moving back to load position");
+                AutoClosingMessageBox.Show("Moving back to load position", "Moving", 3000);
+                File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
+
+                // Move back to Load Position
+                moveX(xPos[3] - (xPos[41] + xPos[7]));
+                moveY(yPos[3] - (yPos[41] + yPos[7]));
+
+                //MessageBox.Show("Reading complete, displaying results");
+                AutoClosingMessageBox.Show("Reading complete, displaying results", "Results", 3000);
+                File.AppendAllText(logFilePath, "Reading complete, displaying results" + Environment.NewLine);
+
+                // Remove In Progress Boxes and Show Test Results Grid
+                inProgressBG_r.Visibility = Visibility.Hidden;
+                inProgress_stack.Visibility = Visibility.Hidden;
+                inProgress_carts.Visibility = Visibility.Hidden;
+                inProgress_carts_borders.Visibility = Visibility.Hidden;
+
+                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
+
+                results_grid.Items.Refresh();
+                results_grid.Visibility = Visibility.Visible;
+
+                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);*/
+
                 isReading = false;
-                File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);
+                //File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);
             }
 
             else
@@ -2728,13 +2743,6 @@ namespace AutoVega4
             }
 
             testCloseTasksAndChannels();
-        }
-
-        private void musicBtn_Click(object sender, RoutedEventArgs e)
-        {
-            MediaPlayer sound1 = new MediaPlayer();
-            sound1.Open(new Uri(@"C:\Users\seaot\Downloads\43536__mkoenig__ultra-dnb-loop-160bpm.wav"));
-            sound1.Play();
         }
     }
 }
