@@ -13,8 +13,8 @@
     <Grid Background="#FFBED1F2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1200" Height="900">
         <StackPanel Name="First_Row" Orientation="Horizontal">
             <Image Height="150" Margin="20,20,0,0" VerticalAlignment="Top" Width="150" Source="Resources/Kaya17Logo_icon.ico" />
-            <TextBlock Margin="144,10,0,0" TextWrapping="Wrap" Text="AUTO VEGA 4" VerticalAlignment="Top" Foreground="Gray" FontSize="28" FontWeight="Bold" Width="189"/>
-            <TextBlock Margin="0,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" FontSize="28" FontWeight="Bold" Height="37" Width="290"><Run Text="Reader Software V0.2"/><LineBreak/><Run/></TextBlock>
+            <TextBlock Margin="272.867,10,0,0" TextWrapping="Wrap" Text="AUTO VEGA 4" VerticalAlignment="Top" Foreground="Gray" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" FontSize="28" FontWeight="Bold" Height="37.2433333333333"><Run Text="Reader Software V0.5"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
         </StackPanel>
         <StackPanel Name="Textbox_Headers" Orientation="Horizontal">
             <TextBlock Margin="274,55,0,0" TextWrapping="Wrap" Text="Test Name" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
@@ -23,19 +23,19 @@
             <TextBlock HorizontalAlignment="Left" Margin="161,55,0,0" TextWrapping="Wrap" Text="Reader ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
         </StackPanel>
         <StackPanel Name="Test_Info_Boxes" Orientation="Horizontal">
-            <TextBlock x:Name="testname_tb" Height="34" Margin="200,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" OpacityMask="Black"/>
+            <TextBox x:Name="testname_tb" Height="34" Margin="200,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" OpacityMask="Black"/>
             <TextBox x:Name="operator_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Your Badge" VerticalAlignment="Top" Background="#FFF6F6EB" SelectionBrush="#FF120303" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" TextChanged="operator_tb_TextChanged" OpacityMask="Black" Width="200" BorderBrush="#FFFFC300" FontSize="16"/>
             <TextBox x:Name="kit_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Kit QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="kit_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
             <TextBox x:Name="reader_tb" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Reader QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="reader_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
         </StackPanel>
         <Rectangle x:Name="testType_Border" Height="50" Width="477" Margin="200,148,0,0" Fill="#FFF6F6EB" HorizontalAlignment="Left" VerticalAlignment="Top" Stroke="White" ></Rectangle>
         <StackPanel Name="Test_Type" Orientation="Horizontal">
-            <TextBlock Margin="243,162,0,0" TextWrapping="Wrap" Text="Covid 19" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
+            <TextBlock Margin="237,162,0,0" TextWrapping="Wrap" Text="Covid 19" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
             <RadioButton x:Name="Covid19_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" Width="15" IsChecked="True" />
             <TextBlock HorizontalAlignment="Left" Margin="55,162,0,0" TextWrapping="Wrap" Text="Allergy" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
             <RadioButton x:Name="Allergy_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" IsEnabled="False" Width="15"/>
-            <TextBlock HorizontalAlignment="Left" Margin="55,162,0,0" TextWrapping="Wrap" Text="Respiratory" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
-            <RadioButton x:Name="Respiratory_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" IsEnabled="False" Width="15" Height="15"/>
+            <TextBlock HorizontalAlignment="Left" Margin="55,162,0,0" TextWrapping="Wrap" Text="Ovarian Panel" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
+            <RadioButton x:Name="Ovarian_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" IsEnabled="False" Width="15" Height="15"/>
         </StackPanel>
         <StackPanel Name="Patient_Info" Orientation="Horizontal">
             <TextBlock Margin="28,240,0,0" TextWrapping="Wrap" Text="Scan QR code or enter patient name" VerticalAlignment="Top" Foreground="Black" TextAlignment="Center" FontSize="20" FontWeight="Bold" Width="262"/>
