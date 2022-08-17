@@ -40,9 +40,16 @@ namespace AutoVega4
         string writeAllSteps;
         string readLimSwitches;
         string switchBanks;
+        string delimiter;
         string[] map;
-        int drainTime = 300000; //wait for 4 minutes
+        string testResult;
+        string sampleName;
+        string outputFileData;
+        int drainTime = 30000; //wait for 1 minute
         int wait = 0;
+        double raw_avg;
+        double TC_rdg;
+        double diff;
 
         [DllImport(@".\DLLs\DAQinterfaceForKaya17.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern IntPtr verifyInput(double[] input);
@@ -65,7 +72,7 @@ namespace AutoVega4
             Directory.CreateDirectory(@"C:\Users\Public\Documents\kaya17\data");
 
             logFilePath = @"C:\Users\Public\Documents\kaya17\log\kaya17-AutoVega4_logfile.txt";
-            outputFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega_" + timeStamp + ".csv";
+            outputFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega4_" + timeStamp + ".csv";
 
             if (File.Exists(logFilePath))
             {
@@ -75,113 +82,21 @@ namespace AutoVega4
             timeStamp = DateTime.Now.ToString("ddMMMyy_HHmmss");
             testTime = DateTime.Now.ToString("ddMMM_HHmm");
 
-            writeAllSteps = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[0];
-            readLimSwitches = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[1];
-            switchBanks = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[2];
+            writeAllSteps = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[3];
+            readLimSwitches = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[4];
+            switchBanks = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[5];
 
             map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps.csv");
 
-            isReading = false;            
+            delimiter = ",";
+
+            isReading = false;
+
+            testResult = "NEG";
 
             InitializeComponent();
-
-            // testRead();
         }
-
-        // To test Reader code
-        private void testRead()
-        {
-
-            double[] testArray = new double[17];
-
-            // read parameter file and read in all necessary parameters
-            string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
-            double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
-            double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
-            double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
-            double samplingRate = double.Parse(parameters[3].Substring(0, 5));
-            double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
-            double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
-            double saturation = double.Parse(parameters[8].Substring(0, 8));
-            double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
-            double lowSignal = double.Parse(parameters[29].Substring(0, 5));
-            double readMethod = double.Parse(parameters[9].Substring(0, 1));
-            double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
-            double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
-            double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
-            double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
-            double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
-            double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
-            double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
-            double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
-            double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
-
-
-
-            testArray[0] = ledOutputRange;
-            testArray[1] = samplingRate;
-            testArray[2] = numSamplesPerReading;
-            testArray[3] = numSamplesForAvg;
-            testArray[4] = errorLimitInMillivolts;
-            testArray[5] = numTempSamplesPerReading;
-            testArray[6] = saturation;
-            testArray[7] = expectedDarkRdg;
-            testArray[8] = lowSignal;
-            testArray[9] = ledOnDuration;
-            testArray[10] = readDelayInMS;
-            testArray[11] = calMinVoltage;
-            testArray[12] = calNomVoltage;
-            testArray[13] = calMaxVoltage;
-            testArray[14] = excMinVoltage;
-            testArray[15] = excNomVoltage;
-            testArray[16] = excMaxVoltage;
-
-            string testString = "";
-            foreach (double value in testArray)
-            {
-                testString += "Input: " + value + "\n";
-            }
-
-            MessageBox.Show(testString);
-
-            IntPtr testPtr = verifyInput(testArray);
-            double[] testArray2 = new double[17];
-            Marshal.Copy(testPtr, testArray2, 0, 17);
-            testString = "";
-            foreach (double value in testArray2)
-            {
-                testString += "Verify input: " + value + "\n";
-            }
-
-            MessageBox.Show(testString);
-
-            bool settingsBool = testSetSettings(testArray);
-
-            MessageBox.Show("Test setSettings: " + settingsBool);
-            StringBuilder sb = new StringBuilder(5000);
-            bool initializeBoardBool = testInitializeBoard(sb, sb.Capacity);
-
-            MessageBox.Show("Test initializeBoard: " + initializeBoardBool + "\n" + sb.ToString());
-
-            // MessageBox.Show("Insert Cartridge and then click ok");
-
-            StringBuilder sb2 = new StringBuilder(10000);
-
-            IntPtr testBoardValuePtr = testGetBoardValue(sb2, sb2.Capacity);
-            double[] testArray3 = new double[5];
-            Marshal.Copy(testBoardValuePtr, testArray3, 0, 5);
-            testString = "";
-            testString += "Return Value: m_dAvgValue = " + testArray3[0] + "\n";
-            testString += "Return Value: m_dCumSum = " + testArray3[1] + "\n";
-            testString += "Return Value: m_dLEDtmp = " + testArray3[2] + "\n";
-            testString += "Return Value: m_dPDtmp = " + testArray3[3] + "\n";
-            testString += "Return Value: testGetBoardValue = " + testArray3[4] + "\n";
-
-            MessageBox.Show(testString + sb2.ToString());
-
-            testCloseTasksAndChannels();
-        }        
-
+        
         private void operator_tb_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -241,8 +156,6 @@ namespace AutoVega4
 
         private async void start_button_Click(object sender, RoutedEventArgs e)
         {
-            string delimiter = ",";
-
             string appendOutputHeaders = "Operator ID" + delimiter + "Kit ID" + delimiter +
                 "Reader ID" + delimiter + "Test Type" + delimiter + Environment.NewLine;
             try
@@ -1497,9 +1410,9 @@ namespace AutoVega4
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
 
-                //MessageBox.Show("Wait 5 minutes for samples to drain through cartridges");
-                AutoClosingMessageBox.Show("Wait 5 minutes for samples to drain through cartridges", "Draining", 2000);
-                File.AppendAllText(logFilePath, "Wait 5 minutes for samples to drain through cartridges" + Environment.NewLine);
+                //MessageBox.Show("Wait 1 minute for samples to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait 1 minute for samples to drain through cartridges", "Draining", 2000);
+                File.AppendAllText(logFilePath, "Wait 1 minute for samples to drain through cartridges" + Environment.NewLine);
 
                 // Turn pump on
                 try
@@ -1534,7 +1447,7 @@ namespace AutoVega4
                     MessageBox.Show(ex.Message);
                 }
 
-                // Leave pump on for 5 minutes
+                // Leave pump on for 1 minute
                 Task.Delay(drainTime).Wait();
 
                 // Turn pump off
@@ -2172,7 +2085,7 @@ namespace AutoVega4
                     dispenseLiquid(pump[i]);
                 }
 
-                // Change E5 to finished color
+                // Change E7 to finished color
                 inProgressEllipses[33].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Change RB Dispense box to finished color
@@ -2182,6 +2095,7 @@ namespace AutoVega4
 
                 //MessageBox.Show("RB Dispensed");
                 AutoClosingMessageBox.Show("Read Buffer Dispensed", "Dispensing Complete", 2000);
+                MessageBox.Show("RB Dispensed");
                 File.AppendAllText(logFilePath, "Read Buffer Dispensed" + Environment.NewLine);
 
                 // Change Cartridges to gray
@@ -2199,192 +2113,235 @@ namespace AutoVega4
                 reading_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 reading_tb.Foreground = Brushes.Black;
 
-                MessageBox.Show("Reading samples in all wells");
-                AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
+                // Board Initialization
+                AutoClosingMessageBox.Show("Initializing Reader Board", "Initializing", 2000);
+                File.AppendAllText(logFilePath, "Initializing Reader Board");
 
-                // **TODO: Add 30 well reading code here**
-
-                // Move to A1 Reading
-                moveX(xPos[8] - xPos[5]);
-                moveY(yPos[8] - yPos[5]);
-
-                // TODO: Add Board initialization function here
                 StringBuilder sb = new StringBuilder(5000);
                 bool initializeBoardBool = testInitializeBoard(sb, sb.Capacity);
 
                 MessageBox.Show("Test initializeBoard: " + initializeBoardBool + "\n" + sb.ToString());
                 File.AppendAllText(logFilePath, "Test initializeBoard: " + initializeBoardBool + Environment.NewLine);
 
-                cart1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                // Define headers for all columns in output file
+                string outputFileDataHeaders = "WellName" + delimiter + "BackgroundReading" + delimiter + "Threshold" + delimiter +
+                                               "RawAvg" + delimiter + "TC_rdg" + delimiter + "TestResult" + Environment.NewLine;
 
-                //MessageBox.Show("Reading A1");
+                // Add headers to output file
+                File.AppendAllText(outputFilePath, outputFileDataHeaders);
+
+                //MessageBox.Show("Reading samples in all wells");
+                AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
+
+                inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                // Move from E7 to A1 + Dispense_to_Read
+                moveY((yPos[(int)steppingPositions.A1] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.E7]);
+                moveX((xPos[(int)steppingPositions.A1] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.E7]);
+
                 AutoClosingMessageBox.Show("Reading A1", "Reading", 3000);
                 File.AppendAllText(logFilePath, "Reading A1" + Environment.NewLine);
 
-                // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA1 = new StringBuilder(10000);
+                StringBuilder sbA1 = new StringBuilder(10000);                
 
                 IntPtr testBoardValuePtrA1 = testGetBoardValue(sbA1, sbA1.Capacity);
                 double[] testArrayA1 = new double[5];
                 Marshal.Copy(testBoardValuePtrA1, testArrayA1, 0, 5);
                 string inputStringA1 = "";
                 inputStringA1 += "Return Value: m_dAvgValue = " + testArrayA1[0] + "\n";
-                //avgValues.Append(testArrayA1[0]);
-                //avgValues[1] = testArrayA1[0];
                 inputStringA1 += "Return Value: m_dCumSum = " + testArrayA1[1] + "\n";
                 inputStringA1 += "Return Value: m_dLEDtmp = " + testArrayA1[2] + "\n";
                 inputStringA1 += "Return Value: m_dPDtmp = " + testArrayA1[3] + "\n";
                 inputStringA1 += "Return Value: testGetBoardValue = " + testArrayA1[4] + "\n";
 
-                MessageBox.Show(inputStringA1 + sbA1.ToString());
+                inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                cart1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                cart2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                // Update Results Grid
+                raw_avg = testArrayA1[0];
 
-                // Move to R2 (Reading A2)
-                moveY(yPos[9] - yPos[8]);
+                TC_rdg = raw_avg;
 
-                //MessageBox.Show("Reading A2");
-                AutoClosingMessageBox.Show("Reading A2", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading A2" + Environment.NewLine);
+                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
 
-                // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA2 = new StringBuilder(10000);
-
-                IntPtr testBoardValuePtrA2 = testGetBoardValue(sbA2, sbA2.Capacity);
-                double[] testArrayA2 = new double[5];
-                Marshal.Copy(testBoardValuePtrA2, testArrayA2, 0, 5);
-                string inputStringA2 = "";
-                inputStringA2 += "Return Value: m_dAvgValue = " + testArrayA2[0] + "\n";
-                //avgValues.Append(testArrayA2[0]);
-                //avgValues[2] = testArrayA2[0];
-                inputStringA2 += "Return Value: m_dCumSum = " + testArrayA2[1] + "\n";
-                inputStringA2 += "Return Value: m_dLEDtmp = " + testArrayA2[2] + "\n";
-                inputStringA2 += "Return Value: m_dPDtmp = " + testArrayA2[3] + "\n";
-                inputStringA2 += "Return Value: testGetBoardValue = " + testArrayA2[4] + "\n";
-
-                MessageBox.Show(inputStringA2 + sbA2.ToString());
-
-                cart2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                cart3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                // Move to R3 (Reading A3)
-                moveY(yPos[10] - yPos[9]);
-
-                //MessageBox.Show("Reading A3");
-                AutoClosingMessageBox.Show("Reading A3", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading A3" + Environment.NewLine);
-
-                // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA3 = new StringBuilder(10000);
-
-                IntPtr testBoardValuePtrA3 = testGetBoardValue(sbA3, sbA3.Capacity);
-                double[] testArrayA3 = new double[5];
-                Marshal.Copy(testBoardValuePtrA3, testArrayA3, 0, 5);
-                string inputStringA3 = "";
-                inputStringA3 += "Return Value: m_dAvgValue = " + testArrayA3[0] + "\n";
-                //avgValues.Append(testArrayA3[0]);
-                //avgValues[3] = testArrayA3[0];
-                inputStringA3 += "Return Value: m_dCumSum = " + testArrayA3[1] + "\n";
-                inputStringA3 += "Return Value: m_dLEDtmp = " + testArrayA3[2] + "\n";
-                inputStringA3 += "Return Value: m_dPDtmp = " + testArrayA3[3] + "\n";
-                inputStringA3 += "Return Value: testGetBoardValue = " + testArrayA3[4] + "\n";
-
-                MessageBox.Show(inputStringA3 + sbA3.ToString());
-
-                cart3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                cart4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                // Move to R4 (Reading A4)
-                moveY(yPos[11] - yPos[10]);
-
-                //MessageBox.Show("Reading A4");
-                AutoClosingMessageBox.Show("Reading A4", "Reading", 3000);
-                File.AppendAllText(logFilePath, "Reading A4" + Environment.NewLine);
-
-                // Reading code here
-                //Task.Delay(3000).Wait();
-                StringBuilder sbA4 = new StringBuilder(10000);
-
-                IntPtr testBoardValuePtrA4 = testGetBoardValue(sbA4, sbA4.Capacity);
-                double[] testArrayA4 = new double[5];
-                Marshal.Copy(testBoardValuePtrA4, testArrayA4, 0, 5);
-                string inputStringA4 = "";
-                inputStringA4 += "Return Value: m_dAvgValue = " + testArrayA4[0] + "\n";
-                //avgValues.Append(testArrayA4[0]);
-                //avgValues[4] = testArrayA4[0];
-                inputStringA4 += "Return Value: m_dCumSum = " + testArrayA4[1] + "\n";
-                inputStringA4 += "Return Value: m_dLEDtmp = " + testArrayA4[2] + "\n";
-                inputStringA4 += "Return Value: m_dPDtmp = " + testArrayA4[3] + "\n";
-                inputStringA4 += "Return Value: testGetBoardValue = " + testArrayA4[4] + "\n";
-
-                MessageBox.Show(inputStringA4 + sbA4.ToString());
-
-                cart4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //MessageBox.Show("All cartridges read");
-                AutoClosingMessageBox.Show("All cartridges read", "Reading Complete", 3000);
-                File.AppendAllText(logFilePath, "All cartridges read" + Environment.NewLine);
-
-                // TODO: add close tasks and channels function here
-                testCloseTasksAndChannels();
-
-                //MessageBox.Show("Moving back to load position");
-                AutoClosingMessageBox.Show("Moving back to load position", "Moving", 3000);
-                File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
-
-                // Move back to Load Position
-                moveX(xPos[6] - xPos[11]);
-                moveY(yPos[6] - yPos[11]);
-
-                //MessageBox.Show("Reading complete, displaying results");
-                AutoClosingMessageBox.Show("Reading complete, displaying results", "Results", 3000);
-                File.AppendAllText(logFilePath, "Reading complete, displaying results" + Environment.NewLine);
-
-                // Remove In Progress Boxes and Show Test Results Grid
-                inProgressBG_r.Visibility = Visibility.Hidden;
-                inProgress_stack.Visibility = Visibility.Hidden;
-                inProgress_carts.Visibility = Visibility.Hidden;
-                inProgress_carts_borders.Visibility = Visibility.Hidden;
-
-                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
-
-                results_grid.Visibility = Visibility.Visible;
-
-                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
-
-                // Display Results
-
-                for (int i = 2; i < 6; i++)
+                if (diff > threshold)
                 {
-                    double[] avgValues = { testArrayA1[0], testArrayA2[0], testArrayA3[0], testArrayA4[0] };
+                    testResult = "POS";
+                }
 
-                    // threshold and bgd_rdg from parameter file
-                    double averageSignal = avgValues[i - 2];
+                sampleName = positions[10];
 
-                    // calculate raw_avg = (averageSignal - afeShiftFactor)*afeScaleFactor
-                    double raw_avg = (averageSignal - afeShiftFactor) * afeScaleFactor;
+                testResults.Add(new TestResults()
+                {
+                    WellName = positions[10],
+                    BackgroundReading = bgd_rdg.ToString(),
+                    Threshold = threshold.ToString(),
+                    RawAvg = raw_avg.ToString(),
+                    TC_rdg = TC_rdg.ToString(),
+                    TestResult = testResult,
+                    SampleName = sampleName
+                });
 
-                    // calculate TC_rdg = raw_avg
-                    double TC_rdg = raw_avg;
+                results_grid.ItemsSource = testResults;
+                results_grid.Items.Refresh();
+                // Result for A1 added to results grid
 
-                    // calculate diff = (TC_rdg - viralCountOffset)*viralScaleFactor
-                    double diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+                // Add results grid data for A1 to output file
+                outputFileData = positions[10] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
-                    // testResult = NEG by default
-                    string testResult = "NEG";
+                File.AppendAllText(outputFilePath, outputFileData);
 
-                    // testResult = POS if diff > threshold
+                // Move from A1 to B1
+                moveY(yPos[(int)steppingPositions.B1] - yPos[(int)steppingPositions.A1]);
+                moveX(xPos[(int)steppingPositions.B1] - xPos[(int)steppingPositions.A1]);
+
+                AutoClosingMessageBox.Show("Reading B1", "Reading", 3000);
+                File.AppendAllText(logFilePath, "Reading B1" + Environment.NewLine);
+
+                StringBuilder sbB1 = new StringBuilder(10000);
+
+                IntPtr testBoardValuePtrB1 = testGetBoardValue(sbB1, sbB1.Capacity);
+                double[] testArrayB1 = new double[5];
+                Marshal.Copy(testBoardValuePtrB1, testArrayB1, 0, 5);
+                string inputStringB1 = "";
+                inputStringB1 += "Return Value: m_dAvgValue = " + testArrayB1[0] + "\n";
+                inputStringB1 += "Return Value: m_dCumSum = " + testArrayB1[1] + "\n";
+                inputStringB1 += "Return Value: m_dLEDtmp = " + testArrayB1[2] + "\n";
+                inputStringB1 += "Return Value: m_dPDtmp = " + testArrayB1[3] + "\n";
+                inputStringB1 += "Return Value: testGetBoardValue = " + testArrayB1[4] + "\n";
+
+                inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                // Update Results Grid
+                raw_avg = testArrayB1[0];
+
+                TC_rdg = raw_avg;
+
+                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                if (diff > threshold)
+                {
+                    testResult = "POS";
+                }
+
+                sampleName = positions[11];
+
+                testResults.Add(new TestResults()
+                {
+                    WellName = positions[11],
+                    BackgroundReading = bgd_rdg.ToString(),
+                    Threshold = threshold.ToString(),
+                    RawAvg = raw_avg.ToString(),
+                    TC_rdg = TC_rdg.ToString(),
+                    TestResult = testResult,
+                    SampleName = sampleName
+                });
+
+                results_grid.ItemsSource = testResults;
+                results_grid.Items.Refresh();
+                // Result for B1 added to results grid
+
+                // Add results grid data for B1 to output file
+                outputFileData = positions[11] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                File.AppendAllText(outputFilePath, outputFileData);
+
+                // Move from B1 to E2
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.B1]);
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.B1]);
+
+                AutoClosingMessageBox.Show("Reading E2", "Reading", 3000);
+                File.AppendAllText(logFilePath, "Reading E2" + Environment.NewLine);
+
+                StringBuilder sbE2 = new StringBuilder(10000);
+
+                IntPtr testBoardValuePtrE2 = testGetBoardValue(sbE2, sbE2.Capacity);
+                double[] testArrayE2 = new double[5];
+                Marshal.Copy(testBoardValuePtrE2, testArrayE2, 0, 5);
+                string inputStringE2 = "";
+                inputStringE2 += "Return Value: m_dAvgValue = " + testArrayE2[0] + "\n";
+                inputStringE2 += "Return Value: m_dCumSum = " + testArrayE2[1] + "\n";
+                inputStringE2 += "Return Value: m_dLEDtmp = " + testArrayE2[2] + "\n";
+                inputStringE2 += "Return Value: m_dPDtmp = " + testArrayE2[3] + "\n";
+                inputStringE2 += "Return Value: testGetBoardValue = " + testArrayE2[4] + "\n";
+
+                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Update Results Grid
+                raw_avg = testArrayE2[0];
+
+                TC_rdg = raw_avg;
+
+                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                if (diff > threshold)
+                {
+                    testResult = "POS";
+                }
+
+                sampleName = positions[14];
+
+                testResults.Add(new TestResults()
+                {
+                    WellName = positions[14],
+                    BackgroundReading = bgd_rdg.ToString(),
+                    Threshold = threshold.ToString(),
+                    RawAvg = raw_avg.ToString(),
+                    TC_rdg = TC_rdg.ToString(),
+                    TestResult = testResult,
+                    SampleName = sampleName
+                });
+
+                results_grid.ItemsSource = testResults;
+                results_grid.Items.Refresh();
+                // Result for E2 added to results grid
+
+                // Add results grid data for E2 to output file
+                outputFileData = positions[14] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                File.AppendAllText(outputFilePath, outputFileData);
+
+                // Loop through rest of reading steps
+                for (int i = 15; i < positions.Length; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    // Read sample in current well
+                    StringBuilder sbR = new StringBuilder(10000);
+
+                    IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity);
+                    double[] readingValues = new double[5];
+                    Marshal.Copy(boardValuePtr, readingValues, 0, 5);
+                    string readingInputString = "";
+                    readingInputString += "Return Value: m_dAvgValue = " + readingValues[0] + "\n";
+                    readingInputString += "Return Value: m_dCumSum = " + readingValues[1] + "\n";
+                    readingInputString += "Return Value: m_dLEDtmp = " + readingValues[2] + "\n";
+                    readingInputString += "Return Value: m_dPDtmp = " + readingValues[3] + "\n";
+                    readingInputString += "Return Value: testGetBoardValue = " + readingValues[4] + "\n";
+
+                    // Update Results Grid for current well
+                    raw_avg = readingInputString[0];
+
+                    TC_rdg = raw_avg;
+
+                    diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
                     if (diff > threshold)
                     {
                         testResult = "POS";
                     }
 
-                    string sampleName = positions[i];
+                    sampleName = positions[i];
 
                     testResults.Add(new TestResults()
                     {
@@ -2399,7 +2356,53 @@ namespace AutoVega4
 
                     results_grid.ItemsSource = testResults;
                     results_grid.Items.Refresh();
+
+                    // Add results grid data for current well to output file
+                    outputFileData = positions[i] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                    File.AppendAllText(outputFilePath, outputFileData);
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 43)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }                    
                 }
+
+                AutoClosingMessageBox.Show("All cartridges read", "Reading Complete", 2000);
+                File.AppendAllText(logFilePath, "All cartridges read" + Environment.NewLine);
+
+                testCloseTasksAndChannels();
+
+                //MessageBox.Show("Moving back to load position");
+                AutoClosingMessageBox.Show("Moving back to load position", "Moving", 2000);
+                File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
+
+                // Move back to Load Position
+                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.E7] + xPos[(int)steppingPositions.Dispense_to_Read]));
+                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.E7] + yPos[(int)steppingPositions.Dispense_to_Read]));
+                
+                //MessageBox.Show("Reading complete, displaying results");
+                AutoClosingMessageBox.Show("Reading complete, displaying results", "Results", 2000);
+                File.AppendAllText(logFilePath, "Reading complete, displaying results" + Environment.NewLine);
+
+                // Remove In Progress Boxes and Show Test Results Grid
+                inProgressBG_r.Visibility = Visibility.Hidden;
+                inProgress_stack.Visibility = Visibility.Hidden;
+                inProgress_carts.Visibility = Visibility.Hidden;
+                inProgress_carts_borders.Visibility = Visibility.Hidden;
+
+                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
+
+                results_grid.Visibility = Visibility.Visible;
+
+                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
 
                 isReading = false;
                 File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);
