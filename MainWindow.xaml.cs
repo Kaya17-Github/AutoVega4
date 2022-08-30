@@ -33,20 +33,20 @@ namespace AutoVega4
         //bool flipX;
         //bool flipY;
         bool isReading = false;
-        string logFilePath;
-        string outputFilePath;
-        string timeStamp;
-        string testTime;
-        string writeAllSteps;
-        string readLimSwitches;
-        string switchBanks;
-        string delimiter;
-        string[] map;
+        readonly string logFilePath;
+        readonly string outputFilePath;
+        readonly string timeStamp;
+        readonly string testTime;
+        readonly string writeAllSteps;
+        readonly string readLimSwitches;
+        readonly string switchBanks;
+        readonly string delimiter;
+        readonly string[] map;
         string testResult;
         string sampleName;
         string outputFileData;
-        int drainTime = 30000; //wait for 1 minute
-        int wait = 0;
+        readonly int drainTime = 3; //wait for 1 minute
+        readonly int wait = 0;
         double raw_avg;
         double TC_rdg;
         double diff;
@@ -71,9 +71,6 @@ namespace AutoVega4
             Directory.CreateDirectory(@"C:\Users\Public\Documents\kaya17\log");
             Directory.CreateDirectory(@"C:\Users\Public\Documents\kaya17\data");
 
-            logFilePath = @"C:\Users\Public\Documents\kaya17\log\kaya17-AutoVega4_logfile.txt";
-            outputFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega4_" + timeStamp + ".csv";
-
             if (File.Exists(logFilePath))
             {
                 File.Delete(logFilePath);
@@ -81,6 +78,9 @@ namespace AutoVega4
 
             timeStamp = DateTime.Now.ToString("ddMMMyy_HHmmss");
             testTime = DateTime.Now.ToString("ddMMM_HHmm");
+
+            logFilePath = @"C:\Users\Public\Documents\kaya17\log\kaya17-AutoVega4_logfile.txt";
+            outputFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega4_" + timeStamp + ".csv";
 
             writeAllSteps = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[3];
             readLimSwitches = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[4];
@@ -727,7 +727,7 @@ namespace AutoVega4
                 }
 
                 //MessageBox.Show("Moving to Drain Position");
-                AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 2000);
+                AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
                 File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
 
                 // Move to Drain Position
@@ -881,7 +881,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 200);
                     File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 10)
@@ -936,7 +936,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 200);
                     File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 14)
@@ -991,7 +991,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 200);
                     File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 24)
@@ -1046,7 +1046,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing wash buffer in " + positions[i], "Dispensing WB", 200);
                     File.AppendAllText(logFilePath, "Dispensing wash buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 34)
@@ -1238,7 +1238,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 200);
                     File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 10)
@@ -1293,7 +1293,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 200);
                     File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 14)
@@ -1348,7 +1348,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 200);
                     File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 24)
@@ -1403,7 +1403,7 @@ namespace AutoVega4
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
 
-                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 2000);
+                    AutoClosingMessageBox.Show("Dispensing read buffer in " + positions[i], "Dispensing RB", 200);
                     File.AppendAllText(logFilePath, "Dispensing read buffer in " + positions[i] + Environment.NewLine);
 
                     if (i == 34)
@@ -1426,9 +1426,9 @@ namespace AutoVega4
                 inProgressEllipses[33].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Change RB Dispense box to finished color
-                wbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                wbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                wbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 //MessageBox.Show("RB Dispensed");
                 AutoClosingMessageBox.Show("Read Buffer Dispensed", "Dispensing Complete", 2000);
@@ -1454,7 +1454,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Initializing Reader Board", "Initializing", 2000);
                 File.AppendAllText(logFilePath, "Initializing Reader Board");
 
-                StringBuilder sb = new StringBuilder(5000);
+                StringBuilder sb = new StringBuilder(50000);
                 bool initializeBoardBool = testInitializeBoard(sb, sb.Capacity);
 
                 MessageBox.Show("Test initializeBoard: " + initializeBoardBool + "\n" + sb.ToString());
@@ -1471,16 +1471,21 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
                 File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
 
-                inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                // A1 Start
+                // ------------------------------------------------------------------------------------------------------------------------
 
                 // Move from E7 to A1 + Dispense_to_Read
                 moveY((yPos[(int)steppingPositions.A1] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.E7]);
                 moveX((xPos[(int)steppingPositions.A1] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.E7]);
 
-                AutoClosingMessageBox.Show("Reading A1", "Reading", 2000);
+                // Change A1 to in progress color
+                inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Reading A1", "Reading", 200);
                 File.AppendAllText(logFilePath, "Reading A1" + Environment.NewLine);
 
-                StringBuilder sbA1 = new StringBuilder(10000);                
+                // Read A1
+                StringBuilder sbA1 = new StringBuilder(100000);                
 
                 IntPtr testBoardValuePtrA1 = testGetBoardValue(sbA1, sbA1.Capacity);
                 double[] testArrayA1 = new double[5];
@@ -1492,8 +1497,8 @@ namespace AutoVega4
                 inputStringA1 += "Return Value: m_dPDtmp = " + testArrayA1[3] + "\n";
                 inputStringA1 += "Return Value: testGetBoardValue = " + testArrayA1[4] + "\n";
 
+                // Change A1 to finished color
                 inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
                 // Update Results Grid
                 raw_avg = testArrayA1[0];
@@ -1507,7 +1512,7 @@ namespace AutoVega4
                     testResult = "POS";
                 }
 
-                sampleName = positions[10];
+                sampleName = positions[(int)steppingPositions.A1];
 
                 testResults.Add(new TestResults()
                 {
@@ -1525,19 +1530,29 @@ namespace AutoVega4
                 // Result for A1 added to results grid
 
                 // Add results grid data for A1 to output file
-                outputFileData = positions[10] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                outputFileData = positions[(int)steppingPositions.A1] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
                                             delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
+
+                // ------------------------------------------------------------------------------------------------------------------------
+                // A1 End
+
+                // B1 Start
+                // ------------------------------------------------------------------------------------------------------------------------
 
                 // Move from A1 to B1
                 moveY(yPos[(int)steppingPositions.B1] - yPos[(int)steppingPositions.A1]);
                 moveX(xPos[(int)steppingPositions.B1] - xPos[(int)steppingPositions.A1]);
 
-                AutoClosingMessageBox.Show("Reading B1", "Reading", 2000);
+                // Change B1 to in progress color
+                inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Reading B1", "Reading", 200);
                 File.AppendAllText(logFilePath, "Reading B1" + Environment.NewLine);
 
-                StringBuilder sbB1 = new StringBuilder(10000);
+                // Read B1
+                StringBuilder sbB1 = new StringBuilder(100000);
 
                 IntPtr testBoardValuePtrB1 = testGetBoardValue(sbB1, sbB1.Capacity);
                 double[] testArrayB1 = new double[5];
@@ -1549,8 +1564,8 @@ namespace AutoVega4
                 inputStringB1 += "Return Value: m_dPDtmp = " + testArrayB1[3] + "\n";
                 inputStringB1 += "Return Value: testGetBoardValue = " + testArrayB1[4] + "\n";
 
+                // Change B1 to finished color
                 inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
                 // Update Results Grid
                 raw_avg = testArrayB1[0];
@@ -1564,11 +1579,11 @@ namespace AutoVega4
                     testResult = "POS";
                 }
 
-                sampleName = positions[11];
+                sampleName = positions[(int)steppingPositions.B1];
 
                 testResults.Add(new TestResults()
                 {
-                    WellName = positions[11],
+                    WellName = positions[(int)steppingPositions.B1],
                     BackgroundReading = bgd_rdg.ToString(),
                     Threshold = threshold.ToString(),
                     RawAvg = raw_avg.ToString(),
@@ -1582,19 +1597,29 @@ namespace AutoVega4
                 // Result for B1 added to results grid
 
                 // Add results grid data for B1 to output file
-                outputFileData = positions[11] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                outputFileData = positions[(int)steppingPositions.B1] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
                                             delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
+
+                // ------------------------------------------------------------------------------------------------------------------------
+                // B1 End
+
+                // E2 Start
+                // ------------------------------------------------------------------------------------------------------------------------
 
                 // Move from B1 to E2
                 moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.B1]);
                 moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.B1]);
 
-                AutoClosingMessageBox.Show("Reading E2", "Reading", 2000);
+                // Change E2 to in progress color
+                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Reading E2", "Reading", 200);
                 File.AppendAllText(logFilePath, "Reading E2" + Environment.NewLine);
 
-                StringBuilder sbE2 = new StringBuilder(10000);
+                // Read E2
+                StringBuilder sbE2 = new StringBuilder(100000);
 
                 IntPtr testBoardValuePtrE2 = testGetBoardValue(sbE2, sbE2.Capacity);
                 double[] testArrayE2 = new double[5];
@@ -1606,6 +1631,7 @@ namespace AutoVega4
                 inputStringE2 += "Return Value: m_dPDtmp = " + testArrayE2[3] + "\n";
                 inputStringE2 += "Return Value: testGetBoardValue = " + testArrayE2[4] + "\n";
 
+                // Change E2 to finished color
                 inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
@@ -1620,11 +1646,11 @@ namespace AutoVega4
                     testResult = "POS";
                 }
 
-                sampleName = positions[14];
+                sampleName = positions[(int)steppingPositions.E2];
 
                 testResults.Add(new TestResults()
                 {
-                    WellName = positions[14],
+                    WellName = positions[(int)steppingPositions.E2],
                     BackgroundReading = bgd_rdg.ToString(),
                     Threshold = threshold.ToString(),
                     RawAvg = raw_avg.ToString(),
@@ -1638,10 +1664,13 @@ namespace AutoVega4
                 // Result for E2 added to results grid
 
                 // Add results grid data for E2 to output file
-                outputFileData = positions[14] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                outputFileData = positions[(int)steppingPositions.E2] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
                                             delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
+
+                // ------------------------------------------------------------------------------------------------------------------------
+                // E2 End
 
                 // Loop through rest of reading steps
                 for (int i = 15; i < positions.Length; i++)
@@ -1653,11 +1682,11 @@ namespace AutoVega4
                     // Change current well to in progress color
                     inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                    AutoClosingMessageBox.Show("Reading " + inProgressEllipses[i - 10], "Reading", 2000);
-                    File.AppendAllText(logFilePath, "Reading " + inProgressEllipses[i - 10] + Environment.NewLine);
+                    AutoClosingMessageBox.Show("Reading " + positions[i], "Reading", 200);
+                    File.AppendAllText(logFilePath, "Reading " + positions[i] + Environment.NewLine);
 
                     // Read sample in current well
-                    StringBuilder sbR = new StringBuilder(10000);
+                    StringBuilder sbR = new StringBuilder(100000);
 
                     IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity);
                     double[] readingValues = new double[5];
@@ -1735,8 +1764,8 @@ namespace AutoVega4
                 // Remove In Progress Boxes and Show Test Results Grid
                 inProgressBG_r.Visibility = Visibility.Hidden;
                 inProgress_stack.Visibility = Visibility.Hidden;
-                inProgress_carts.Visibility = Visibility.Hidden;
-                inProgress_carts_borders.Visibility = Visibility.Hidden;
+                inProgress_cart34.Visibility = Visibility.Hidden;
+                inProgress_cart34_border.Visibility = Visibility.Hidden;
 
                 File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
 
@@ -1756,8 +1785,6 @@ namespace AutoVega4
 
         private void moveX(int v)
         {
-            string test = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[0];
-
             // If negative, move x negative
             if (v < 0)
             {
@@ -1768,7 +1795,7 @@ namespace AutoVega4
                         using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                         {
                             //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                                 ChannelLineGrouping.OneChannelForAllLines);
 
                             //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -1795,7 +1822,7 @@ namespace AutoVega4
                         using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                         {
                             //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                                 ChannelLineGrouping.OneChannelForAllLines);
 
                             //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -1816,8 +1843,6 @@ namespace AutoVega4
 
         private void moveY(int v)
         {
-            string test = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[0];
-
             // If negative, move y negative
             if (v < 0)
             {
@@ -1828,7 +1853,7 @@ namespace AutoVega4
                         using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                         {
                             //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                                 ChannelLineGrouping.OneChannelForAllLines);
 
                             //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -1855,7 +1880,7 @@ namespace AutoVega4
                         using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                         {
                             //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                                 ChannelLineGrouping.OneChannelForAllLines);
 
                             //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -1905,8 +1930,6 @@ namespace AutoVega4
 
         private void drawLiquid(int v)
         {
-            string test = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[0];
-
             for (int i = 0; i < v; i++)
             {
                 try
@@ -1914,7 +1937,7 @@ namespace AutoVega4
                     using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                     {
                         //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                             ChannelLineGrouping.OneChannelForAllLines);
 
                         //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -1934,8 +1957,6 @@ namespace AutoVega4
 
         private void dispenseLiquid(int v)
         {
-            string test = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[0];
-
             for (int i = 0; i < v; i++)
             {
                 try
@@ -1943,7 +1964,7 @@ namespace AutoVega4
                     using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                     {
                         //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                             ChannelLineGrouping.OneChannelForAllLines);
 
                         //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -1963,9 +1984,6 @@ namespace AutoVega4
 
         private void raiseZPosition(int v)
         {
-            string test = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[0];
-            string test2 = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[1];
-
             for (int i = 0; i < v; i++)
             {
                 try
@@ -1973,7 +1991,7 @@ namespace AutoVega4
                     using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                     {
                         //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                             ChannelLineGrouping.OneChannelForAllLines);
 
                         //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -1989,7 +2007,7 @@ namespace AutoVega4
                         using (NationalInstruments.DAQmx.Task digitalReadTask = new NationalInstruments.DAQmx.Task())
                         {
                             digitalReadTask.DIChannels.CreateChannel(
-                                test2,
+                                readLimSwitches,
                                 "port1",
                                 ChannelLineGrouping.OneChannelForAllLines);
 
@@ -2021,7 +2039,7 @@ namespace AutoVega4
                 using (NationalInstruments.DAQmx.Task digitalReadTask = new NationalInstruments.DAQmx.Task())
                 {
                     digitalReadTask.DIChannels.CreateChannel(
-                        test2,
+                        readLimSwitches,
                         "port1",
                         ChannelLineGrouping.OneChannelForAllLines);
 
@@ -2033,14 +2051,14 @@ namespace AutoVega4
 
                     if (limitInputText == "4")
                     {
-                        for (int i = 0; i < 500; i++)
+                        for (int i = 0; i < 300; i++)
                         {
                             try
                             {
                                 using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                                 {
                                     //  Create an Digital Output channel and name it.
-                                    digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                                    digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                                         ChannelLineGrouping.OneChannelForAllLines);
 
                                     //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
@@ -2067,8 +2085,6 @@ namespace AutoVega4
 
         private void lowerZPosition(int v)
         {
-            string test = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[0];
-
             for (int i = 0; i < v; i++)
             {
                 try
@@ -2076,7 +2092,7 @@ namespace AutoVega4
                     using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
                     {
                         //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(test, "port0",
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
                             ChannelLineGrouping.OneChannelForAllLines);
 
                         //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
