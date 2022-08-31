@@ -157,6 +157,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Auto Vega\34_well_cartridge_steps.csv" />
+    <None Include="Auto Vega\34_well_cartridge_steps_1row_test.csv" />
     <None Include="Auto Vega\cartridge_scanning_map_default_2.csv" />
     <None Include="Auto Vega\single_well_cartridge_map.csv" />
     <None Include="packages.config" />

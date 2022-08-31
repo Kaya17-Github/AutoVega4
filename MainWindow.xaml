@@ -84,15 +84,15 @@
         <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Hidden"/>
         <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Hidden">
             <Border Name="sampleDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="15,0,0,0">
-                <TextBlock x:Name="sampleDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Draining Sample" VerticalAlignment="Center" Height="60" Width="90" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+                <TextBlock x:Name="sampleDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubate and Drain" VerticalAlignment="Center" Height="60" Width="90" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
             <TextBlock Text="&#x2794;" Margin="12.85,0,0,0" FontSize="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Border Name="wbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="12.85,0,0,0">
-                <TextBlock x:Name="wbDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Wash Buffer" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+                <TextBlock x:Name="wbDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Probe" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
             <TextBlock Text="&#x2794;" Margin="12.85,0,0,0" FontSize="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Border Name="wbDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12.85,0,0,0">
-                <TextBlock x:Name="wbDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Draining Wash Buffer" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+                <TextBlock x:Name="wbDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubate and Drain" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
             <TextBlock Text="&#x2794;" Margin="12.85,0,0,0" FontSize="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Border Name="rbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="12.85,0,0,0">
