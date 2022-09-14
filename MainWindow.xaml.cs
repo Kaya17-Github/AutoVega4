@@ -1168,8 +1168,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 2030 steps (2.9mL)
-                drawLiquid(2030);
+                // Draw 1750 steps (2.5mL)
+                drawLiquid(1750);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1190,8 +1190,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A1", "Dispensing", 1000);
 
-                // Dispense 350ul RB in A1
-                dispenseLiquid(245);
+                // Dispense 300ul RB in A1
+                dispenseLiquid(210);
 
                 // Change A1 to finished color
                 inProgressA1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1206,8 +1206,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in B1", "Dispensing", 1000);
 
-                // Dispense 350ul RB in B1
-                dispenseLiquid(245);
+                // Dispense 300ul RB in B1
+                dispenseLiquid(210);
 
                 // Change B1 to finished color
                 inProgressB1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1222,8 +1222,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A2", "Dispensing", 1000);
 
-                // Dispense 350ul RB in A2
-                dispenseLiquid(245);
+                // Dispense 300ul RB in A2
+                dispenseLiquid(210);
 
                 // Change A2 to finished color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1238,8 +1238,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A3", "Dispensing", 1000);
 
-                // Dispense 350ul RB in A3
-                dispenseLiquid(245);
+                // Dispense 300ul RB in A3
+                dispenseLiquid(210);
 
                 // Change A3 to finished color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1254,8 +1254,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A4", "Dispensing", 1000);
 
-                // Dispense 350ul RB in A4
-                dispenseLiquid(245);
+                // Dispense 300ul RB in A4
+                dispenseLiquid(210);
 
                 // Change A4 to finished color
                 inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1270,8 +1270,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A5", "Dispensing", 1000);
 
-                // Dispense 350ul RB in A5
-                dispenseLiquid(245);
+                // Dispense 300ul RB in A5
+                dispenseLiquid(210);
 
                 // Change A5 to finished color
                 inProgressA5.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1286,8 +1286,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A6", "Dispensing", 1000);
 
-                // Dispense 350ul RB in A6
-                dispenseLiquid(245);
+                // Dispense 300ul RB in A6
+                dispenseLiquid(210);
 
                 // Change A6 to finished color
                 inProgressA6.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1302,8 +1302,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A7", "Dispensing", 1000);
 
-                // Dispense 350ul RB in A7
-                dispenseLiquid(245);
+                // Dispense 300ul RB in A7
+                dispenseLiquid(210);
 
                 // Change A7 to finished color
                 inProgressA7.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1315,7 +1315,6 @@ namespace AutoVega4
 
                 //MessageBox.Show("RB Dispensed");
                 AutoClosingMessageBox.Show("Read Buffer Dispensed", "Dispensing Complete", 2000);
-                MessageBox.Show("RB Dispensed");
                 File.AppendAllText(logFilePath, "Read Buffer Dispensed" + Environment.NewLine);
 
                 // Change Cartridges to gray
