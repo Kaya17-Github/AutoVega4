@@ -328,6 +328,82 @@ namespace AutoVega4
                 zPos[i] = Int32.Parse(map[i].Split(',')[3]);
             }
 
+            // turn z motor until limit switch is reached (z positive)
+            for (int i = 0; i < zPos[(int)steppingPositions.Home]; i++)
+            {
+                try
+                {
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 192);
+                        Thread.Sleep(wait);
+                        writer.WriteSingleSamplePort(true, 128);
+                    }
+
+                    try
+                    {
+                        using (NationalInstruments.DAQmx.Task digitalReadTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            digitalReadTask.DIChannels.CreateChannel(
+                                readLimSwitches,
+                                "port1",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            DigitalSingleChannelReader reader = new DigitalSingleChannelReader(digitalReadTask.Stream);
+                            UInt32 data = reader.ReadSingleSamplePortUInt32();
+
+                            //Update the Data Read box
+                            string LimitInputText = data.ToString();
+
+                            if (LimitInputText == "4" || LimitInputText == "5" || LimitInputText == "6" || LimitInputText == "7")
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    catch (DaqException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            // steps z back so limit switch is not pressed
+            for (int i = 0; i < zPos[(int)steppingPositions.Back_Off]; i++)
+            {
+                try
+                {
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 64);
+                        Thread.Sleep(wait);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
             // turns motor a specified amount of steps (x negative)
             for (int i = 0; i < xPos[(int)steppingPositions.Home]; i++)
             {
@@ -474,82 +550,6 @@ namespace AutoVega4
                         writer.WriteSingleSamplePort(true, 12);
                         Thread.Sleep(wait);
                         writer.WriteSingleSamplePort(true, 8);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-
-            // turn z motor until limit switch is reached (z positive)
-            for (int i = 0; i < zPos[(int)steppingPositions.Home]; i++)
-            {
-                try
-                {
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 192);
-                        Thread.Sleep(wait);
-                        writer.WriteSingleSamplePort(true, 128);
-                    }
-
-                    try
-                    {
-                        using (NationalInstruments.DAQmx.Task digitalReadTask = new NationalInstruments.DAQmx.Task())
-                        {
-                            digitalReadTask.DIChannels.CreateChannel(
-                                readLimSwitches,
-                                "port1",
-                                ChannelLineGrouping.OneChannelForAllLines);
-
-                            DigitalSingleChannelReader reader = new DigitalSingleChannelReader(digitalReadTask.Stream);
-                            UInt32 data = reader.ReadSingleSamplePortUInt32();
-
-                            //Update the Data Read box
-                            string LimitInputText = data.ToString();
-
-                            if (LimitInputText == "4" || LimitInputText == "5" || LimitInputText == "6" || LimitInputText == "7")
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    catch (DaqException ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-
-            // steps z back so limit switch is not pressed
-            for (int i = 0; i < zPos[(int)steppingPositions.Back_Off]; i++)
-            {
-                try
-                {
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 64);
-                        Thread.Sleep(wait);
-                        writer.WriteSingleSamplePort(true, 0);
                     }
                 }
                 catch (Exception ex)
@@ -731,8 +731,8 @@ namespace AutoVega4
 
                 // Wait 20 mins
                 AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
-                Task.Delay(1200000).Wait();
-                //Task.Delay(1000).Wait(); // 1 second instead of 30 mins
+                //Task.Delay(1200000).Wait();
+                Task.Delay(1000).Wait(); // 1 second instead of 30 mins
 
                 //MessageBox.Show("Moving to Drain Position");
                 AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
@@ -1027,17 +1027,21 @@ namespace AutoVega4
 
                 // Draw 2100 steps (3mL)
                 drawLiquid(2100);
-
-                // Dispense 2200 steps (3mL + extra)
-                dispenseLiquid(2200);
-
+                
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Probe_Wash_Bottle]);
 
+                // Dispense 2200 steps (3mL + extra)
+                dispenseLiquid(2300);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
                 // Wait 20 mins
                 AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
-                Task.Delay(1200000).Wait();
-                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+                //Task.Delay(1200000).Wait();
+                Task.Delay(1000).Wait(); // 1 second instead of 20 mins
 
                 //MessageBox.Show("Moving Back to Drain Position");
                 AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 1000);
@@ -1156,8 +1160,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 2800 steps (4mL)
-                drawLiquid(2800);
+                // Draw 2030 steps (2.9mL)
+                drawLiquid(2030);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1178,8 +1182,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A1", "Dispensing", 1000);
 
-                // Dispense 500ul RB in A1
-                dispenseLiquid(350);
+                // Dispense 350ul RB in A1
+                dispenseLiquid(245);
 
                 // Change A1 to finished color
                 inProgressA1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1194,8 +1198,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in B1", "Dispensing", 1000);
 
-                // Dispense 500ul RB in B1
-                dispenseLiquid(350);
+                // Dispense 350ul RB in B1
+                dispenseLiquid(245);
 
                 // Change B1 to finished color
                 inProgressB1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1210,8 +1214,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A2", "Dispensing", 1000);
 
-                // Dispense 500ul RB in A2
-                dispenseLiquid(350);
+                // Dispense 350ul RB in A2
+                dispenseLiquid(245);
 
                 // Change A2 to finished color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1226,8 +1230,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A3", "Dispensing", 1000);
 
-                // Dispense 500ul RB in A3
-                dispenseLiquid(350);
+                // Dispense 350ul RB in A3
+                dispenseLiquid(245);
 
                 // Change A3 to finished color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1242,8 +1246,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A4", "Dispensing", 1000);
 
-                // Dispense 500ul A4 in C2
-                dispenseLiquid(350);
+                // Dispense 350ul RB in A4
+                dispenseLiquid(245);
 
                 // Change A4 to finished color
                 inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1258,8 +1262,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A5", "Dispensing", 1000);
 
-                // Dispense 500ul RB in A5
-                dispenseLiquid(350);
+                // Dispense 350ul RB in A5
+                dispenseLiquid(245);
 
                 // Change A5 to finished color
                 inProgressA5.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1274,8 +1278,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A6", "Dispensing", 1000);
 
-                // Dispense 500ul RB in A6
-                dispenseLiquid(350);
+                // Dispense 350ul RB in A6
+                dispenseLiquid(245);
 
                 // Change A6 to finished color
                 inProgressA6.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1290,8 +1294,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A7", "Dispensing", 1000);
 
-                // Dispense 500ul RB in A7
-                dispenseLiquid(450);
+                // Dispense 350ul RB in A7
+                dispenseLiquid(245);
 
                 // Change A7 to finished color
                 inProgressA7.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1319,14 +1323,18 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Wash_Bottle]);
 
-                // Draw 2800 steps (4mL)
-                drawLiquid(2800);
-
-                // Dispense 2900 steps (4mL + extra)
-                dispenseLiquid(2900);
+                // Draw 2100 steps (3mL)
+                drawLiquid(2100);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Wash_Bottle]);
+
+                // Dispense 2400 steps (3.2mL + extra)
+                dispenseLiquid(2400);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
 
                 // TODO: Check for lid closed
                 MessageBox.Show("Please make sure lid is closed before continuing.");
@@ -1362,8 +1370,8 @@ namespace AutoVega4
                 // ----------------------------------------------------------------------------------------------------------------------------
 
                 // Move from RB_Wash_Bottle to A1 + Dispense_to_Read
-                moveX((xPos[(int)steppingPositions.A1] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.RB_Wash_Bottle]);
                 moveY((yPos[(int)steppingPositions.A1] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.RB_Wash_Bottle]);
+                moveX((xPos[(int)steppingPositions.A1] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.RB_Wash_Bottle]);
 
                 // Change A1 to in progress color
                 inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
