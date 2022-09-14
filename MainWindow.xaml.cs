@@ -629,6 +629,14 @@ namespace AutoVega4
                                                 inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
                                                 inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
 
+                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
+                                              resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
+                                              resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
+                                              resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
+                                              resultsDisplayA5,resultsDisplayB5,resultsDisplayC5,resultsDisplayD5,resultsDisplayE5,   /*Row 5*/ /*19-23*/
+                                              resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
+                                              resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
+
                 File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
 
                 // read parameter file and read in all necessary parameters
@@ -1435,6 +1443,8 @@ namespace AutoVega4
 
                 File.AppendAllText(outputFilePath, outputFileData);
 
+                resultsTextboxes[0].Text = raw_avg.ToString();
+
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // A1 End
 
@@ -1506,6 +1516,8 @@ namespace AutoVega4
                                             delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
+
+                resultsTextboxes[1].Text = raw_avg.ToString();
 
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // B1 End
@@ -1579,6 +1591,8 @@ namespace AutoVega4
 
                 File.AppendAllText(outputFilePath, outputFileData);
 
+                resultsTextboxes[8].Text = raw_avg.ToString();
+
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // A2 End
 
@@ -1650,6 +1664,8 @@ namespace AutoVega4
                                             delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
+
+                resultsTextboxes[9].Text = raw_avg.ToString();
 
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // A3 End
@@ -1723,6 +1739,8 @@ namespace AutoVega4
 
                 File.AppendAllText(outputFilePath, outputFileData);
 
+                resultsTextboxes[18].Text = raw_avg.ToString();
+
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // A4 End
 
@@ -1794,6 +1812,8 @@ namespace AutoVega4
                                             delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
+
+                resultsTextboxes[19].Text = raw_avg.ToString();
 
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // A5 End
@@ -1867,6 +1887,8 @@ namespace AutoVega4
 
                 File.AppendAllText(outputFilePath, outputFileData);
 
+                resultsTextboxes[28].Text = raw_avg.ToString();
+
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // A6 End
 
@@ -1939,6 +1961,8 @@ namespace AutoVega4
 
                 File.AppendAllText(outputFilePath, outputFileData);
 
+                resultsTextboxes[29].Text = raw_avg.ToString();
+
                 // ----------------------------------------------------------------------------------------------------------------------------
                 // A7 End... Reading Complete
 
@@ -1970,6 +1994,13 @@ namespace AutoVega4
                 results_grid.Visibility = Visibility.Visible;
 
                 File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
+
+                if (switchResults_cb.IsChecked == true)
+                {
+                    results_grid.Visibility = Visibility.Hidden;
+                    resultsDisplay_cart34_border.Visibility = Visibility.Visible;
+                    resultsDisplay_cart34.Visibility = Visibility.Visible;
+                }
 
                 isReading = false;
                 File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);

@@ -43,9 +43,6 @@
             <TextBlock Margin="60,250,0,0" TextWrapping="Wrap" Text="Number of samples" VerticalAlignment="Top" Foreground="Black" FontSize="20" Height="35"/>
             <TextBox x:Name="sampleNum_tb" VerticalContentAlignment="Center" Height="35" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="35" Margin="20,250,0,0" FontFamily="Arial" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" FontSize="20" Foreground="Black" IsEnabled="False" OpacityMask="Black"/>
         </StackPanel>
-        <StackPanel x:Name="Bottom_Row" Orientation="Horizontal">
-            <TextBlock x:Name="message_tb" Margin="50,710,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="Black" FontSize="20" Height="34" Background="#FFF6F6EB" TextAlignment="Center" Width="895"/>
-        </StackPanel>
         <StackPanel x:Name="Footer" Orientation="Horizontal">
             <TextBlock HorizontalAlignment="Center" Margin="428.675,800,0,0" TextWrapping="Wrap" Text="TEST EARLY" VerticalAlignment="Center" Foreground="Gray" FontSize="28" FontWeight="Bold"/>
             <TextBlock HorizontalAlignment="Center" Margin="10,800,0,0" TextWrapping="Wrap" Text="TEST SIMPLE" VerticalAlignment="Center" Foreground="Black" FontSize="28" FontWeight="Bold"/>
@@ -199,5 +196,257 @@
         </StackPanel>
         <Rectangle Name="inProgress_cart34_border" HorizontalAlignment="Center" Height="250" Margin="0,527,0,0" Stroke="Black" VerticalAlignment="Top" Width="350" Visibility="Hidden"/>
         <Button x:Name="musicBtn" Margin="953,592,149,258" Content="music" Click="musicBtn_Click" Visibility="Hidden"/>
+        <Rectangle Name="resultsDisplay_cart34_border" HorizontalAlignment="Center" Height="450" Width="650" VerticalAlignment="Center" Stroke="Black" Margin="0,184,0,0" Visibility="Hidden"/>
+        <StackPanel Name="resultsDisplay_cart34" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Height="450" Width="650" Margin="0,184,0,0" Visibility="Hidden">
+            <StackPanel x:Name="resultsDisplay_cart34A" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,10,0,0" Visibility="Visible">
+                <TextBox Name="resultsDisplayA7" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayA6" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayA5" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayA4" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayA3" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayA2" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayA1" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+            <StackPanel x:Name="resultsDisplay_cart34B" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Visible">
+                <TextBox Name="resultsDisplayB7" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayB6" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayB5" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayB4" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayB3" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayB2" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayB1" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+            <StackPanel x:Name="resultsDisplay_cart34C" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Visible">
+                <TextBox Name="resultsDisplayC7" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayC6" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayC5" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayC4" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayC3" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayC2" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayC1" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+            <StackPanel x:Name="resultsDisplay_cart34D" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Visible">
+                <TextBox Name="resultsDisplayD7" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayD6" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayD5" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayD4" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayD3" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayD2" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayD1" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+            <StackPanel x:Name="resultsDisplay_cart34E" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Visible">
+                <TextBox Name="resultsDisplayE7" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-80,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayE6" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayE5" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayE4" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayE3" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="resultsDisplayE2" Background="Gray" Foreground="White" FontSize="16" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+        </StackPanel>
+        <CheckBox x:Name="switchResults_cb" Content="Visual Results" HorizontalAlignment="Left" Margin="1009,165,0,0" VerticalAlignment="Top" IsChecked="True"/>
     </Grid>
 </Window>
