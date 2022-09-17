@@ -737,6 +737,16 @@ namespace AutoVega4
                 // ** Start of moving steps **
                 // ---------------------------
 
+                // Change Sample Draining Box and Cartridge to in progress color
+                sampleDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                sampleDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                sampleDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                sampleDrain_tb.Foreground = Brushes.Black;
+                for (int i = 0; i < inProgressEllipses.Length; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
                 // Wait 20 mins
                 AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
                 Task.Delay(1200000).Wait();
@@ -749,16 +759,6 @@ namespace AutoVega4
                 // Move to Drain Position
                 moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Load]);
                 moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Load]);
-
-                // Change Sample Draining Box and Cartridge to in progress color
-                sampleDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                sampleDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                sampleDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                sampleDrain_tb.Foreground = Brushes.Black;
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                }
 
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
@@ -1125,6 +1125,16 @@ namespace AutoVega4
 
                 dispenseLiquid(300);
 
+                // Change WB Draining Box and Cartridge to in progress color
+                wbDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                wbDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                wbDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                wbDrain_tb.Foreground = Brushes.Black;
+                for (int i = 0; i < inProgressEllipses.Length; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
                 // Wait 20 mins
                 AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
                 Task.Delay(1200000).Wait();
@@ -1137,16 +1147,6 @@ namespace AutoVega4
                 // Move back to Drain Position
                 moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Probe_Wash_Bottle]);
                 moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Probe_Wash_Bottle]);
-
-                // Change WB Draining Box and Cartridge to in progress color
-                wbDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                wbDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                wbDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                wbDrain_tb.Foreground = Brushes.Black;
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                }
 
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
