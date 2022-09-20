@@ -42,10 +42,14 @@ namespace AutoVega4
         readonly string switchBanks;
         readonly string delimiter;
         readonly string[] map;
+        readonly string[] shiftAndScale;
         string testResult;
         string sampleName;
         string outputFileData;
-        readonly int drainTime = 120000; //wait for 2 minutes
+        int incubationMinutes;
+        int incubationTime;
+        int drainMinutes;
+        int drainTime;
         readonly int wait = 0;
         double raw_avg;
         double TC_rdg;
@@ -87,6 +91,8 @@ namespace AutoVega4
             switchBanks = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[5];
 
             map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps_1row_test.csv");
+
+            shiftAndScale = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17_32Well_Shift_Scale.csv");
 
             delimiter = ",";
 
@@ -310,6 +316,44 @@ namespace AutoVega4
             C7 = 41,
             D7 = 42,
             E7 = 43,
+        }
+
+        enum shiftsAndScales
+        {
+            A1 = 0,
+            B1 = 1,
+            C1 = 2,
+            D1 = 3,
+            E2 = 4,
+            D2 = 5,
+            C2 = 6,
+            B2 = 7,
+            A2 = 8,
+            A3 = 9,
+            B3 = 10,
+            C3 = 11,
+            D3 = 12,
+            E3 = 13,
+            E4 = 14,
+            D4 = 15,
+            C4 = 16,
+            B4 = 17,
+            A4 = 18,
+            A5 = 19,
+            B5 = 20,
+            C5 = 21,
+            D5 = 22,
+            E5 = 23,
+            E6 = 24,
+            D6 = 25,
+            C6 = 26,
+            B6 = 27,
+            A6 = 28,
+            A7 = 29,
+            B7 = 30,
+            C7 = 31,
+            D7 = 32,
+            E7 = 33,
         }
 
         private void MoveToHomePosition()
@@ -734,6 +778,15 @@ namespace AutoVega4
                     pump[i] = Int32.Parse(map[i].Split(',')[4]);
                 }
 
+                double[] shiftFactors = new double[shiftAndScale.Length];
+                double[] scaleFactors = new double[shiftAndScale.Length];
+
+                for (int i = 0; i < shiftAndScale.Length; i++)
+                {
+                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
+                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
+                }
+
                 // ** Start of moving steps **
                 // ---------------------------
 
@@ -747,10 +800,30 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 }
 
-                // Wait 20 mins
-                AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
-                Task.Delay(1200000).Wait();
-                //Task.Delay(1000).Wait(); // 1 second instead of 30 mins
+                // Incubate for the amount of time entered
+                incubationMinutes = Int32.Parse(incubationTime_tb.Text);
+                //incubationTime = incubationMinutes * 60 * 1000;
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i; 
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+
+                    incubationRemaining_tb.Text = (remaining - 1).ToString();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
 
                 //MessageBox.Show("Moving to Drain Position");
                 AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
@@ -763,9 +836,12 @@ namespace AutoVega4
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
 
-                //MessageBox.Show("Wait 2 minutes for samples to drain through cartridges");
-                AutoClosingMessageBox.Show("Wait 2 minutes for samples to drain through cartridges", "Draining", 1000);
-                File.AppendAllText(logFilePath, "Wait 2 minutes for samples to drain through cartridges" + Environment.NewLine);
+                drainMinutes = Int32.Parse(drainTime_tb.Text);
+                drainTime = drainMinutes * 60 * 1000;
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for samples to drain through cartridges" + Environment.NewLine);
 
                 // Turn pump on
                 try
@@ -798,7 +874,7 @@ namespace AutoVega4
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                }
+                }                
 
                 // Leave pump on for 2 minutes
                 Task.Delay(drainTime).Wait();
@@ -874,7 +950,7 @@ namespace AutoVega4
                     }
 
                     // Leave pump on for 2 minutes
-                    Task.Delay(drainTime).Wait();
+                    Task.Delay(120000).Wait();
 
                     // Turn pump off
                     try
@@ -941,15 +1017,15 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
 
-                // Draw Probe for eight wells (A1, B1, A2, A3, A4, A5, A6, A7)
+                // Draw Probe for rows 2, 3, and 4
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
                 File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
 
                 // Lower Z by 9000 steps
                 lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
 
-                // Draw 1848 steps (2.64mL)
-                drawLiquid(1848);
+                // Draw 3150 steps (4.5mL)
+                drawLiquid(3150);
 
                 // Raise Z by 9000 steps
                 raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
@@ -960,50 +1036,82 @@ namespace AutoVega4
                 wbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 wbDispense_tb.Foreground = Brushes.Black;
 
-                //**A1**//
-                // Move from probe bottle to A1
-                moveY(yPos[(int)steppingPositions.A1] - yPos[(int)steppingPositions.Probe_Bottle]);
-                moveX(xPos[(int)steppingPositions.A1] - xPos[(int)steppingPositions.Probe_Bottle]);
+                //**E2**//
+                // Move from probe bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
 
-                // Change A1 to in progress color
-                inProgressA1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                // Change E2 to in progress color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                AutoClosingMessageBox.Show("Dispensing Probe in A1", "Dispensing", 1000);
+                AutoClosingMessageBox.Show("Dispensing Probe in E2", "Dispensing", 1000);
 
-                // Dispense 330ul Probe in A1
-                dispenseLiquid(231);
+                // Dispense 300ul Probe in E2
+                dispenseLiquid(210);
 
-                // Change A1 to finished color
-                inProgressA1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                // Change E2 to finished color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
-                //**B1**//
-                // Move from A1 to B1
-                moveX(xPos[(int)steppingPositions.B1] - xPos[(int)steppingPositions.A1]);
-                moveY(yPos[(int)steppingPositions.B1] - yPos[(int)steppingPositions.A1]);
+                //**D2**//
+                // Move from E2 to D2
+                moveX(xPos[(int)steppingPositions.D2] - xPos[(int)steppingPositions.E2]);
+                moveY(yPos[(int)steppingPositions.D2] - yPos[(int)steppingPositions.E2]);
 
-                // Change B1 to in progress color
-                inProgressB1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                // Change D2 to in progress color
+                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                AutoClosingMessageBox.Show("Dispensing Probe in B1", "Dispensing", 1000);
+                AutoClosingMessageBox.Show("Dispensing Probe in D2", "Dispensing", 1000);
 
-                // Dispense 330ul Probe in B1
-                dispenseLiquid(231);
+                // Dispense 300ul Probe in D2
+                dispenseLiquid(210);
 
-                // Change B1 to finished color
-                inProgressB1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                // Change D2 to finished color
+                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C2**//
+                // Move from D2 to C2
+                moveX(xPos[(int)steppingPositions.C2] - xPos[(int)steppingPositions.D2]);
+                moveY(yPos[(int)steppingPositions.C2] - yPos[(int)steppingPositions.D2]);
+
+                // Change C2 to in progress color
+                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in C2", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in C2
+                dispenseLiquid(210);
+
+                // Change C2 to finished color
+                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**B2**//
+                // Move from C2 to B2
+                moveX(xPos[(int)steppingPositions.B2] - xPos[(int)steppingPositions.C2]);
+                moveY(yPos[(int)steppingPositions.B2] - yPos[(int)steppingPositions.C2]);
+
+                // Change B2 to in progress color
+                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in B2", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in B2
+                dispenseLiquid(210);
+
+                // Change B2 to finished color
+                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 //**A2**//
-                // Move from B1 to A2
-                moveX(xPos[(int)steppingPositions.A2] - xPos[(int)steppingPositions.B1]);
-                moveY(yPos[(int)steppingPositions.A2] - yPos[(int)steppingPositions.B1]);
+                // Move from B2 to A2
+                moveX(xPos[(int)steppingPositions.A2] - xPos[(int)steppingPositions.B2]);
+                moveY(yPos[(int)steppingPositions.A2] - yPos[(int)steppingPositions.B2]);
 
                 // Change A2 to in progress color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
                 AutoClosingMessageBox.Show("Dispensing Probe in A2", "Dispensing", 1000);
 
-                // Dispense 330ul Probe in A2
-                dispenseLiquid(231);
+                // Dispense 300ul Probe in A2
+                dispenseLiquid(210);
 
                 // Change A2 to finished color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1018,75 +1126,155 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing Probe in A3", "Dispensing", 1000);
 
-                // Dispense 330ul Probe in A3
-                dispenseLiquid(231);
+                // Dispense 300ul Probe in A3
+                dispenseLiquid(210);
 
                 // Change A3 to finished color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
+                //**B3**//
+                // Move from A3 to B3
+                moveX(xPos[(int)steppingPositions.B3] - xPos[(int)steppingPositions.A3]);
+                moveY(yPos[(int)steppingPositions.B3] - yPos[(int)steppingPositions.A3]);
+
+                // Change B3 to in progress color
+                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in B3", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in B3
+                dispenseLiquid(210);
+
+                // Change B3 to finished color
+                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C3**//
+                // Move from B3 to C3
+                moveX(xPos[(int)steppingPositions.C3] - xPos[(int)steppingPositions.B3]);
+                moveY(yPos[(int)steppingPositions.C3] - yPos[(int)steppingPositions.B3]);
+
+                // Change C3 to in progress color
+                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in C3", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in C3
+                dispenseLiquid(210);
+
+                // Change C3 to finished color
+                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**D3**//
+                // Move from C3 to D3
+                moveX(xPos[(int)steppingPositions.D3] - xPos[(int)steppingPositions.C3]);
+                moveY(yPos[(int)steppingPositions.D3] - yPos[(int)steppingPositions.C3]);
+
+                // Change D3 to in progress color
+                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in D3", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in D3
+                dispenseLiquid(210);
+
+                // Change D3 to finished color
+                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**E3**//
+                // Move from D3 to E3
+                moveX(xPos[(int)steppingPositions.E3] - xPos[(int)steppingPositions.D3]);
+                moveY(yPos[(int)steppingPositions.E3] - yPos[(int)steppingPositions.D3]);
+
+                // Change E3 to in progress color
+                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in E3", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in E3
+                dispenseLiquid(210);
+
+                // Change E3 to finished color
+                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**E4**//
+                // Move from E3 to E4
+                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.E3]);
+
+                // Change E4 to in progress color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in E4", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in E4
+                dispenseLiquid(210);
+
+                // Change E4 to finished color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**D4**//
+                // Move from E4 to D4
+                moveX(xPos[(int)steppingPositions.D4] - xPos[(int)steppingPositions.E4]);
+                moveY(yPos[(int)steppingPositions.D4] - yPos[(int)steppingPositions.E4]);
+
+                // Change D4 to in progress color
+                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in D4", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in D4
+                dispenseLiquid(210);
+
+                // Change D4 to finished color
+                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C4**//
+                // Move from D4 to C4
+                moveX(xPos[(int)steppingPositions.C4] - xPos[(int)steppingPositions.D4]);
+                moveY(yPos[(int)steppingPositions.C4] - yPos[(int)steppingPositions.D4]);
+
+                // Change C4 to in progress color
+                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in C4", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in C4
+                dispenseLiquid(210);
+
+                // Change C4 to finished color
+                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**B4**//
+                // Move from C4 to B4
+                moveX(xPos[(int)steppingPositions.B4] - xPos[(int)steppingPositions.C4]);
+                moveY(yPos[(int)steppingPositions.B4] - yPos[(int)steppingPositions.C4]);
+
+                // Change B4 to in progress color
+                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in B4", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in B4
+                dispenseLiquid(210);
+
+                // Change B4 to finished color
+                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
                 //**A4**//
-                // Move from A3 to A4
-                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.A3]);
-                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.A3]);
+                // Move from B4 to A4
+                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.B4]);
+                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.B4]);
 
                 // Change A4 to in progress color
                 inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
                 AutoClosingMessageBox.Show("Dispensing Probe in A4", "Dispensing", 1000);
 
-                // Dispense 330ul Probe in A4
-                dispenseLiquid(231);
+                // Dispense remaining Probe in A4
+                dispenseLiquid(310);
 
                 // Change A4 to finished color
                 inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A5**//
-                // Move from A4 to A5
-                moveX(xPos[(int)steppingPositions.A5] - xPos[(int)steppingPositions.A4]);
-                moveY(yPos[(int)steppingPositions.A5] - yPos[(int)steppingPositions.A4]);
-
-                // Change A5 to in progress color
-                inProgressA5.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in A5", "Dispensing", 1000);
-
-                // Dispense 330ul Probe in A5
-                dispenseLiquid(231);
-
-                // Change A5 to finished color
-                inProgressA5.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A6**//
-                // Move from A5 to A6
-                moveX(xPos[(int)steppingPositions.A6] - xPos[(int)steppingPositions.A5]);
-                moveY(yPos[(int)steppingPositions.A6] - yPos[(int)steppingPositions.A5]);
-
-                // Change A6 to in progress color
-                inProgressA6.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in A6", "Dispensing", 1000);
-
-                // Dispense 330ul Probe in A6
-                dispenseLiquid(231);
-
-                // Change A6 to finished color
-                inProgressA6.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A7**//
-                // Move from A6 to A7
-                moveX(xPos[(int)steppingPositions.A7] - xPos[(int)steppingPositions.A6]);
-                moveY(yPos[(int)steppingPositions.A7] - yPos[(int)steppingPositions.A6]);
-
-                // Change A7 to in progress color
-                inProgressA7.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in A7", "Dispensing", 1000);
-
-                // Dispense 330ul Probe in A7
-                dispenseLiquid(331);
-
-                // Change A7 to finished color
-                inProgressA7.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Change Probe Dispense box to finished color
                 wbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1105,21 +1293,21 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
 
-                // Move from A7 to Probe_Wash_Bottle
-                moveX(xPos[(int)steppingPositions.Probe_Wash_Bottle] - xPos[(int)steppingPositions.A7]);
-                moveY(yPos[(int)steppingPositions.Probe_Wash_Bottle] - yPos[(int)steppingPositions.A7]);
+                // Move from A4 to Probe_Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Probe_Wash_Bottle] - xPos[(int)steppingPositions.A4]);
+                moveY(yPos[(int)steppingPositions.Probe_Wash_Bottle] - yPos[(int)steppingPositions.A4]);
 
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Probe_Wash_Bottle]);
 
-                // Draw 2100 steps (3mL)
-                drawLiquid(2100);
+                // Draw 3150 steps (4.5mL)
+                drawLiquid(3150);
                 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Probe_Wash_Bottle]);
 
-                // Dispense 2200 steps (3mL + extra)
-                dispenseLiquid(2300);
+                // Dispense 3300 steps (4.5mL + extra)
+                dispenseLiquid(3300);
 
                 Task.Delay(5000).Wait();
 
@@ -1135,9 +1323,25 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 }
 
-                // Wait 20 mins
-                AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
-                Task.Delay(1200000).Wait();
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+
+                    incubationRemaining_tb.Text = (remaining - 1).ToString();
+                }
+                //Task.Delay(incubationTime).Wait();
                 //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
 
                 //MessageBox.Show("Moving Back to Drain Position");
@@ -1151,9 +1355,9 @@ namespace AutoVega4
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
 
-                //MessageBox.Show("Wait 2 minutes for WB to drain through cartridges");
-                AutoClosingMessageBox.Show("Wait 2 minutes for WB to drain through cartridges", "Draining", 1000);
-                File.AppendAllText(logFilePath, "Wait 2 minutes for WB to drain through cartridges" + Environment.NewLine);
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for WB to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for WB to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for WB to drain through cartridges" + Environment.NewLine);
 
                 // Turn pump on
                 try
@@ -1262,7 +1466,7 @@ namespace AutoVega4
                     }
 
                     // Leave pump on for 2 minutes
-                    Task.Delay(drainTime).Wait();
+                    Task.Delay(120000).Wait();
 
                     // Turn pump off
                     try
@@ -1326,8 +1530,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 1750 steps (2.5mL)
-                drawLiquid(1750);
+                // Draw 3220 steps (4.6mL)
+                drawLiquid(3220);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1338,42 +1542,74 @@ namespace AutoVega4
                 rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 rbDispense_tb.Foreground = Brushes.Black;
 
-                //**A1**//
-                // Move from RB bottle to A1
-                moveY(yPos[(int)steppingPositions.A1] - yPos[(int)steppingPositions.RB_Bottle]);
-                moveX(xPos[(int)steppingPositions.A1] - xPos[(int)steppingPositions.RB_Bottle]);
+                //**E2**//
+                // Move from RB bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.RB_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.RB_Bottle]);
 
-                // Change A1 to in progress color
-                inProgressA1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                // Change E2 to in progress color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                AutoClosingMessageBox.Show("Dispensing RB in A1", "Dispensing", 1000);
+                AutoClosingMessageBox.Show("Dispensing RB in E2", "Dispensing", 1000);
 
-                // Dispense 300ul RB in A1
+                // Dispense 300ul RB in E2
                 dispenseLiquid(210);
 
-                // Change A1 to finished color
-                inProgressA1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                // Change E2 to finished color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
-                //**B1**//
-                // Move from A1 to B1
-                moveX(xPos[(int)steppingPositions.B1] - xPos[(int)steppingPositions.A1]);
-                moveY(yPos[(int)steppingPositions.B1] - yPos[(int)steppingPositions.A1]);
+                //**D2**//
+                // Move from E2 to D2
+                moveX(xPos[(int)steppingPositions.D2] - xPos[(int)steppingPositions.E2]);
+                moveY(yPos[(int)steppingPositions.D2] - yPos[(int)steppingPositions.E2]);
 
-                // Change B1 to in progress color
-                inProgressB1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                // Change D2 to in progress color
+                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                AutoClosingMessageBox.Show("Dispensing RB in B1", "Dispensing", 1000);
+                AutoClosingMessageBox.Show("Dispensing RB in D2", "Dispensing", 1000);
 
-                // Dispense 300ul RB in B1
+                // Dispense 300ul RB in D2
                 dispenseLiquid(210);
 
-                // Change B1 to finished color
-                inProgressB1.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                // Change D2 to finished color
+                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C2**//
+                // Move from D2 to C2
+                moveX(xPos[(int)steppingPositions.C2] - xPos[(int)steppingPositions.D2]);
+                moveY(yPos[(int)steppingPositions.C2] - yPos[(int)steppingPositions.D2]);
+
+                // Change C2 to in progress color
+                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in C2", "Dispensing", 1000);
+
+                // Dispense 300ul RB in C2
+                dispenseLiquid(210);
+
+                // Change C2 to finished color
+                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**B2**//
+                // Move from C2 to B2
+                moveX(xPos[(int)steppingPositions.B2] - xPos[(int)steppingPositions.C2]);
+                moveY(yPos[(int)steppingPositions.B2] - yPos[(int)steppingPositions.C2]);
+
+                // Change B2 to in progress color
+                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in B2", "Dispensing", 1000);
+
+                // Dispense 300ul RB in B2
+                dispenseLiquid(210);
+
+                // Change B2 to finished color
+                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 //**A2**//
-                // Move from B1 to A2
-                moveX(xPos[(int)steppingPositions.A2] - xPos[(int)steppingPositions.B1]);
-                moveY(yPos[(int)steppingPositions.A2] - yPos[(int)steppingPositions.B1]);
+                // Move from B2 to A2
+                moveX(xPos[(int)steppingPositions.A2] - xPos[(int)steppingPositions.B2]);
+                moveY(yPos[(int)steppingPositions.A2] - yPos[(int)steppingPositions.B2]);
 
                 // Change A2 to in progress color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -1402,10 +1638,138 @@ namespace AutoVega4
                 // Change A3 to finished color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
+                //**B3**//
+                // Move from A3 to B3
+                moveX(xPos[(int)steppingPositions.B3] - xPos[(int)steppingPositions.A3]);
+                moveY(yPos[(int)steppingPositions.B3] - yPos[(int)steppingPositions.A3]);
+
+                // Change B3 to in progress color
+                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in B3", "Dispensing", 1000);
+
+                // Dispense 300ul RB in B3
+                dispenseLiquid(210);
+
+                // Change B3 to finished color
+                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C3**//
+                // Move from B3 to C3
+                moveX(xPos[(int)steppingPositions.C3] - xPos[(int)steppingPositions.B3]);
+                moveY(yPos[(int)steppingPositions.C3] - yPos[(int)steppingPositions.B3]);
+
+                // Change C3 to in progress color
+                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in C3", "Dispensing", 1000);
+
+                // Dispense 300ul RB in C3
+                dispenseLiquid(210);
+
+                // Change C3 to finished color
+                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**D3**//
+                // Move from C3 to D3
+                moveX(xPos[(int)steppingPositions.D3] - xPos[(int)steppingPositions.C3]);
+                moveY(yPos[(int)steppingPositions.D3] - yPos[(int)steppingPositions.C3]);
+
+                // Change D3 to in progress color
+                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in D3", "Dispensing", 1000);
+
+                // Dispense 300ul RB in D3
+                dispenseLiquid(210);
+
+                // Change D3 to finished color
+                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**E3**//
+                // Move from D3 to E3
+                moveX(xPos[(int)steppingPositions.E3] - xPos[(int)steppingPositions.D3]);
+                moveY(yPos[(int)steppingPositions.E3] - yPos[(int)steppingPositions.D3]);
+
+                // Change E3 to in progress color
+                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in E3", "Dispensing", 1000);
+
+                // Dispense 300ul RB in E3
+                dispenseLiquid(210);
+
+                // Change E3 to finished color
+                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**E4**//
+                // Move from E3 to E4
+                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.E3]);
+
+                // Change E4 to in progress color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in E4", "Dispensing", 1000);
+
+                // Dispense 300ul RB in E4
+                dispenseLiquid(210);
+
+                // Change E4 to finished color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**D4**//
+                // Move from E4 to D4
+                moveX(xPos[(int)steppingPositions.D4] - xPos[(int)steppingPositions.E4]);
+                moveY(yPos[(int)steppingPositions.D4] - yPos[(int)steppingPositions.E4]);
+
+                // Change D4 to in progress color
+                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in D4", "Dispensing", 1000);
+
+                // Dispense 300ul RB in D4
+                dispenseLiquid(210);
+
+                // Change D4 to finished color
+                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C4**//
+                // Move from D4 to C4
+                moveX(xPos[(int)steppingPositions.C4] - xPos[(int)steppingPositions.D4]);
+                moveY(yPos[(int)steppingPositions.C4] - yPos[(int)steppingPositions.D4]);
+
+                // Change C4 to in progress color
+                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in C4", "Dispensing", 1000);
+
+                // Dispense 300ul RB in C4
+                dispenseLiquid(210);
+
+                // Change C4 to finished color
+                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**B4**//
+                // Move from C4 to B4
+                moveX(xPos[(int)steppingPositions.B4] - xPos[(int)steppingPositions.C4]);
+                moveY(yPos[(int)steppingPositions.B4] - yPos[(int)steppingPositions.C4]);
+
+                // Change B4 to in progress color
+                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in B4", "Dispensing", 1000);
+
+                // Dispense 300ul RB in B4
+                dispenseLiquid(210);
+
+                // Change B4 to finished color
+                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
                 //**A4**//
-                // Move from A3 to A4
-                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.A3]);
-                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.A3]);
+                // Move from B4 to A4
+                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.B4]);
+                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.B4]);
 
                 // Change A4 to in progress color
                 inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -1416,55 +1780,7 @@ namespace AutoVega4
                 dispenseLiquid(210);
 
                 // Change A4 to finished color
-                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A5**//
-                // Move from A4 to A5
-                moveX(xPos[(int)steppingPositions.A5] - xPos[(int)steppingPositions.A4]);
-                moveY(yPos[(int)steppingPositions.A5] - yPos[(int)steppingPositions.A4]);
-
-                // Change A5 to in progress color
-                inProgressA5.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in A5", "Dispensing", 1000);
-
-                // Dispense 300ul RB in A5
-                dispenseLiquid(210);
-
-                // Change A5 to finished color
-                inProgressA5.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A6**//
-                // Move from A5 to A6
-                moveX(xPos[(int)steppingPositions.A6] - xPos[(int)steppingPositions.A5]);
-                moveY(yPos[(int)steppingPositions.A6] - yPos[(int)steppingPositions.A5]);
-
-                // Change A6 to in progress color
-                inProgressA6.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in A6", "Dispensing", 1000);
-
-                // Dispense 300ul RB in A6
-                dispenseLiquid(210);
-
-                // Change A6 to finished color
-                inProgressA6.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A7**//
-                // Move from A6 to A7
-                moveX(xPos[(int)steppingPositions.A7] - xPos[(int)steppingPositions.A6]);
-                moveY(yPos[(int)steppingPositions.A7] - yPos[(int)steppingPositions.A6]);
-
-                // Change A7 to in progress color
-                inProgressA7.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in A7", "Dispensing", 1000);
-
-                // Dispense 300ul RB in A7
-                dispenseLiquid(210);
-
-                // Change A7 to finished color
-                inProgressA7.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);                
 
                 // Change RB Dispense box to finished color
                 rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1481,21 +1797,24 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
 
-                // Move from A7 to RB_Wash_Bottle
-                moveX(xPos[(int)steppingPositions.RB_Wash_Bottle] - xPos[(int)steppingPositions.A7]);
-                moveY(yPos[(int)steppingPositions.RB_Wash_Bottle] - yPos[(int)steppingPositions.A7]);
+                // Move from A4 to RB_Wash_Bottle
+                moveX(xPos[(int)steppingPositions.RB_Wash_Bottle] - xPos[(int)steppingPositions.A4]);
+                moveY(yPos[(int)steppingPositions.RB_Wash_Bottle] - yPos[(int)steppingPositions.A4]);
+
+                // Dispense remaining 0.1mL RB in bottle
+                dispenseLiquid(100);
 
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Wash_Bottle]);
 
-                // Draw 2100 steps (3mL)
-                drawLiquid(2100);
+                // Draw 3220 steps (4.6mL)
+                drawLiquid(3220);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Wash_Bottle]);
 
-                // Dispense 2400 steps (3.2mL + extra)
-                dispenseLiquid(2400);
+                // Dispense 3300 steps (4.6mL + extra)
+                dispenseLiquid(3300);
 
                 Task.Delay(5000).Wait();
 
@@ -1531,39 +1850,31 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
                 File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
 
-                // A1 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
+                // Move from RB_Wash_Bottle to E2 + Dispense_to_Read
+                moveX((xPos[(int)steppingPositions.E2] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.RB_Wash_Bottle]);
+                moveY((yPos[(int)steppingPositions.E2] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.RB_Wash_Bottle]);
 
-                // Move from RB_Wash_Bottle to A1 + Dispense_to_Read
-                moveY((yPos[(int)steppingPositions.A1] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.RB_Wash_Bottle]);
-                moveX((xPos[(int)steppingPositions.A1] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.RB_Wash_Bottle]);
+                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                // Change A1 to in progress color
-                inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                AutoClosingMessageBox.Show("Reading E2", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading E2" + Environment.NewLine);
 
-                AutoClosingMessageBox.Show("Reading A1", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading A1" + Environment.NewLine);
+                StringBuilder sbE2 = new StringBuilder(100000);
 
-                // Read A1
-                StringBuilder sbA1 = new StringBuilder(100000);
+                IntPtr testBoardValuePtrE2 = testGetBoardValue(sbE2, sbE2.Capacity);
+                double[] testArrayE2 = new double[5];
+                Marshal.Copy(testBoardValuePtrE2, testArrayE2, 0, 5);
+                string inputStringE2 = "";
+                inputStringE2 += "Return Value: m_dAvgValue = " + testArrayE2[0] + "\n";
+                inputStringE2 += "Return Value: m_dCumSum = " + testArrayE2[1] + "\n";
+                inputStringE2 += "Return Value: m_dLEDtmp = " + testArrayE2[2] + "\n";
+                inputStringE2 += "Return Value: m_dPDtmp = " + testArrayE2[3] + "\n";
+                inputStringE2 += "Return Value: testGetBoardValue = " + testArrayE2[4] + "\n";
 
-                IntPtr testBoardValuePtrA1 = testGetBoardValue(sbA1, sbA1.Capacity);
-                double[] testArrayA1 = new double[5];
-                Marshal.Copy(testBoardValuePtrA1, testArrayA1, 0, 5);
-                string inputStringA1 = "";
-                inputStringA1 += "Return Value: m_dAvgValue = " + testArrayA1[0] + "\n";
-                inputStringA1 += "Return Value: m_dCumSum = " + testArrayA1[1] + "\n";
-                inputStringA1 += "Return Value: m_dLEDtmp = " + testArrayA1[2] + "\n";
-                inputStringA1 += "Return Value: m_dPDtmp = " + testArrayA1[3] + "\n";
-                inputStringA1 += "Return Value: testGetBoardValue = " + testArrayA1[4] + "\n";
-
-                File.AppendAllText(logFilePath, "A1 avg value = " + testArrayA1[0] + Environment.NewLine);
-
-                // Change A1 to finished color
-                inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA1[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayE2[0] - shiftFactors[(int)shiftsAndScales.E2]) * scaleFactors[(int)shiftsAndScales.E2];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -1577,11 +1888,11 @@ namespace AutoVega4
                     testResult = "POS";
                 }
 
-                sampleName = positions[(int)steppingPositions.A1];
+                sampleName = positions[(int)steppingPositions.E2];
 
                 testResults.Add(new TestResults()
                 {
-                    WellName = positions[(int)steppingPositions.A1],
+                    WellName = positions[(int)steppingPositions.E2],
                     BackgroundReading = bgd_rdg.ToString(),
                     Threshold = threshold.ToString(),
                     RawAvg = raw_avg.ToString(),
@@ -1592,536 +1903,92 @@ namespace AutoVega4
 
                 results_grid.ItemsSource = testResults;
                 results_grid.Items.Refresh();
-                // Result for A1 added to results grid
+                // Result for E2 added to results grid
 
-                // Add results grid data for A1 to output file
-                outputFileData = positions[(int)steppingPositions.A1] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                // Add results grid data for E2 to output file
+                outputFileData = positions[(int)steppingPositions.E2] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
                                             delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
 
-                resultsTextboxes[0].Text = raw_avg.ToString();
+                resultsTextboxes[4].Text = raw_avg.ToString();
 
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // A1 End
-
-                // B1 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
-
-                // Move from A1 to B1
-                moveX(xPos[(int)steppingPositions.B1] - xPos[(int)steppingPositions.A1]);
-                moveY(yPos[(int)steppingPositions.B1] - yPos[(int)steppingPositions.A1]);
-
-                // Change B1 to in progress color
-                inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Reading B1", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading B1" + Environment.NewLine);
-
-                // Read B1
-                StringBuilder sbB1 = new StringBuilder(100000);
-
-                IntPtr testBoardValuePtrB1 = testGetBoardValue(sbB1, sbB1.Capacity);
-                double[] testArrayB1 = new double[5];
-                Marshal.Copy(testBoardValuePtrB1, testArrayB1, 0, 5);
-                string inputStringB1 = "";
-                inputStringB1 += "Return Value: m_dAvgValue = " + testArrayB1[0] + "\n";
-                inputStringB1 += "Return Value: m_dCumSum = " + testArrayB1[1] + "\n";
-                inputStringB1 += "Return Value: m_dLEDtmp = " + testArrayB1[2] + "\n";
-                inputStringB1 += "Return Value: m_dPDtmp = " + testArrayB1[3] + "\n";
-                inputStringB1 += "Return Value: testGetBoardValue = " + testArrayB1[4] + "\n";
-
-                File.AppendAllText(logFilePath, "B1 avg value = " + testArrayB1[0] + Environment.NewLine);
-
-                // Change B1 to finished color
-                inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Update Results Grid
-                raw_avg = (testArrayB1[0] - afeShiftFactor) * afeScaleFactor;
-                raw_avg = Math.Round(raw_avg, 3);
-
-                TC_rdg = raw_avg;
-
-                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
-
-                testResult = "NEG";
-
-                if (diff > threshold)
+                // Loop through rest of reading steps
+                for (int i = 15; i < positions.Length; i++)
                 {
-                    testResult = "POS";
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Reading " + positions[i], "Reading", 2000);
+                    File.AppendAllText(logFilePath, "Reading " + positions[i] + Environment.NewLine);
+
+                    // Read sample in current well
+                    StringBuilder sbR = new StringBuilder(100000);
+
+                    IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity);
+                    double[] readingValues = new double[5];
+                    Marshal.Copy(boardValuePtr, readingValues, 0, 5);
+                    string readingInputString = "";
+                    readingInputString += "Return Value: m_dAvgValue = " + readingValues[0] + "\n";
+                    readingInputString += "Return Value: m_dCumSum = " + readingValues[1] + "\n";
+                    readingInputString += "Return Value: m_dLEDtmp = " + readingValues[2] + "\n";
+                    readingInputString += "Return Value: m_dPDtmp = " + readingValues[3] + "\n";
+                    readingInputString += "Return Value: testGetBoardValue = " + readingValues[4] + "\n";
+
+                    // Update Results Grid for current well
+                    raw_avg = (readingValues[0] - shiftFactors[i - 10]) * scaleFactors[i - 10];
+                    raw_avg = Math.Round(raw_avg, 3);
+
+                    TC_rdg = raw_avg;
+
+                    diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                    testResult = "NEG";
+
+                    if (diff > threshold)
+                    {
+                        testResult = "POS";
+                    }
+
+                    sampleName = positions[i];
+
+                    testResults.Add(new TestResults()
+                    {
+                        WellName = positions[i],
+                        BackgroundReading = bgd_rdg.ToString(),
+                        Threshold = threshold.ToString(),
+                        RawAvg = raw_avg.ToString(),
+                        TC_rdg = TC_rdg.ToString(),
+                        TestResult = testResult,
+                        SampleName = sampleName
+                    });
+
+                    results_grid.ItemsSource = testResults;
+                    results_grid.Items.Refresh();
+
+                    // Add results grid data for current well to output file
+                    outputFileData = positions[i] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                    File.AppendAllText(outputFilePath, outputFileData);
+
+                    resultsTextboxes[i - 10].Text = raw_avg.ToString();
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 43)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
                 }
-
-                sampleName = positions[(int)steppingPositions.B1];
-
-                testResults.Add(new TestResults()
-                {
-                    WellName = positions[(int)steppingPositions.B1],
-                    BackgroundReading = bgd_rdg.ToString(),
-                    Threshold = threshold.ToString(),
-                    RawAvg = raw_avg.ToString(),
-                    TC_rdg = TC_rdg.ToString(),
-                    TestResult = testResult,
-                    SampleName = sampleName
-                });
-
-                results_grid.ItemsSource = testResults;
-                results_grid.Items.Refresh();
-                // Result for B1 added to results grid
-
-                // Add results grid data for B1 to output file
-                outputFileData = positions[(int)steppingPositions.B1] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
-                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
-
-                File.AppendAllText(outputFilePath, outputFileData);
-
-                resultsTextboxes[1].Text = raw_avg.ToString();
-
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // B1 End
-
-                // A2 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
-
-                // Move from B1 to A2
-                moveX(xPos[(int)steppingPositions.A2] - xPos[(int)steppingPositions.B1]);
-                moveY(yPos[(int)steppingPositions.A2] - yPos[(int)steppingPositions.B1]);
-
-                // Change A2 to in progress color
-                inProgressEllipses[8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Reading A2", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading A2" + Environment.NewLine);
-
-                // Read A2
-                StringBuilder sbA2 = new StringBuilder(100000);
-
-                IntPtr testBoardValuePtrA2 = testGetBoardValue(sbA2, sbA2.Capacity);
-                double[] testArrayA2 = new double[5];
-                Marshal.Copy(testBoardValuePtrA2, testArrayA2, 0, 5);
-                string inputStringA2 = "";
-                inputStringA2 += "Return Value: m_dAvgValue = " + testArrayA2[0] + "\n";
-                inputStringA2 += "Return Value: m_dCumSum = " + testArrayA2[1] + "\n";
-                inputStringA2 += "Return Value: m_dLEDtmp = " + testArrayA2[2] + "\n";
-                inputStringA2 += "Return Value: m_dPDtmp = " + testArrayA2[3] + "\n";
-                inputStringA2 += "Return Value: testGetBoardValue = " + testArrayA2[4] + "\n";
-
-                File.AppendAllText(logFilePath, "A2 avg value = " + testArrayA2[0] + Environment.NewLine);
-
-                // Change A2 to finished color
-                inProgressEllipses[8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Update Results Grid
-                raw_avg = (testArrayA2[0] - afeShiftFactor) * afeScaleFactor;
-                raw_avg = Math.Round(raw_avg, 3);
-
-                TC_rdg = raw_avg;
-
-                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
-
-                testResult = "NEG";
-
-                if (diff > threshold)
-                {
-                    testResult = "POS";
-                }
-
-                sampleName = positions[(int)steppingPositions.A2];
-
-                testResults.Add(new TestResults()
-                {
-                    WellName = positions[(int)steppingPositions.A2],
-                    BackgroundReading = bgd_rdg.ToString(),
-                    Threshold = threshold.ToString(),
-                    RawAvg = raw_avg.ToString(),
-                    TC_rdg = TC_rdg.ToString(),
-                    TestResult = testResult,
-                    SampleName = sampleName
-                });
-
-                results_grid.ItemsSource = testResults;
-                results_grid.Items.Refresh();
-                // Result for A2 added to results grid
-
-                // Add results grid data for A2 to output file
-                outputFileData = positions[(int)steppingPositions.A2] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
-                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
-
-                File.AppendAllText(outputFilePath, outputFileData);
-
-                resultsTextboxes[8].Text = raw_avg.ToString();
-
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // A2 End
-
-                // A3 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
-
-                // Move from A2 to A3
-                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.A2]);
-                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.A2]);
-
-                // Change A3 to in progress color
-                inProgressEllipses[9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Reading A3", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading A3" + Environment.NewLine);
-
-                // Read A3
-                StringBuilder sbA3 = new StringBuilder(100000);
-
-                IntPtr testBoardValuePtrA3 = testGetBoardValue(sbA3, sbA3.Capacity);
-                double[] testArrayA3 = new double[5];
-                Marshal.Copy(testBoardValuePtrA3, testArrayA3, 0, 5);
-                string inputStringA3 = "";
-                inputStringA3 += "Return Value: m_dAvgValue = " + testArrayA3[0] + "\n";
-                inputStringA3 += "Return Value: m_dCumSum = " + testArrayA3[1] + "\n";
-                inputStringA3 += "Return Value: m_dLEDtmp = " + testArrayA3[2] + "\n";
-                inputStringA3 += "Return Value: m_dPDtmp = " + testArrayA3[3] + "\n";
-                inputStringA3 += "Return Value: testGetBoardValue = " + testArrayA3[4] + "\n";
-
-                File.AppendAllText(logFilePath, "A3 avg value = " + testArrayA3[0] + Environment.NewLine);
-
-                // Change A3 to finished color
-                inProgressEllipses[9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Update Results Grid
-                raw_avg = (testArrayA3[0] - afeShiftFactor) * afeScaleFactor;
-                raw_avg = Math.Round(raw_avg, 3);
-
-                TC_rdg = raw_avg;
-
-                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
-
-                testResult = "NEG";
-
-                if (diff > threshold)
-                {
-                    testResult = "POS";
-                }
-
-                sampleName = positions[(int)steppingPositions.A3];
-
-                testResults.Add(new TestResults()
-                {
-                    WellName = positions[(int)steppingPositions.A3],
-                    BackgroundReading = bgd_rdg.ToString(),
-                    Threshold = threshold.ToString(),
-                    RawAvg = raw_avg.ToString(),
-                    TC_rdg = TC_rdg.ToString(),
-                    TestResult = testResult,
-                    SampleName = sampleName
-                });
-
-                results_grid.ItemsSource = testResults;
-                results_grid.Items.Refresh();
-                // Result for A3 added to results grid
-
-                // Add results grid data for A3 to output file
-                outputFileData = positions[(int)steppingPositions.A3] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
-                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
-
-                File.AppendAllText(outputFilePath, outputFileData);
-
-                resultsTextboxes[9].Text = raw_avg.ToString();
-
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // A3 End
-
-                // A4 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
-
-                // Move from A3 to A4
-                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.A3]);
-                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.A3]);
-
-                // Change A4 to in progress color
-                inProgressEllipses[18].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Reading A4", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading A4" + Environment.NewLine);
-
-                // Read A4
-                StringBuilder sbA4 = new StringBuilder(100000);
-
-                IntPtr testBoardValuePtrA4 = testGetBoardValue(sbA4, sbA4.Capacity);
-                double[] testArrayA4 = new double[5];
-                Marshal.Copy(testBoardValuePtrA4, testArrayA4, 0, 5);
-                string inputStringA4 = "";
-                inputStringA4 += "Return Value: m_dAvgValue = " + testArrayA4[0] + "\n";
-                inputStringA4 += "Return Value: m_dCumSum = " + testArrayA4[1] + "\n";
-                inputStringA4 += "Return Value: m_dLEDtmp = " + testArrayA4[2] + "\n";
-                inputStringA4 += "Return Value: m_dPDtmp = " + testArrayA4[3] + "\n";
-                inputStringA4 += "Return Value: testGetBoardValue = " + testArrayA4[4] + "\n";
-
-                File.AppendAllText(logFilePath, "A4 avg value = " + testArrayA4[0] + Environment.NewLine);
-
-                // Change A4 to finished color
-                inProgressEllipses[18].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Update Results Grid
-                raw_avg = (testArrayA4[0] - afeShiftFactor) * afeScaleFactor;
-                raw_avg = Math.Round(raw_avg, 3);
-
-                TC_rdg = raw_avg;
-
-                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
-
-                testResult = "NEG";
-
-                if (diff > threshold)
-                {
-                    testResult = "POS";
-                }
-
-                sampleName = positions[(int)steppingPositions.A4];
-
-                testResults.Add(new TestResults()
-                {
-                    WellName = positions[(int)steppingPositions.A4],
-                    BackgroundReading = bgd_rdg.ToString(),
-                    Threshold = threshold.ToString(),
-                    RawAvg = raw_avg.ToString(),
-                    TC_rdg = TC_rdg.ToString(),
-                    TestResult = testResult,
-                    SampleName = sampleName
-                });
-
-                results_grid.ItemsSource = testResults;
-                results_grid.Items.Refresh();
-                // Result for A4 added to results grid
-
-                // Add results grid data for A4 to output file
-                outputFileData = positions[(int)steppingPositions.A4] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
-                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
-
-                File.AppendAllText(outputFilePath, outputFileData);
-
-                resultsTextboxes[18].Text = raw_avg.ToString();
-
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // A4 End
-
-                // A5 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
-
-                // Move from A4 to A5
-                moveX(xPos[(int)steppingPositions.A5] - xPos[(int)steppingPositions.A4]);
-                moveY(yPos[(int)steppingPositions.A5] - yPos[(int)steppingPositions.A4]);
-
-                // Change A5 to in progress color
-                inProgressEllipses[19].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Reading A5", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading A5" + Environment.NewLine);
-
-                // Read A5
-                StringBuilder sbA5 = new StringBuilder(100000);
-
-                IntPtr testBoardValuePtrA5 = testGetBoardValue(sbA5, sbA5.Capacity);
-                double[] testArrayA5 = new double[5];
-                Marshal.Copy(testBoardValuePtrA5, testArrayA5, 0, 5);
-                string inputStringA5 = "";
-                inputStringA5 += "Return Value: m_dAvgValue = " + testArrayA5[0] + "\n";
-                inputStringA5 += "Return Value: m_dCumSum = " + testArrayA5[1] + "\n";
-                inputStringA5 += "Return Value: m_dLEDtmp = " + testArrayA5[2] + "\n";
-                inputStringA5 += "Return Value: m_dPDtmp = " + testArrayA5[3] + "\n";
-                inputStringA5 += "Return Value: testGetBoardValue = " + testArrayA5[4] + "\n";
-
-                File.AppendAllText(logFilePath, "A5 avg value = " + testArrayA5[0] + Environment.NewLine);
-
-                // Change A5 to finished color
-                inProgressEllipses[19].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Update Results Grid
-                raw_avg = (testArrayA5[0] - afeShiftFactor) * afeScaleFactor;
-                raw_avg = Math.Round(raw_avg, 3);
-
-                TC_rdg = raw_avg;
-
-                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
-
-                testResult = "NEG";
-
-                if (diff > threshold)
-                {
-                    testResult = "POS";
-                }
-
-                sampleName = positions[(int)steppingPositions.A5];
-
-                testResults.Add(new TestResults()
-                {
-                    WellName = positions[(int)steppingPositions.A5],
-                    BackgroundReading = bgd_rdg.ToString(),
-                    Threshold = threshold.ToString(),
-                    RawAvg = raw_avg.ToString(),
-                    TC_rdg = TC_rdg.ToString(),
-                    TestResult = testResult,
-                    SampleName = sampleName
-                });
-
-                results_grid.ItemsSource = testResults;
-                results_grid.Items.Refresh();
-                // Result for A5 added to results grid
-
-                // Add results grid data for A5 to output file
-                outputFileData = positions[(int)steppingPositions.A5] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
-                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
-
-                File.AppendAllText(outputFilePath, outputFileData);
-
-                resultsTextboxes[19].Text = raw_avg.ToString();
-
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // A5 End
-
-                // A6 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
-
-                // Move from A5 to A6
-                moveX(xPos[(int)steppingPositions.A6] - xPos[(int)steppingPositions.A5]);
-                moveY(yPos[(int)steppingPositions.A6] - yPos[(int)steppingPositions.A5]);
-
-                // Change A6 to in progress color
-                inProgressEllipses[28].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Reading A6", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading A6" + Environment.NewLine);
-
-                // Read A6
-                StringBuilder sbA6 = new StringBuilder(100000);
-
-                IntPtr testBoardValuePtrA6 = testGetBoardValue(sbA6, sbA6.Capacity);
-                double[] testArrayA6 = new double[5];
-                Marshal.Copy(testBoardValuePtrA6, testArrayA6, 0, 5);
-                string inputStringA6 = "";
-                inputStringA6 += "Return Value: m_dAvgValue = " + testArrayA6[0] + "\n";
-                inputStringA6 += "Return Value: m_dCumSum = " + testArrayA6[1] + "\n";
-                inputStringA6 += "Return Value: m_dLEDtmp = " + testArrayA6[2] + "\n";
-                inputStringA6 += "Return Value: m_dPDtmp = " + testArrayA6[3] + "\n";
-                inputStringA6 += "Return Value: testGetBoardValue = " + testArrayA6[4] + "\n";
-
-                File.AppendAllText(logFilePath, "A6 avg value = " + testArrayA6[0] + Environment.NewLine);
-
-                // Change A6 to finished color
-                inProgressEllipses[28].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Update Results Grid
-                raw_avg = (testArrayA6[0] - afeShiftFactor) * afeScaleFactor;
-                raw_avg = Math.Round(raw_avg, 3);
-
-                TC_rdg = raw_avg;
-
-                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
-
-                testResult = "NEG";
-
-                if (diff > threshold)
-                {
-                    testResult = "POS";
-                }
-
-                sampleName = positions[(int)steppingPositions.A6];
-
-                testResults.Add(new TestResults()
-                {
-                    WellName = positions[(int)steppingPositions.A6],
-                    BackgroundReading = bgd_rdg.ToString(),
-                    Threshold = threshold.ToString(),
-                    RawAvg = raw_avg.ToString(),
-                    TC_rdg = TC_rdg.ToString(),
-                    TestResult = testResult,
-                    SampleName = sampleName
-                });
-
-                results_grid.ItemsSource = testResults;
-                results_grid.Items.Refresh();
-                // Result for A6 added to results grid
-
-                // Add results grid data for A6 to output file
-                outputFileData = positions[(int)steppingPositions.A6] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
-                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
-
-                File.AppendAllText(outputFilePath, outputFileData);
-
-                resultsTextboxes[28].Text = raw_avg.ToString();
-
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // A6 End
-
-                // A7 Start
-                // ----------------------------------------------------------------------------------------------------------------------------
-
-                // Move from A6 to A7
-                moveX(xPos[(int)steppingPositions.A7] - xPos[(int)steppingPositions.A6]);
-                moveY(yPos[(int)steppingPositions.A7] - yPos[(int)steppingPositions.A6]);
-
-                // Change A7 to in progress color
-                inProgressEllipses[29].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Reading A7", "Reading", 1000);
-                File.AppendAllText(logFilePath, "Reading A7" + Environment.NewLine);
-
-                // Read A7
-                StringBuilder sbA7 = new StringBuilder(100000);
-
-                IntPtr testBoardValuePtrA7 = testGetBoardValue(sbA7, sbA7.Capacity);
-                double[] testArrayA7 = new double[5];
-                Marshal.Copy(testBoardValuePtrA7, testArrayA7, 0, 5);
-                string inputStringA7 = "";
-                inputStringA7 += "Return Value: m_dAvgValue = " + testArrayA7[0] + "\n";
-                inputStringA7 += "Return Value: m_dCumSum = " + testArrayA7[1] + "\n";
-                inputStringA7 += "Return Value: m_dLEDtmp = " + testArrayA7[2] + "\n";
-                inputStringA7 += "Return Value: m_dPDtmp = " + testArrayA7[3] + "\n";
-                inputStringA7 += "Return Value: testGetBoardValue = " + testArrayA7[4] + "\n";
-
-                File.AppendAllText(logFilePath, "A7 avg value = " + testArrayA7[0] + Environment.NewLine);
-
-                // Change A7 to finished color
-                inProgressEllipses[29].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Update Results Grid
-                raw_avg = (testArrayA7[0] - afeShiftFactor) * afeScaleFactor;
-                raw_avg = Math.Round(raw_avg, 3);
-
-                TC_rdg = raw_avg;
-
-                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
-
-                testResult = "NEG";
-
-                if (diff > threshold)
-                {
-                    testResult = "POS";
-                }
-
-                sampleName = positions[(int)steppingPositions.A7];
-
-                testResults.Add(new TestResults()
-                {
-                    WellName = positions[(int)steppingPositions.A7],
-                    BackgroundReading = bgd_rdg.ToString(),
-                    Threshold = threshold.ToString(),
-                    RawAvg = raw_avg.ToString(),
-                    TC_rdg = TC_rdg.ToString(),
-                    TestResult = testResult,
-                    SampleName = sampleName
-                });
-
-                results_grid.ItemsSource = testResults;
-                results_grid.Items.Refresh();
-                // Result for A7 added to results grid
-
-                // Add results grid data for A7 to output file
-                outputFileData = positions[(int)steppingPositions.A7] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
-                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
-
-                File.AppendAllText(outputFilePath, outputFileData);
-
-                resultsTextboxes[29].Text = raw_avg.ToString();
-
-                // ----------------------------------------------------------------------------------------------------------------------------
-                // A7 End... Reading Complete
 
                 AutoClosingMessageBox.Show("All wells read", "Reading Complete", 2000);
                 File.AppendAllText(logFilePath, "All wells read" + Environment.NewLine);
@@ -2133,8 +2000,8 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
 
                 // Move back to Load Position
-                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.A7] + xPos[(int)steppingPositions.Dispense_to_Read]));
-                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.A7] + yPos[(int)steppingPositions.Dispense_to_Read]));
+                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.E7] + xPos[(int)steppingPositions.Dispense_to_Read]));
+                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.E7] + yPos[(int)steppingPositions.Dispense_to_Read]));
                 
                 //MessageBox.Show("Reading complete, displaying results");
                 AutoClosingMessageBox.Show("Reading complete, displaying results", "Results", 2000);
