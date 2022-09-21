@@ -448,11 +448,11 @@
             </StackPanel>
         </StackPanel>
         <CheckBox x:Name="switchResults_cb" Content="Visual Results" HorizontalAlignment="Left" Margin="1009,145,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <TextBlock Text="Incubation Time (minutes): " Margin="970,165,0,0"/>
-        <TextBox x:Name="incubationTime_tb" Height="20" Width="25" Margin="1112,164,58,715" Text="20" TextAlignment="Center"/>
-        <TextBlock Text="Draining Time (minutes): " Margin="982,185,-12,0"/>
+        <TextBlock Text="Incubation Time (minutes): " Height="20" Margin="970,166,86,714" Width="140"/>
+        <TextBox x:Name="incubationTime_tb" Height="20" Width="25" Margin="1114,164,60,715" Text="20" TextAlignment="Center"/>
+        <TextBlock Text="Draining Time (minutes): " Margin="982,186,90,694" Height="20" Width="138"/>
         <TextBox x:Name="drainTime_tb" Height="20" Width="25" Margin="1114,184,60,696" Text="2" TextAlignment="Center"/>
-        <TextBlock Text="Incubation Time Remaining: " Margin="964,206,-12,0"/>
+        <TextBlock Text="Incubation Time Remaining: " Margin="964,-463,-12,0" Height="20"/>
         <TextBox x:Name="incubationRemaining_tb" Height="20" Width="25" Margin="1114,204,60,671" TextAlignment="Center" IsReadOnly="True"/>
     </Grid>
 </Window>
