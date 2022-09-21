@@ -808,10 +808,15 @@ namespace AutoVega4
 
                 for (int i = 0; i < incubationMinutes; i++)
                 {
-                    int remaining = incubationMinutes - i; 
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
                     if (remaining == 1)
                     {
                         AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
                     }
                     else
                     {
@@ -819,11 +824,12 @@ namespace AutoVega4
                     }
 
                     Task.Delay(60000).Wait();
-
-                    incubationRemaining_tb.Text = (remaining - 1).ToString();
                 }
                 //Task.Delay(incubationTime).Wait();
                 //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
 
                 //MessageBox.Show("Moving to Drain Position");
                 AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
@@ -1328,9 +1334,14 @@ namespace AutoVega4
                 for (int i = 0; i < incubationMinutes; i++)
                 {
                     int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
                     if (remaining == 1)
                     {
                         AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
                     }
                     else
                     {
@@ -1338,11 +1349,12 @@ namespace AutoVega4
                     }
 
                     Task.Delay(60000).Wait();
-
-                    incubationRemaining_tb.Text = (remaining - 1).ToString();
                 }
                 //Task.Delay(incubationTime).Wait();
                 //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
 
                 //MessageBox.Show("Moving Back to Drain Position");
                 AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 1000);
@@ -1530,8 +1542,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 1360 steps (2.2mL)
-                drawLiquid(1360);
+                // Draw 1272 steps (2.12mL)
+                drawLiquid(1272);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
