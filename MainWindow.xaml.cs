@@ -2051,6 +2051,7 @@ namespace AutoVega4
                 inputStringA1 += "Return Value: testGetBoardValue = " + testArrayA1[4] + "\n";
 
                 File.AppendAllText(logFilePath, "A1 avg value = " + testArrayA1[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "A1 Board Value: " + sbA1 + Environment.NewLine);
 
                 // Change A1 to finished color
                 inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2125,6 +2126,7 @@ namespace AutoVega4
                 inputStringB1 += "Return Value: testGetBoardValue = " + testArrayB1[4] + "\n";
 
                 File.AppendAllText(logFilePath, "B1 avg value = " + testArrayB1[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "B1 Board Value: " + sbB1 + Environment.NewLine);
 
                 // Change B1 to finished color
                 inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2199,6 +2201,7 @@ namespace AutoVega4
                 inputStringA2 += "Return Value: testGetBoardValue = " + testArrayA2[4] + "\n";
 
                 File.AppendAllText(logFilePath, "A2 avg value = " + testArrayA2[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "A2 Board Value: " + sbA2 + Environment.NewLine);
 
                 // Change A2 to finished color
                 inProgressEllipses[8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2273,6 +2276,7 @@ namespace AutoVega4
                 inputStringA3 += "Return Value: testGetBoardValue = " + testArrayA3[4] + "\n";
 
                 File.AppendAllText(logFilePath, "A3 avg value = " + testArrayA3[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "A3 Board Value: " + sbA3 + Environment.NewLine);
 
                 // Change A3 to finished color
                 inProgressEllipses[9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2347,6 +2351,7 @@ namespace AutoVega4
                 inputStringA4 += "Return Value: testGetBoardValue = " + testArrayA4[4] + "\n";
 
                 File.AppendAllText(logFilePath, "A4 avg value = " + testArrayA4[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "A4 Board Value: " + sbA4 + Environment.NewLine);
 
                 // Change A4 to finished color
                 inProgressEllipses[18].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2421,6 +2426,7 @@ namespace AutoVega4
                 inputStringA5 += "Return Value: testGetBoardValue = " + testArrayA5[4] + "\n";
 
                 File.AppendAllText(logFilePath, "A5 avg value = " + testArrayA5[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "A5 Board Value: " + sbA5 + Environment.NewLine);
 
                 // Change A5 to finished color
                 inProgressEllipses[19].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2495,6 +2501,7 @@ namespace AutoVega4
                 inputStringA6 += "Return Value: testGetBoardValue = " + testArrayA6[4] + "\n";
 
                 File.AppendAllText(logFilePath, "A6 avg value = " + testArrayA6[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "A6 Board Value: " + sbA6 + Environment.NewLine);
 
                 // Change A6 to finished color
                 inProgressEllipses[28].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2569,6 +2576,7 @@ namespace AutoVega4
                 inputStringA7 += "Return Value: testGetBoardValue = " + testArrayA7[4] + "\n";
 
                 File.AppendAllText(logFilePath, "A7 avg value = " + testArrayA7[0] + Environment.NewLine);
+                File.AppendAllText(readingLogFilePath, "A7 Board Value: " + sbA7 + Environment.NewLine);
 
                 // Change A7 to finished color
                 inProgressEllipses[29].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
