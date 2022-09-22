@@ -1554,6 +1554,14 @@ namespace AutoVega4
                 rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 rbDispense_tb.Foreground = Brushes.Black;
 
+                // Change wells back to gray
+                for (int i = 0; i < inProgressEllipses.Length; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Dispensing RB", "Dispensing", 1000);
+
                 //**E2**//
                 // Move from RB bottle to E2
                 moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.RB_Bottle]);
