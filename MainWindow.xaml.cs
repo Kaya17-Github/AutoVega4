@@ -34,6 +34,7 @@ namespace AutoVega4
         //bool flipY;
         bool isReading = false;
         readonly string logFilePath;
+        readonly string readingLogFilePath;
         readonly string outputFilePath;
         readonly string timeStamp;
         readonly string testTime;
@@ -85,6 +86,8 @@ namespace AutoVega4
 
             logFilePath = @"C:\Users\Public\Documents\kaya17\log\kaya17-AutoVega4_logfile.txt";
             outputFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega4_" + timeStamp + ".csv";
+
+            readingLogFilePath = @"C:\Users\Public\Documents\kaya17\log\kaya17-AutoVega4_reading-log.txt";
 
             writeAllSteps = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[3];
             readLimSwitches = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[4];
