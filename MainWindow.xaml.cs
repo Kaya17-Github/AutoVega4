@@ -2056,7 +2056,7 @@ namespace AutoVega4
                 inProgressEllipses[0].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA1[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayA1[0] - shiftFactors[(int)shiftsAndScales.A1]) * scaleFactors[(int)shiftsAndScales.A1];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -2130,7 +2130,7 @@ namespace AutoVega4
                 inProgressEllipses[1].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayB1[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayB1[0] - shiftFactors[(int)shiftsAndScales.B1]) * scaleFactors[(int)shiftsAndScales.B1];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -2204,7 +2204,7 @@ namespace AutoVega4
                 inProgressEllipses[8].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA2[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayA2[0] - shiftFactors[(int)shiftsAndScales.A2]) * scaleFactors[(int)shiftsAndScales.A2];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -2278,7 +2278,7 @@ namespace AutoVega4
                 inProgressEllipses[9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA3[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayA3[0] - shiftFactors[(int)shiftsAndScales.A3]) * scaleFactors[(int)shiftsAndScales.A3];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -2352,7 +2352,7 @@ namespace AutoVega4
                 inProgressEllipses[18].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA4[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayA4[0] - shiftFactors[(int)shiftsAndScales.A4]) * scaleFactors[(int)shiftsAndScales.A4];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -2426,7 +2426,7 @@ namespace AutoVega4
                 inProgressEllipses[19].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA5[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayA5[0] - shiftFactors[(int)shiftsAndScales.A5]) * scaleFactors[(int)shiftsAndScales.A5];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -2500,7 +2500,7 @@ namespace AutoVega4
                 inProgressEllipses[28].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA6[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayA6[0] - shiftFactors[(int)shiftsAndScales.A6]) * scaleFactors[(int)shiftsAndScales.A6];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
@@ -2574,7 +2574,7 @@ namespace AutoVega4
                 inProgressEllipses[29].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
-                raw_avg = (testArrayA7[0] - afeShiftFactor) * afeScaleFactor;
+                raw_avg = (testArrayA7[0] - shiftFactors[(int)shiftsAndScales.A7]) * scaleFactors[(int)shiftsAndScales.A7];
                 raw_avg = Math.Round(raw_avg, 3);
 
                 TC_rdg = raw_avg;
