@@ -42,10 +42,14 @@ namespace AutoVega4
         readonly string switchBanks;
         readonly string delimiter;
         readonly string[] map;
+        readonly string[] shiftAndScale;
         string testResult;
         string sampleName;
         string outputFileData;
-        readonly int drainTime = 120000; //wait for 2 minutes
+        int incubationMinutes;
+        int incubationTime;
+        int drainMinutes;
+        int drainTime;
         readonly int wait = 0;
         double raw_avg;
         double TC_rdg;
@@ -87,6 +91,8 @@ namespace AutoVega4
             switchBanks = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[5];
 
             map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps_1row_test.csv");
+
+            shiftAndScale = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17_32Well_Shift_Scale.csv");
 
             delimiter = ",";
 
@@ -310,6 +316,44 @@ namespace AutoVega4
             C7 = 41,
             D7 = 42,
             E7 = 43,
+        }
+
+        enum shiftsAndScales
+        {
+            A1 = 0,
+            B1 = 1,
+            C1 = 2,
+            D1 = 3,
+            E2 = 4,
+            D2 = 5,
+            C2 = 6,
+            B2 = 7,
+            A2 = 8,
+            A3 = 9,
+            B3 = 10,
+            C3 = 11,
+            D3 = 12,
+            E3 = 13,
+            E4 = 14,
+            D4 = 15,
+            C4 = 16,
+            B4 = 17,
+            A4 = 18,
+            A5 = 19,
+            B5 = 20,
+            C5 = 21,
+            D5 = 22,
+            E5 = 23,
+            E6 = 24,
+            D6 = 25,
+            C6 = 26,
+            B6 = 27,
+            A6 = 28,
+            A7 = 29,
+            B7 = 30,
+            C7 = 31,
+            D7 = 32,
+            E7 = 33,
         }
 
         private void MoveToHomePosition()
@@ -734,6 +778,15 @@ namespace AutoVega4
                     pump[i] = Int32.Parse(map[i].Split(',')[4]);
                 }
 
+                double[] shiftFactors = new double[shiftAndScale.Length];
+                double[] scaleFactors = new double[shiftAndScale.Length];
+
+                for (int i = 0; i < shiftAndScale.Length; i++)
+                {
+                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
+                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
+                }
+
                 // ** Start of moving steps **
                 // ---------------------------
 
@@ -747,10 +800,36 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 }
 
-                // Wait 20 mins
-                AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
-                Task.Delay(1200000).Wait();
-                //Task.Delay(1000).Wait(); // 1 second instead of 30 mins
+                // Incubate for the amount of time entered
+                incubationMinutes = Int32.Parse(incubationTime_tb.Text);
+                //incubationTime = incubationMinutes * 60 * 1000;
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
 
                 //MessageBox.Show("Moving to Drain Position");
                 AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
@@ -763,9 +842,12 @@ namespace AutoVega4
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
 
-                //MessageBox.Show("Wait 2 minutes for samples to drain through cartridges");
-                AutoClosingMessageBox.Show("Wait 2 minutes for samples to drain through cartridges", "Draining", 1000);
-                File.AppendAllText(logFilePath, "Wait 2 minutes for samples to drain through cartridges" + Environment.NewLine);
+                drainMinutes = Int32.Parse(drainTime_tb.Text);
+                drainTime = drainMinutes * 60 * 1000;
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for samples to drain through cartridges" + Environment.NewLine);
 
                 // Turn pump on
                 try
@@ -874,7 +956,7 @@ namespace AutoVega4
                     }
 
                     // Leave pump on for 2 minutes
-                    Task.Delay(drainTime).Wait();
+                    Task.Delay(120000).Wait();
 
                     // Turn pump off
                     try
@@ -1135,14 +1217,36 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 }
 
-                // Wait 20 mins, replace probe bottle with HBSS bottle
-                AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
-                Task.Delay(1200000).Wait();
-                //Task.Delay(1000).Wait(); // 1 second instead of 30 mins
+                // Incubate for the amount of time entered
+                incubationMinutes = Int32.Parse(incubationTime_tb.Text);
+                //incubationTime = incubationMinutes * 60 * 1000;
 
-                //MessageBox.Show("Moving to Drain Position");
-                AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
-                File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
 
                 // Move to Drain Position
                 moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Probe_Wash_Bottle]);
@@ -1151,9 +1255,9 @@ namespace AutoVega4
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
 
-                //MessageBox.Show("Wait 2 minutes for samples to drain through cartridges");
-                AutoClosingMessageBox.Show("Wait 2 minutes for probe to drain through cartridges", "Draining", 1000);
-                File.AppendAllText(logFilePath, "Wait 2 minutes for probe to drain through cartridges" + Environment.NewLine);
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for probe to drain through cartridges" + Environment.NewLine);
 
                 // Turn pump on
                 try
@@ -1262,7 +1366,7 @@ namespace AutoVega4
                     }
 
                     // Leave pump on for 2 minutes
-                    Task.Delay(drainTime).Wait();
+                    Task.Delay(120000).Wait();
 
                     // Turn pump off
                     try
