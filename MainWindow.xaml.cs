@@ -1627,11 +1627,6 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 }
 
-                // Wait 20 mins
-                AutoClosingMessageBox.Show("Incubating for 20 minutes", "Incubating", 3000);
-                Task.Delay(1200000).Wait();
-                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
-
                 //MessageBox.Show("Moving Back to Drain Position");
                 AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 1000);
                 File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
