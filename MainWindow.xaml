@@ -14,7 +14,7 @@
         <StackPanel Name="First_Row" Orientation="Horizontal">
             <Image Height="150" Margin="20,20,0,0" VerticalAlignment="Top" Width="150" Source="Resources/Kaya17Logo_icon.ico" />
             <TextBlock Margin="272.867,10,0,0" TextWrapping="Wrap" Text="AUTO VEGA 4" VerticalAlignment="Top" Foreground="Gray" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" FontSize="28" FontWeight="Bold" Height="37.2433333333333"><Run Text="Reader Software V0.5"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
+            <TextBlock Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" FontSize="28" FontWeight="Bold" Height="37.2433333333333"><Run Text="Reader Software V1.2"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
         </StackPanel>
         <StackPanel Name="Textbox_Headers" Orientation="Horizontal">
             <TextBlock Margin="274,55,0,0" TextWrapping="Wrap" Text="Test Name" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
@@ -23,7 +23,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="161,55,0,0" TextWrapping="Wrap" Text="Reader ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
         </StackPanel>
         <StackPanel Name="Test_Info_Boxes" Orientation="Horizontal">
-            <TextBox x:Name="testname_tb" Height="34" Margin="200,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" OpacityMask="Black"/>
+            <TextBox x:Name="testname_tb" Height="34" Margin="200,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" OpacityMask="Black" Opacity="0"/>
             <TextBox x:Name="operator_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Your Badge" VerticalAlignment="Top" Background="#FFF6F6EB" SelectionBrush="#FF120303" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" TextChanged="operator_tb_TextChanged" OpacityMask="Black" Width="200" BorderBrush="#FFFFC300" FontSize="16"/>
             <TextBox x:Name="kit_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Kit QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="kit_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
             <TextBox x:Name="reader_tb" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Reader QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="reader_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
@@ -78,25 +78,27 @@
             </Button.Effect>
         </Button>
         <DataGrid x:Name="results_grid" HorizontalAlignment="Center" Height="430" Margin="0,317,0,0" VerticalAlignment="Top" Width="1150" ItemsSource="{Binding}" Background="#FFF0F0F0" Visibility="Hidden"/>
-        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Hidden"/>
-        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Hidden">
-            <Border Name="sampleDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="15,0,0,0">
-                <TextBlock x:Name="sampleDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubate and Drain" VerticalAlignment="Center" Height="60" Width="90" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Visible"/>
+        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Visible">
+            <Border Name="sampleDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="20,0,0,0">
+                <TextBlock x:Name="sampleDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubating and Draining Sample" VerticalAlignment="Center" Height="85" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <TextBlock Text="&#x2794;" Margin="12.85,0,0,0" FontSize="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Border Name="wbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="12.85,0,0,0">
-                <TextBlock x:Name="wbDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Probe" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+            <Border Name="probeDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="12.85,0,0,0">
+                <TextBlock x:Name="probeDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Probe" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <TextBlock Text="&#x2794;" Margin="12.85,0,0,0" FontSize="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Border Name="wbDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12.85,0,0,0">
-                <TextBlock x:Name="wbDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubate and Drain" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+            <Border Name="probeDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="15,0,0,0">
+                <TextBlock x:Name="probeDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubating and Draining Probe" VerticalAlignment="Center" Height="85" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <TextBlock Text="&#x2794;" Margin="12.85,0,0,0" FontSize="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Border Name="rbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="12.85,0,0,0">
+            <Border Name="HBSSDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="12.85,0,0,0">
+                <TextBlock x:Name="HBSSDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing HBSS" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+            </Border>
+            <Border Name="HBSSDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12.85,0,0,0">
+                <TextBlock x:Name="HBSSDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Draining HBSS" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+            </Border>
+            <Border Name="rbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="12.85,0,0,0">
                 <TextBlock x:Name="rbDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Read Buffer" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <TextBlock Text="&#x2794;" Margin="12.85,0,0,0" FontSize="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Border Name="reading_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="175" Margin="12.85,0,0,0">
+            <Border Name="reading_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="12.85,0,0,0">
                 <TextBlock x:Name="reading_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Reading Wells" VerticalAlignment="Center" Height="60" Width="85" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"></TextBlock>
             </Border>
         </StackPanel>
