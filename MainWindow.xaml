@@ -78,8 +78,8 @@
             </Button.Effect>
         </Button>
         <DataGrid x:Name="results_grid" HorizontalAlignment="Center" Height="430" Margin="0,317,0,0" VerticalAlignment="Top" Width="1150" ItemsSource="{Binding}" Background="#FFF0F0F0" Visibility="Hidden"/>
-        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Visible"/>
-        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Visible">
+        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Hidden"/>
+        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Hidden">
             <Border Name="sampleDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="20,0,0,0">
                 <TextBlock x:Name="sampleDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubating and Draining Sample" VerticalAlignment="Center" Height="85" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
