@@ -828,11 +828,11 @@ namespace AutoVega4
                 // Raise Z by 9000 steps
                 raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
 
-                // Change HBSS Dispense and Drain Box to in progress color
-                sampleDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                sampleDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                sampleDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                sampleDrain_tb.Foreground = Brushes.Black;
+                // Change HBSS Dispense Box to in progress color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Foreground = Brushes.Black;
 
                 //**E2**//
                 // Move from HBSS bottle to E2
@@ -994,6 +994,11 @@ namespace AutoVega4
                 // Change E3 to finished color
                 inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
+                // Change HBSS Dispense Box to Finished Color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
                 //MessageBox.Show("HBSS Dispensed");
                 AutoClosingMessageBox.Show("HBSS Dispensed", "Dispensing Complete", 1000);
                 File.AppendAllText(logFilePath, "HBSS Dispensed" + Environment.NewLine);
@@ -1003,6 +1008,12 @@ namespace AutoVega4
 
                 // ** HBSS Wash **
                 // ---------------
+
+                // Change wells to gray
+                for (int i = 4; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
 
                 AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
 
@@ -1032,11 +1043,23 @@ namespace AutoVega4
                 // ** HBSS Incubation and Draining **
                 // ----------------------------------
 
+                // Change HBSS Incubation and Draining Box to in progress color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Foreground = Brushes.Black;
+
+                // Change wells to in progress color
+                for (int i = 4; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
                 // Incubate for the amount of time entered
                 incubationMinutes = Int32.Parse(incubationTime_tb.Text);
                 //incubationTime = incubationMinutes * 60 * 1000;
 
-                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 1000);
 
                 for (int i = 0; i < incubationMinutes; i++)
                 {
@@ -1068,8 +1091,8 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
 
                 // Move to Drain Position
-                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
                 moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
 
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
@@ -1229,10 +1252,16 @@ namespace AutoVega4
                     AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
                 }
 
-                // Change Sample Draining Box to finished color
-                sampleDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                sampleDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                sampleDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                // Change HBSS Draining Box to finished color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Change wells to finished color
+                for (int i = 4; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                }
 
                 //MessageBox.Show("HBSS Draining Complete");
                 AutoClosingMessageBox.Show("HBSS Draining Complete", "Draining Complete", 1000);
@@ -1250,6 +1279,18 @@ namespace AutoVega4
                 // Lift Pipette Tips above top of bottles
                 raiseZPosition(zPos[(int)steppingPositions.Drain]);
 
+                // Change Probe Dispense Box to in progress color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Foreground = Brushes.Black;
+
+                // Change cartridge wells to gray
+                for (int i = 4; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
                 // Move to Probe Bottle
                 moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
                 moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
@@ -1266,18 +1307,6 @@ namespace AutoVega4
 
                 // Raise Z by 9000 steps
                 raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Change Probe Dispense Box to in progress color
-                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                probeDispense_tb.Foreground = Brushes.Black;
-
-                // Change cartridge wells to gray
-                for (int i = 4; i < 14; i++)
-                {
-                    inProgressEllipses[i].Fill = Brushes.Gray;
-                }
 
                 //**E2**//
                 // Move from Probe bottle to E2
@@ -1439,6 +1468,11 @@ namespace AutoVega4
                 // Change E3 to finished color
                 inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
+                // Change probe dispense box to finished color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
                 //MessageBox.Show("Probe Dispensed");
                 AutoClosingMessageBox.Show("Probe Dispensed", "Dispensing Complete", 1000);
                 File.AppendAllText(logFilePath, "Probe Dispensed" + Environment.NewLine);
@@ -1448,6 +1482,12 @@ namespace AutoVega4
 
                 // ** Probe Wash **
                 // ----------------
+
+                // Change wells to gray
+                for (int i = 4; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
 
                 AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
 
@@ -1706,8 +1746,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 2520 steps (4.2mL)
-                drawLiquid(2520);
+                // Draw 2600 steps (4.2mL + extra)
+                drawLiquid(2600);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1799,6 +1839,12 @@ namespace AutoVega4
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
                 AutoClosingMessageBox.Show("Dispensing RB in A2", "Dispensing", 1000);
+
+                // Dispense 420ul RB in A2
+                dispenseLiquid(252);
+
+                // Change A2 to finished color
+                inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 //**A3**//
                 // Move from A2 to A3
@@ -1896,7 +1942,7 @@ namespace AutoVega4
                 // -------------
 
                 // Change Cartridges to gray
-                for (int i = 0; i < inProgressEllipses.Length; i++)
+                for (int i = 4; i < 14; i++)
                 {
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
@@ -1911,14 +1957,14 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 2760 steps (4.6mL)
-                drawLiquid(2760);
+                // Draw 2520 steps (4.2mL)
+                drawLiquid(2520);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2850 steps (4.6mL + extra)
-                dispenseLiquid(2850);
+                // Dispense 2600 steps (4.2mL + extra)
+                dispenseLiquid(2600);
 
                 Task.Delay(5000).Wait();
 
@@ -1940,7 +1986,7 @@ namespace AutoVega4
                 reading_tb.Foreground = Brushes.Black;
 
                 // Board Initialization
-                AutoClosingMessageBox.Show("Initializing Reader Board", "Initializing", 2000);
+                AutoClosingMessageBox.Show("Initializing Reader Board", "Initializing", 1000);
                 File.AppendAllText(logFilePath, "Initializing Reader Board");
 
                 StringBuilder sb = new StringBuilder(5000);
@@ -1960,7 +2006,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
                 File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
 
-                // Move from RB_Wash_Bottle to E2 + Dispense_to_Read
+                // Move from Wash_Bottle to E2 + Dispense_to_Read
                 moveX((xPos[(int)steppingPositions.E2] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.Wash_Bottle]);
                 moveY((yPos[(int)steppingPositions.E2] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.Wash_Bottle]);
 
@@ -2024,7 +2070,7 @@ namespace AutoVega4
                 resultsTextboxes[4].Text = raw_avg.ToString();
 
                 // Loop through rest of reading steps
-                for (int i = 15; i < 29; i++)
+                for (int i = 15; i < 24; i++)
                 {
                     // Move to next well
                     moveY(yPos[i] - yPos[i - 1]);
@@ -2089,7 +2135,7 @@ namespace AutoVega4
                     resultsTextboxes[i - 10].Text = raw_avg.ToString();
 
                     // Change current well to finished color and next well to in progress color except for last time
-                    if (i == 28)
+                    if (i == 23)
                     {
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                     }
@@ -2116,8 +2162,8 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
 
                 // Move back to Load Position
-                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.A4] + xPos[(int)steppingPositions.Dispense_to_Read]));
-                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.A4] + yPos[(int)steppingPositions.Dispense_to_Read]));
+                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.E3] + xPos[(int)steppingPositions.Dispense_to_Read]));
+                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.E3] + yPos[(int)steppingPositions.Dispense_to_Read]));
                 
                 //MessageBox.Show("Reading complete, displaying results");
                 AutoClosingMessageBox.Show("Reading complete, displaying results", "Results", 2000);
