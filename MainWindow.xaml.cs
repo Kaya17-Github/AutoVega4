@@ -800,22 +800,237 @@ namespace AutoVega4
                     scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
                 }
 
+                // 600 steps = 1mL
+
                 // ** Start of moving steps **
                 // ---------------------------
 
+                // ** HBSS Dispensing, Incubation, and Drain **
+                // --------------------------------------------
 
-                // ** Sample Incubation and Drain **
-                // ---------------------------------
+                // ** HBSS Dispensing **
+                // ---------------------
 
-                // Change Sample Draining Box and Cartridge to in progress color
+                // Move to HBSS Bottle
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+
+                // Draw HBSS for rows 2 and 3
+                AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
+                File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
+
+                // Lower Z by 9000 steps
+                lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+
+                // Draw 1800 steps (3mL)
+                drawLiquid(1800);
+
+                // Raise Z by 9000 steps
+                raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+
+                // Change HBSS Dispense and Drain Box to in progress color
                 sampleDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 sampleDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 sampleDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 sampleDrain_tb.Foreground = Brushes.Black;
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                }
+
+                //**E2**//
+                // Move from HBSS bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
+
+                // Change E2 to in progress color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in E2", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in E2
+                dispenseLiquid(180);
+
+                // Change E2 to finished color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**D2**//
+                // Move from E2 to D2
+                moveX(xPos[(int)steppingPositions.D2] - xPos[(int)steppingPositions.E2]);
+                moveY(yPos[(int)steppingPositions.D2] - yPos[(int)steppingPositions.E2]);
+
+                // Change D2 to in progress color
+                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in D2", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in D2
+                dispenseLiquid(180);
+
+                // Change D2 to finished color
+                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C2**//
+                // Move from D2 to C2
+                moveX(xPos[(int)steppingPositions.C2] - xPos[(int)steppingPositions.D2]);
+                moveY(yPos[(int)steppingPositions.C2] - yPos[(int)steppingPositions.D2]);
+
+                // Change C2 to in progress color
+                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in C2", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in C2
+                dispenseLiquid(180);
+
+                // Change C2 to finished color
+                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**B2**//
+                // Move from C2 to B2
+                moveX(xPos[(int)steppingPositions.B2] - xPos[(int)steppingPositions.C2]);
+                moveY(yPos[(int)steppingPositions.B2] - yPos[(int)steppingPositions.C2]);
+
+                // Change B2 to in progress color
+                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in B2", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in B2
+                dispenseLiquid(180);
+
+                // Change B2 to finished color
+                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**A2**//
+                // Move from B2 to A2
+                moveX(xPos[(int)steppingPositions.A2] - xPos[(int)steppingPositions.B2]);
+                moveY(yPos[(int)steppingPositions.A2] - yPos[(int)steppingPositions.B2]);
+
+                // Change A2 to in progress color
+                inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in A2", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in A2
+                dispenseLiquid(180);
+
+                // Change A2 to finished color
+                inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**A3**//
+                // Move from A2 to A3
+                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.A2]);
+                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.A2]);
+
+                // Change A3 to in progress color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in A3", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in A3
+                dispenseLiquid(180);
+
+                // Change A3 to finished color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**B3**//
+                // Move from A3 to B3
+                moveX(xPos[(int)steppingPositions.B3] - xPos[(int)steppingPositions.A3]);
+                moveY(yPos[(int)steppingPositions.B3] - yPos[(int)steppingPositions.A3]);
+
+                // Change B3 to in progress color
+                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in B3", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in B3
+                dispenseLiquid(180);
+
+                // Change B3 to finished color
+                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**C3**//
+                // Move from B3 to C3
+                moveX(xPos[(int)steppingPositions.C3] - xPos[(int)steppingPositions.B3]);
+                moveY(yPos[(int)steppingPositions.C3] - yPos[(int)steppingPositions.B3]);
+
+                // Change C3 to in progress color
+                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in C3", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in C3
+                dispenseLiquid(180);
+
+                // Change C3 to finished color
+                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**D3**//
+                // Move from C3 to D3
+                moveX(xPos[(int)steppingPositions.D3] - xPos[(int)steppingPositions.C3]);
+                moveY(yPos[(int)steppingPositions.D3] - yPos[(int)steppingPositions.C3]);
+
+                // Change D3 to in progress color
+                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in D3", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in D3
+                dispenseLiquid(180);
+
+                // Change D3 to finished color
+                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //**E3**//
+                // Move from D3 to E3
+                moveX(xPos[(int)steppingPositions.E3] - xPos[(int)steppingPositions.D3]);
+                moveY(yPos[(int)steppingPositions.E3] - yPos[(int)steppingPositions.D3]);
+
+                // Change E3 to in progress color
+                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in E3", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in E3
+                dispenseLiquid(180);
+
+                // Change E3 to finished color
+                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("HBSS Dispensed");
+                AutoClosingMessageBox.Show("HBSS Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Dispensed" + Environment.NewLine);
+
+                // -----------------------------
+                // ** HBSS Dispense Complete **
+
+                // ** HBSS Wash **
+                // ---------------
+
+                AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
+
+                // Move from E3 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.E3]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 1800 steps (3mL)
+                drawLiquid(1800);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2000 steps (3mL + extra)
+                dispenseLiquid(2000);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ------------------------
+                // ** HBSS Wash Complete **
+
+                // ** HBSS Incubation and Draining **
+                // ----------------------------------
 
                 // Incubate for the amount of time entered
                 incubationMinutes = Int32.Parse(incubationTime_tb.Text);
@@ -853,8 +1068,8 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
 
                 // Move to Drain Position
-                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Load]);
-                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Load]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
+                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
 
                 // Lower Pipette Tips to Drain
                 lowerZPosition(zPos[(int)steppingPositions.Drain]);
@@ -1014,50 +1229,43 @@ namespace AutoVega4
                     AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
                 }
 
-                // Change Sample Draining Box and Cartridge to finished color
+                // Change Sample Draining Box to finished color
                 sampleDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 sampleDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 sampleDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                }
 
-                //MessageBox.Show("Sample Draining Complete");
-                AutoClosingMessageBox.Show("Sample Draining Complete", "Draining Complete", 1000);
-                File.AppendAllText(logFilePath, "Sample Draining Complete" + Environment.NewLine);
+                //MessageBox.Show("HBSS Draining Complete");
+                AutoClosingMessageBox.Show("HBSS Draining Complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Draining Complete" + Environment.NewLine);
 
-                // ------------------------------------------
-                // ** Sample Incubation and Drain Complete **
+                // ----------------------------------------
+                // ** HBSS Incubation and Drain Complete **
 
-                // ** Probe Dispense **
-                // --------------------
+                // -----------------------------------------------------
+                // ** HBSS Dispensing, Incubation, and Drain Complete **
+
+                // ** Probe Dispensing **
+                // ----------------------
 
                 // Lift Pipette Tips above top of bottles
                 raiseZPosition(zPos[(int)steppingPositions.Drain]);
 
                 // Move to Probe Bottle
-                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Drain]);
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
 
-                // Change Cartridges to gray
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = Brushes.Gray;
-                }
-
-                // Draw Probe for rows 2, 3, and 4
+                // Draw Probe for rows 2 and 3
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
                 File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
 
                 // Lower Z by 9000 steps
-                lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+                lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
 
-                // Draw 2700 steps (4.5mL)
-                drawLiquid(2700);
+                // Draw 1800 steps (3mL)
+                drawLiquid(1800);
 
                 // Raise Z by 9000 steps
-                raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+                raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
 
                 // Change Probe Dispense Box to in progress color
                 probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -1065,10 +1273,16 @@ namespace AutoVega4
                 probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 probeDispense_tb.Foreground = Brushes.Black;
 
+                // Change cartridge wells to gray
+                for (int i = 4; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
                 //**E2**//
-                // Move from probe bottle to E2
-                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
-                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
+                // Move from Probe bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
 
                 // Change E2 to in progress color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -1225,91 +1439,6 @@ namespace AutoVega4
                 // Change E3 to finished color
                 inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
-                //**E4**//
-                // Move from E3 to E4
-                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.E3]);
-                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.E3]);
-
-                // Change E4 to in progress color
-                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in E4", "Dispensing", 1000);
-
-                // Dispense 300ul Probe in E4
-                dispenseLiquid(180);
-
-                // Change E4 to finished color
-                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**D4**//
-                // Move from E4 to D4
-                moveX(xPos[(int)steppingPositions.D4] - xPos[(int)steppingPositions.E4]);
-                moveY(yPos[(int)steppingPositions.D4] - yPos[(int)steppingPositions.E4]);
-
-                // Change D4 to in progress color
-                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in D4", "Dispensing", 1000);
-
-                // Dispense 300ul Probe in D4
-                dispenseLiquid(180);
-
-                // Change D4 to finished color
-                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**C4**//
-                // Move from D4 to C4
-                moveX(xPos[(int)steppingPositions.C4] - xPos[(int)steppingPositions.D4]);
-                moveY(yPos[(int)steppingPositions.C4] - yPos[(int)steppingPositions.D4]);
-
-                // Change C4 to in progress color
-                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in C4", "Dispensing", 1000);
-
-                // Dispense 300ul Probe in C4
-                dispenseLiquid(180);
-
-                // Change C4 to finished color
-                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**B4**//
-                // Move from C4 to B4
-                moveX(xPos[(int)steppingPositions.B4] - xPos[(int)steppingPositions.C4]);
-                moveY(yPos[(int)steppingPositions.B4] - yPos[(int)steppingPositions.C4]);
-
-                // Change B4 to in progress color
-                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in B4", "Dispensing", 1000);
-
-                // Dispense 300ul Probe in B4
-                dispenseLiquid(180);
-
-                // Change B4 to finished color
-                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A4**//
-                // Move from B4 to A4
-                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.B4]);
-                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.B4]);
-
-                // Change A4 to in progress color
-                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing Probe in A4", "Dispensing", 1000);
-
-                // Dispense remaining Probe in A4
-                dispenseLiquid(230);
-
-                // Change A4 to finished color
-                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Change Probe Dispense box to finished color
-                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
                 //MessageBox.Show("Probe Dispensed");
                 AutoClosingMessageBox.Show("Probe Dispensed", "Dispensing Complete", 1000);
                 File.AppendAllText(logFilePath, "Probe Dispensed" + Environment.NewLine);
@@ -1320,36 +1449,30 @@ namespace AutoVega4
                 // ** Probe Wash **
                 // ----------------
 
-                // Change Cartridges to gray
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = Brushes.Gray;
-                }
-
                 AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
 
-                // Move from A4 to Probe_Wash_Bottle
-                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A4]);
-                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A4]);
+                // Move from E3 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.E3]);
 
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 2700 steps (4.5mL)
-                drawLiquid(2700);
-                
+                // Draw 1800 steps (3mL)
+                drawLiquid(1800);
+
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2800 steps (4.5mL + extra)
-                dispenseLiquid(2800);
+                // Dispense 2000 steps (3mL + extra)
+                dispenseLiquid(2000);
 
                 Task.Delay(5000).Wait();
 
                 dispenseLiquid(300);
 
+                // ------------------------
                 // ** Probe Wash Complete **
-                // -------------------------
 
                 // ** Probe Incubation and Drain **
                 // --------------------------------
@@ -1359,7 +1482,7 @@ namespace AutoVega4
                 probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 probeDrain_tb.Foreground = Brushes.Black;
-                for (int i = 0; i < inProgressEllipses.Length; i++)
+                for (int i = 4; i < 14; i++)
                 {
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 }
@@ -1558,7 +1681,7 @@ namespace AutoVega4
                 probeDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                for (int i = 0; i < inProgressEllipses.Length; i++)
+                for (int i = 4; i < 14; i++)
                 {
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 }
@@ -1569,544 +1692,6 @@ namespace AutoVega4
 
                 // -----------------------------------------
                 // ** Probe Incubation and Drain Complete **
-
-                // ** HBSS Dispense **
-                // -------------------
-
-                // Lift Pipette Tips above top of bottles
-                raiseZPosition(zPos[(int)steppingPositions.Drain]);
-
-                // Move from drain to HBSS_Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
-
-                // Lower pipette tips
-                lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Draw 1272 steps (2.12mL)
-                drawLiquid(1272);
-
-                // Raise pipette tips
-                raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Change HBSS Dispense Box to in progress color
-                HBSSDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                HBSSDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                HBSSDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                HBSSDispense_tb.Foreground = Brushes.Black;
-
-                // Change wells back to gray
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = Brushes.Gray;
-                }
-
-                AutoClosingMessageBox.Show("Dispensing HBSS", "Dispensing", 1000);
-
-                //**E2**//
-                // Move from HBSS bottle to E2
-                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Change E2 to in progress color
-                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in E2", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in E2
-                dispenseLiquid(252);
-
-                // Change E2 to finished color
-                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**D2**//
-                // Move from E2 to D2
-                moveX(xPos[(int)steppingPositions.D2] - xPos[(int)steppingPositions.E2]);
-                moveY(yPos[(int)steppingPositions.D2] - yPos[(int)steppingPositions.E2]);
-
-                // Change D2 to in progress color
-                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in D2", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in D2
-                dispenseLiquid(252);
-
-                // Change D2 to finished color
-                inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**C2**//
-                // Move from D2 to C2
-                moveX(xPos[(int)steppingPositions.C2] - xPos[(int)steppingPositions.D2]);
-                moveY(yPos[(int)steppingPositions.C2] - yPos[(int)steppingPositions.D2]);
-
-                // Change C2 to in progress color
-                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in C2", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in C2
-                dispenseLiquid(252);
-
-                // Change C2 to finished color
-                inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**B2**//
-                // Move from C2 to B2
-                moveX(xPos[(int)steppingPositions.B2] - xPos[(int)steppingPositions.C2]);
-                moveY(yPos[(int)steppingPositions.B2] - yPos[(int)steppingPositions.C2]);
-
-                // Change B2 to in progress color
-                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in B2", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in B2
-                dispenseLiquid(252);
-
-                // Change B2 to finished color
-                inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A2**//
-                // Move from B2 to A2
-                moveX(xPos[(int)steppingPositions.A2] - xPos[(int)steppingPositions.B2]);
-                moveY(yPos[(int)steppingPositions.A2] - yPos[(int)steppingPositions.B2]);
-
-                // Change A2 to in progress color
-                inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in A2", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in A2
-                dispenseLiquid(252);
-
-                // Change A2 to finished color
-                inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Move from A2 to HBSS_Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.A2]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.A2]);
-
-                // Lower pipette tips
-                lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Draw 1260 steps (2.1mL)
-                drawLiquid(1260);
-
-                // Raise pipette tips
-                raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                //**A3**//
-                // Move from HBSS_Bottle to A3
-                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Change A3 to in progress color
-                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in A3", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in A3
-                dispenseLiquid(252);
-
-                // Change A3 to finished color
-                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**B3**//
-                // Move from A3 to B3
-                moveX(xPos[(int)steppingPositions.B3] - xPos[(int)steppingPositions.A3]);
-                moveY(yPos[(int)steppingPositions.B3] - yPos[(int)steppingPositions.A3]);
-
-                // Change B3 to in progress color
-                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in B3", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in B3
-                dispenseLiquid(252);
-
-                // Change B3 to finished color
-                inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**C3**//
-                // Move from B3 to C3
-                moveX(xPos[(int)steppingPositions.C3] - xPos[(int)steppingPositions.B3]);
-                moveY(yPos[(int)steppingPositions.C3] - yPos[(int)steppingPositions.B3]);
-
-                // Change C3 to in progress color
-                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in C3", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in C3
-                dispenseLiquid(252);
-
-                // Change C3 to finished color
-                inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**D3**//
-                // Move from C3 to D3
-                moveX(xPos[(int)steppingPositions.D3] - xPos[(int)steppingPositions.C3]);
-                moveY(yPos[(int)steppingPositions.D3] - yPos[(int)steppingPositions.C3]);
-
-                // Change D3 to in progress color
-                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in D3", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in D3
-                dispenseLiquid(252);
-
-                // Change D3 to finished color
-                inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**E3**//
-                // Move from D3 to E3
-                moveX(xPos[(int)steppingPositions.E3] - xPos[(int)steppingPositions.D3]);
-                moveY(yPos[(int)steppingPositions.E3] - yPos[(int)steppingPositions.D3]);
-
-                // Change E3 to in progress color
-                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in E3", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in E3
-                dispenseLiquid(252);
-
-                // Change E3 to finished color
-                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Move from E3 to HBSS_Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.E3]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.E3]);
-
-                // Lower pipette tips
-                lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Draw 1260 steps (2.1mL)
-                drawLiquid(1260);
-
-                // Raise pipette tips
-                raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                //**E4**//
-                // Move from HBSS_Bottle to E4
-                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Change E4 to in progress color
-                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in E4", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in E4
-                dispenseLiquid(252);
-
-                // Change E4 to finished color
-                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**D4**//
-                // Move from E4 to D4
-                moveX(xPos[(int)steppingPositions.D4] - xPos[(int)steppingPositions.E4]);
-                moveY(yPos[(int)steppingPositions.D4] - yPos[(int)steppingPositions.E4]);
-
-                // Change D4 to in progress color
-                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in D4", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in D4
-                dispenseLiquid(252);
-
-                // Change D4 to finished color
-                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**C4**//
-                // Move from D4 to C4
-                moveX(xPos[(int)steppingPositions.C4] - xPos[(int)steppingPositions.D4]);
-                moveY(yPos[(int)steppingPositions.C4] - yPos[(int)steppingPositions.D4]);
-
-                // Change C4 to in progress color
-                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in C4", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in C4
-                dispenseLiquid(252);
-
-                // Change C4 to finished color
-                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**B4**//
-                // Move from C4 to B4
-                moveX(xPos[(int)steppingPositions.B4] - xPos[(int)steppingPositions.C4]);
-                moveY(yPos[(int)steppingPositions.B4] - yPos[(int)steppingPositions.C4]);
-
-                // Change B4 to in progress color
-                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in B4", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in B4
-                dispenseLiquid(252);
-
-                // Change B4 to finished color
-                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A4**//
-                // Move from B4 to A4
-                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.B4]);
-                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.B4]);
-
-                // Change A4 to in progress color
-                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing HBSS in A4", "Dispensing", 1000);
-
-                // Dispense 420ul HBSS in A4
-                dispenseLiquid(252);
-
-                // Change A4 to finished color
-                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Change HBSS Dispense box to finished color
-                HBSSDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                HBSSDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                HBSSDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //MessageBox.Show("HBSS Dispensed");
-                AutoClosingMessageBox.Show("HBSS Dispensed", "Dispensing Complete", 2000);
-                File.AppendAllText(logFilePath, "HBSS Dispensed" + Environment.NewLine);
-
-                // ----------------------------
-                // ** HBSS Dispense Complete **
-
-                // ** HBSS Wash **
-                // ---------------
-
-                // Change Cartridges to gray
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = Brushes.Gray;
-                }
-
-                // Move from A4 to Wash_Bottle
-                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A4]);
-                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A4]);
-
-                // Dispense remaining HBSS in bottle
-                dispenseLiquid(200);
-
-                // Lower pipette tips
-                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
-
-                // Draw 2760 steps (4.6mL)
-                drawLiquid(2760);
-
-                // Raise pipette tips
-                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
-
-                // Dispense 2850 steps (4.6mL + extra)
-                dispenseLiquid(2850);
-
-                Task.Delay(5000).Wait();
-
-                dispenseLiquid(300);
-
-                // ------------------------
-                // ** HBSS Wash Complete **
-
-                // ** HBSS Drain **
-                // ----------------
-
-                // Change HBSS Draining Box and Cartridge to in progress color
-                HBSSDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                HBSSDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                HBSSDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                HBSSDrain_tb.Foreground = Brushes.Black;
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                }
-
-                //MessageBox.Show("Moving Back to Drain Position");
-                AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 1000);
-                File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
-
-                // Move back to Drain Position
-                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
-                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
-
-                // Lower Pipette Tips to Drain
-                lowerZPosition(zPos[(int)steppingPositions.Drain]);
-
-                //MessageBox.Show("Wait " + drainMinutes + " minutes for HBSS to drain through cartridges");
-                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for HBSS to drain through cartridges", "Draining", 1000);
-                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for HBSS to drain through cartridges" + Environment.NewLine);
-
-                // Turn pump on
-                try
-                {
-                    // Switch to bank 2
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 1);
-                    }
-                    // Send signal to turn on pump
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 8);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-                // Leave pump on for 2 minutes
-                Task.Delay(drainTime).Wait();
-
-                // Turn pump off
-                try
-                {
-                    // Send signal to turn off pump
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 0);
-                    }
-                    // Switch back to bank 1
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 0);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-                MessageBoxResult messageBoxResult3 = MessageBox.Show("Would you like to drain for 2 more minutes?", "Add Drain Time", MessageBoxButton.YesNo);
-
-                if (messageBoxResult3 == MessageBoxResult.Yes)
-                {
-                    // Turn pump on
-                    try
-                    {
-                        // Switch to bank 2
-                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                        {
-                            //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
-                                ChannelLineGrouping.OneChannelForAllLines);
-
-                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                            //  of digital data on demand, so no timeout is necessary.
-                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                            writer.WriteSingleSamplePort(true, 1);
-                        }
-                        // Send signal to turn on pump
-                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                        {
-                            //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                                ChannelLineGrouping.OneChannelForAllLines);
-
-                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                            //  of digital data on demand, so no timeout is necessary.
-                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                            writer.WriteSingleSamplePort(true, 8);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-
-                    // Leave pump on for 2 minutes
-                    Task.Delay(120000).Wait();
-
-                    // Turn pump off
-                    try
-                    {
-                        // Send signal to turn off pump
-                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                        {
-                            //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                                ChannelLineGrouping.OneChannelForAllLines);
-
-                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                            //  of digital data on demand, so no timeout is necessary.
-                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                            writer.WriteSingleSamplePort(true, 0);
-                        }
-                        // Switch back to bank 1
-                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                        {
-                            //  Create an Digital Output channel and name it.
-                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
-                                ChannelLineGrouping.OneChannelForAllLines);
-
-                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                            //  of digital data on demand, so no timeout is necessary.
-                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                            writer.WriteSingleSamplePort(true, 0);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-
-                else if (messageBoxResult3 == MessageBoxResult.No)
-                {
-                    AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
-                }
-
-                // Change HBSS Draining Box and Cartridge to finished color
-                HBSSDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                HBSSDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                HBSSDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                for (int i = 0; i < inProgressEllipses.Length; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                }
-
-                //MessageBox.Show("Draining Complete");
-                AutoClosingMessageBox.Show("Draining complete", "Draining Complete", 1000);
-                File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
-
-                // -------------------------
-                // ** HBSS Drain Complete **
 
                 // ** RB Dispense **
                 // -----------------
@@ -2121,8 +1706,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 1272 steps (2.12mL)
-                drawLiquid(1272);
+                // Draw 2520 steps (4.2mL)
+                drawLiquid(2520);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -2134,7 +1719,7 @@ namespace AutoVega4
                 rbDispense_tb.Foreground = Brushes.Black;
 
                 // Change wells back to gray
-                for (int i = 0; i < inProgressEllipses.Length; i++)
+                for (int i = 4; i < 14; i++)
                 {
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
@@ -2215,29 +1800,10 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing RB in A2", "Dispensing", 1000);
 
-                // Dispense 420ul RB in A2
-                dispenseLiquid(252);
-
-                // Change A2 to finished color
-                inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Move from A2 to RB_Bottle
-                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.A2]);
-                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.A2]);
-
-                // Lower pipette tips
-                lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
-
-                // Draw 1260 steps (2.1mL)
-                drawLiquid(1260);
-
-                // Raise pipette tips
-                raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
-
                 //**A3**//
-                // Move from RB_Bottle to A3
-                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.RB_Bottle]);
-                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.RB_Bottle]);
+                // Move from A2 to A3
+                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.A2]);
+                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.A2]);
 
                 // Change A3 to in progress color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -2312,100 +1878,7 @@ namespace AutoVega4
                 dispenseLiquid(252);
 
                 // Change E3 to finished color
-                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                // Move from E3 to RB_Bottle
-                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.E3]);
-                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.E3]);
-
-                // Lower pipette tips
-                lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
-
-                // Draw 1260 steps (2.1mL)
-                drawLiquid(1260);
-
-                // Raise pipette tips
-                raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
-
-                //**E4**//
-                // Move from RB_Bottle to E4
-                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.RB_Bottle]);
-                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.RB_Bottle]);
-
-                // Change E4 to in progress color
-                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in E4", "Dispensing", 1000);
-
-                // Dispense 420ul RB in E4
-                dispenseLiquid(252);
-
-                // Change E4 to finished color
-                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**D4**//
-                // Move from E4 to D4
-                moveX(xPos[(int)steppingPositions.D4] - xPos[(int)steppingPositions.E4]);
-                moveY(yPos[(int)steppingPositions.D4] - yPos[(int)steppingPositions.E4]);
-
-                // Change D4 to in progress color
-                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in D4", "Dispensing", 1000);
-
-                // Dispense 420ul RB in D4
-                dispenseLiquid(252);
-
-                // Change D4 to finished color
-                inProgressD4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**C4**//
-                // Move from D4 to C4
-                moveX(xPos[(int)steppingPositions.C4] - xPos[(int)steppingPositions.D4]);
-                moveY(yPos[(int)steppingPositions.C4] - yPos[(int)steppingPositions.D4]);
-
-                // Change C4 to in progress color
-                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in C4", "Dispensing", 1000);
-
-                // Dispense 420ul RB in C4
-                dispenseLiquid(252);
-
-                // Change C4 to finished color
-                inProgressC4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**B4**//
-                // Move from C4 to B4
-                moveX(xPos[(int)steppingPositions.B4] - xPos[(int)steppingPositions.C4]);
-                moveY(yPos[(int)steppingPositions.B4] - yPos[(int)steppingPositions.C4]);
-
-                // Change B4 to in progress color
-                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in B4", "Dispensing", 1000);
-
-                // Dispense 420ul RB in B4
-                dispenseLiquid(252);
-
-                // Change B4 to finished color
-                inProgressB4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                //**A4**//
-                // Move from B4 to A4
-                moveX(xPos[(int)steppingPositions.A4] - xPos[(int)steppingPositions.B4]);
-                moveY(yPos[(int)steppingPositions.A4] - yPos[(int)steppingPositions.B4]);
-
-                // Change A4 to in progress color
-                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                AutoClosingMessageBox.Show("Dispensing RB in A4", "Dispensing", 1000);
-
-                // Dispense 420ul RB in A4
-                dispenseLiquid(252);
-
-                // Change A4 to finished color
-                inProgressA4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);                
+                inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);            
 
                 // Change RB Dispense box to finished color
                 rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2428,9 +1901,9 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
 
-                // Move from A4 to Wash_Bottle
-                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A4]);
-                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A4]);
+                // Move from E3 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.E3]);
 
                 // Dispense remaining RB in bottle
                 dispenseLiquid(200);
