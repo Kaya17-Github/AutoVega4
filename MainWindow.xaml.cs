@@ -48,6 +48,7 @@ namespace AutoVega4
         bool isReading = false;
         readonly string logFilePath;
         readonly string outputFilePath;
+        readonly string dataFilePath;
         readonly string timeStamp;
         readonly string testTime;
         readonly string writeAllSteps;
@@ -88,16 +89,22 @@ namespace AutoVega4
             Directory.CreateDirectory(@"C:\Users\Public\Documents\kaya17\log");
             Directory.CreateDirectory(@"C:\Users\Public\Documents\kaya17\data");
 
+            timeStamp = DateTime.Now.ToString("ddMMMyy_HHmmss");
+            testTime = DateTime.Now.ToString("ddMMM_HHmm");
+
+            logFilePath = @"C:\Users\Public\Documents\kaya17\log\kaya17-AutoVega4_logfile.txt";
+            outputFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega4_" + timeStamp + "output.csv";
+            dataFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega4_data.csv";
+
             if (File.Exists(logFilePath))
             {
                 File.Delete(logFilePath);
             }
 
-            timeStamp = DateTime.Now.ToString("ddMMMyy_HHmmss");
-            testTime = DateTime.Now.ToString("ddMMM_HHmm");
-
-            logFilePath = @"C:\Users\Public\Documents\kaya17\log\kaya17-AutoVega4_logfile.txt";
-            outputFilePath = @"C:\Users\Public\Documents\Kaya17\Data\kaya17-AutoVega4_" + timeStamp + ".csv";
+            if (File.Exists(dataFilePath))
+            {
+                File.Delete(dataFilePath);
+            }
 
             writeAllSteps = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[3];
             readLimSwitches = DaqSystem.Local.GetPhysicalChannels(PhysicalChannelTypes.DOPort, PhysicalChannelAccess.External)[4];
@@ -2027,6 +2034,13 @@ namespace AutoVega4
                 inputStringE2 += "Return Value: m_dPDtmp = " + testArrayE2[3] + "\n";
                 inputStringE2 += "Return Value: testGetBoardValue = " + testArrayE2[4] + "\n";
 
+                File.AppendAllText(logFilePath, "E2 GetBoardValue: " + inputStringE2 + Environment.NewLine);
+
+                if (testArrayE2[4] == 0)
+                {
+                    MessageBox.Show("Error reading E2. Check log for specifics");
+                }
+
                 inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
@@ -2095,6 +2109,13 @@ namespace AutoVega4
                     readingInputString += "Return Value: m_dPDtmp = " + readingValues[3] + "\n";
                     readingInputString += "Return Value: testGetBoardValue = " + readingValues[4] + "\n";
 
+                    File.AppendAllText(logFilePath, positions[i] + " GetBoardValue: " + readingInputString + Environment.NewLine);
+
+                    if (readingValues[4] == 0)
+                    {
+                        MessageBox.Show("Error reading " + positions[i] + ". Check log for specifics.");
+                    }
+
                     // Update Results Grid for current well
                     raw_avg = (readingValues[0] - shiftFactors[i - 10]) * scaleFactors[i - 10];
                     raw_avg = Math.Round(raw_avg, 3);
@@ -2138,6 +2159,7 @@ namespace AutoVega4
                     if (i == 23)
                     {
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        File.AppendAllText(dataFilePath, sbR.ToString() + Environment.NewLine);
                     }
                     else
                     {
