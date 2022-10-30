@@ -189,7 +189,9 @@
     <Resource Include="Auto Vega\cartridge_scanning_map_custom.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DLLs\DAQinterfaceForKaya17.dll" />
+    <Content Include="DLLs\DAQinterfaceForKaya17.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sounds\43536__mkoenig__ultra-dnb-loop-160bpm.wav" />
     <Content Include="Sounds\one-minute-remaining.mp3" />
   </ItemGroup>
