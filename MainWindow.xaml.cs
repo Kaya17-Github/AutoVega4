@@ -1568,8 +1568,8 @@ namespace AutoVega4
                     // Before dispensing in E4, draw RB for last row
                     if (i == 24)
                     {
-                        moveX(xPos[7] - xPos[i]);
-                        moveY(yPos[7] - yPos[i]);
+                        moveX(xPos[6] - xPos[i]);
+                        moveY(yPos[6] - yPos[i]);
 
                         // Lower pipette tips
                         lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1580,8 +1580,8 @@ namespace AutoVega4
                         // Raise pipette tips
                         raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                        moveY(yPos[i] - yPos[7]);
-                        moveX(xPos[i] - xPos[7]);
+                        moveY(yPos[i] - yPos[6]);
+                        moveX(xPos[i] - xPos[6]);
                     }
 
                     AutoClosingMessageBox.Show("Dispensing RB in " + positions[i], "Dispensing", 1000);
