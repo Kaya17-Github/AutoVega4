@@ -807,7 +807,7 @@ namespace AutoVega4
                     scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
                 }
 
-                // 600 steps = 1mL
+                // 540 steps = 1mL
 
                 // ** Start of moving steps **
                 // ---------------------------
@@ -826,13 +826,13 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
                 File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
+                // Lower Z by 9500 steps
                 lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
 
-                // Draw 2700 steps (4.5mL)
-                drawLiquid(2700);
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
 
-                // Raise Z by 9000 steps
+                // Raise Z by 9500 steps
                 raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
 
                 // Change HBSS Dispense Box to in progress color
@@ -852,7 +852,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in E2", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in E2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -870,7 +870,7 @@ namespace AutoVega4
                     AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
 
                     // Dispense 300ul HBSS
-                    dispenseLiquid(180);
+                    dispenseLiquid(162);
 
                     // Change current well to finished color and next well to in progress color except for last time
                     if (i == 28)
@@ -914,14 +914,14 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 2700 steps (4.5mL)
-                drawLiquid(2700);
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2800 steps (4.5mL + extra)
-                dispenseLiquid(2800);
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
 
                 Task.Delay(5000).Wait();
 
@@ -1189,13 +1189,13 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
                 File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
 
-                // Lower Z by 9000 steps
+                // Lower Z by 9500 steps
                 lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
 
-                // Draw 2700 steps (4.5mL)
-                drawLiquid(2700);
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
 
-                // Raise Z by 9000 steps
+                // Raise Z by 9500 steps
                 raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
 
                 //**E2**//
@@ -1209,7 +1209,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in E2", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in E2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1227,7 +1227,7 @@ namespace AutoVega4
                     AutoClosingMessageBox.Show("Dispensing Probe in " + positions[i], "Dispensing", 1000);
 
                     // Dispense 300ul Probe
-                    dispenseLiquid(180);
+                    dispenseLiquid(162);
 
                     // Change current well to finished color and next well to in progress color except for last time
                     if (i == 28)
@@ -1268,17 +1268,17 @@ namespace AutoVega4
                 moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A4]);
                 moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A4]);
 
-                // Lower pipette tips
+                // Lower pipette tip
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 2700 steps (4.5mL)
-                drawLiquid(2700);
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
 
-                // Raise pipette tips
+                // Raise pipette tip
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2800 steps (4.5mL + extra)
-                dispenseLiquid(2800);
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
 
                 Task.Delay(5000).Wait();
 
@@ -1519,8 +1519,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 2600 steps (4.2mL + extra)
-                drawLiquid(2600);
+                // Draw 2350 steps (4.2mL + extra)
+                drawLiquid(2350);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1550,7 +1550,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in E2", "Dispensing", 1000);
 
                 // Dispense 420ul RB in E2
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1574,8 +1574,8 @@ namespace AutoVega4
                         // Lower pipette tips
                         lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                        // Draw 1300 steps (2.1mL)
-                        drawLiquid(1300);
+                        // Draw 1134 steps (2.1mL)
+                        drawLiquid(1134);
 
                         // Raise pipette tips
                         raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1587,7 +1587,7 @@ namespace AutoVega4
                     AutoClosingMessageBox.Show("Dispensing RB in " + positions[i], "Dispensing", 1000);
 
                     // Dispense 420ul RB
-                    dispenseLiquid(252);
+                    dispenseLiquid(227);
 
                     // Change current well to finished color and next well to in progress color except for last time
                     if (i == 28)
@@ -1632,14 +1632,14 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 2520 steps (4.2mL)
-                drawLiquid(2520);
+                // Draw 2268 steps (4.2mL)
+                drawLiquid(2268);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2600 steps (4.2mL + extra)
-                dispenseLiquid(2600);
+                // Dispense 2500 steps (4.2mL + extra)
+                dispenseLiquid(2500);
 
                 Task.Delay(5000).Wait();
 
