@@ -829,8 +829,8 @@ namespace AutoVega4
                 // Lower Z by 9000 steps
                 lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
 
-                // Draw 1800 steps (3mL)
-                drawLiquid(1800);
+                // Draw 1620 steps (3mL)
+                drawLiquid(1620);
 
                 // Raise Z by 9000 steps
                 raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
@@ -852,7 +852,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in E2", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in E2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -868,7 +868,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in D2", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in D2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change D2 to finished color
                 inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -884,7 +884,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in C2", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in C2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change C2 to finished color
                 inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -900,7 +900,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in B2", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in B2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change B2 to finished color
                 inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -916,7 +916,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in A2", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in A2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change A2 to finished color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -932,7 +932,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in A3", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in A3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change A3 to finished color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -948,7 +948,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in B3", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in B3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change B3 to finished color
                 inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -964,7 +964,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in C3", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in C3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change C3 to finished color
                 inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -980,7 +980,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in D3", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in D3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change D3 to finished color
                 inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -996,7 +996,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing HBSS in E3", "Dispensing", 1000);
 
                 // Dispense 300ul HBSS in E3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change E3 to finished color
                 inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1031,14 +1031,14 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 1800 steps (3mL)
-                drawLiquid(1800);
+                // Draw 1620 steps (3mL)
+                drawLiquid(1620);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2000 steps (3mL + extra)
-                dispenseLiquid(2000);
+                // Dispense 1700 steps (3mL + extra)
+                dispenseLiquid(1700);
 
                 Task.Delay(5000).Wait();
 
@@ -1309,8 +1309,8 @@ namespace AutoVega4
                 // Lower Z by 9000 steps
                 lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
 
-                // Draw 1800 steps (3mL)
-                drawLiquid(1800);
+                // Draw 1620 steps (3mL)
+                drawLiquid(1620);
 
                 // Raise Z by 9000 steps
                 raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
@@ -1326,7 +1326,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in E2", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in E2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1342,7 +1342,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in D2", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in D2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change D2 to finished color
                 inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1358,7 +1358,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in C2", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in C2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change C2 to finished color
                 inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1374,7 +1374,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in B2", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in B2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change B2 to finished color
                 inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1390,7 +1390,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in A2", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in A2
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change A2 to finished color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1406,7 +1406,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in A3", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in A3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change A3 to finished color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1422,7 +1422,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in B3", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in B3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change B3 to finished color
                 inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1438,7 +1438,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in C3", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in C3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change C3 to finished color
                 inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1454,7 +1454,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in D3", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in D3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change D3 to finished color
                 inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1470,7 +1470,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing Probe in E3", "Dispensing", 1000);
 
                 // Dispense 300ul Probe in E3
-                dispenseLiquid(180);
+                dispenseLiquid(162);
 
                 // Change E3 to finished color
                 inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1505,14 +1505,14 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 1800 steps (3mL)
-                drawLiquid(1800);
+                // Draw 1620 steps (3mL)
+                drawLiquid(1620);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2000 steps (3mL + extra)
-                dispenseLiquid(2000);
+                // Dispense 1700 steps (3mL + extra)
+                dispenseLiquid(1700);
 
                 Task.Delay(5000).Wait();
 
@@ -1753,8 +1753,8 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
 
-                // Draw 2600 steps (4.2mL + extra)
-                drawLiquid(2600);
+                // Draw 2350 steps (4.2mL + extra)
+                drawLiquid(2350);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
@@ -1784,7 +1784,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in E2", "Dispensing", 1000);
 
                 // Dispense 420ul RB in E2
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1800,7 +1800,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in D2", "Dispensing", 1000);
 
                 // Dispense 420ul RB in D2
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change D2 to finished color
                 inProgressD2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1816,7 +1816,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in C2", "Dispensing", 1000);
 
                 // Dispense 420ul RB in C2
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change C2 to finished color
                 inProgressC2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1832,7 +1832,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in B2", "Dispensing", 1000);
 
                 // Dispense 420ul RB in B2
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change B2 to finished color
                 inProgressB2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1848,7 +1848,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in A2", "Dispensing", 1000);
 
                 // Dispense 420ul RB in A2
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change A2 to finished color
                 inProgressA2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1864,7 +1864,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in A3", "Dispensing", 1000);
 
                 // Dispense 420ul RB in A3
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change A3 to finished color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1880,7 +1880,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in B3", "Dispensing", 1000);
 
                 // Dispense 420ul RB in B3
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change B3 to finished color
                 inProgressB3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1896,7 +1896,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in C3", "Dispensing", 1000);
 
                 // Dispense 420ul RB in C3
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change C3 to finished color
                 inProgressC3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1912,7 +1912,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in D3", "Dispensing", 1000);
 
                 // Dispense 420ul RB in D3
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change D3 to finished color
                 inProgressD3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1928,7 +1928,7 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Dispensing RB in E3", "Dispensing", 1000);
 
                 // Dispense 420ul RB in E3
-                dispenseLiquid(252);
+                dispenseLiquid(227);
 
                 // Change E3 to finished color
                 inProgressE3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);            
@@ -1964,14 +1964,14 @@ namespace AutoVega4
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Draw 2520 steps (4.2mL)
-                drawLiquid(2520);
+                // Draw 2268 steps (4.2mL)
+                drawLiquid(2268);
 
                 // Raise pipette tips
                 raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
 
-                // Dispense 2600 steps (4.2mL + extra)
-                dispenseLiquid(2600);
+                // Dispense 2500 steps (4.2mL + extra)
+                dispenseLiquid(2500);
 
                 Task.Delay(5000).Wait();
 
