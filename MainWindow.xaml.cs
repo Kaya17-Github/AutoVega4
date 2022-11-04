@@ -79,7 +79,7 @@ namespace AutoVega4
         static extern bool testInitializeBoard(StringBuilder str, int len);
 
         [DllImport(@".\DLLs\DAQinterfaceForKaya17.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr testGetBoardValue(StringBuilder str, int len);
+        static extern IntPtr testGetBoardValue(StringBuilder str, int len, double excVoltage);
 
         [DllImport(@".\DLLs\DAQinterfaceForKaya17.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern void testCloseTasksAndChannels();
@@ -1692,7 +1692,7 @@ namespace AutoVega4
 
                 StringBuilder sbE2 = new StringBuilder(100000);
 
-                IntPtr testBoardValuePtrE2 = testGetBoardValue(sbE2, sbE2.Capacity);
+                IntPtr testBoardValuePtrE2 = testGetBoardValue(sbE2, sbE2.Capacity, excitationLedVoltage);
                 double[] testArrayE2 = new double[5];
                 Marshal.Copy(testBoardValuePtrE2, testArrayE2, 0, 5);
                 string inputStringE2 = "";
@@ -1767,7 +1767,7 @@ namespace AutoVega4
                     // Read sample in current well
                     StringBuilder sbR = new StringBuilder(100000);
 
-                    IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity);
+                    IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity, excitationLedVoltage);
                     double[] readingValues = new double[5];
                     Marshal.Copy(boardValuePtr, readingValues, 0, 5);
                     string readingInputString = "";
@@ -2333,7 +2333,7 @@ namespace AutoVega4
 
                 StringBuilder sb2 = new StringBuilder(10000);
 
-                IntPtr testBoardValuePtr = testGetBoardValue(sb2, sb2.Capacity);
+                IntPtr testBoardValuePtr = testGetBoardValue(sb2, sb2.Capacity, excitationLedVoltage);
                 double[] testArray3 = new double[5];
                 Marshal.Copy(testBoardValuePtr, testArray3, 0, 5);
                 testString = "";
