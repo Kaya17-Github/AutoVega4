@@ -23,7 +23,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="161,55,0,0" TextWrapping="Wrap" Text="Reader ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
         </StackPanel>
         <StackPanel Name="Test_Info_Boxes" Orientation="Horizontal">
-            <TextBox x:Name="testname_tb" Height="34" Margin="200,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" OpacityMask="Black"/>
+            <TextBox x:Name="testname_tb" Height="34" Margin="200,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center" OpacityMask="Black"/>
             <TextBox x:Name="operator_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Your Badge" VerticalAlignment="Top" Background="#FFF6F6EB" SelectionBrush="#FF120303" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" TextChanged="operator_tb_TextChanged" OpacityMask="Black" Width="200" BorderBrush="#FFFFC300" FontSize="16"/>
             <TextBox x:Name="kit_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Kit QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="kit_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
             <TextBox x:Name="reader_tb" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Reader QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="reader_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
@@ -191,6 +191,22 @@
                 <Ellipse Name="inProgressE4" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="0,0,8,0"/>
                 <Ellipse Name="inProgressE3" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="0,0,8,0"/>
                 <Ellipse Name="inProgressE2" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="0,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="7" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="19,10,8,0"/>
+                <TextBlock Text="6" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="5" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="4" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="3" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="2" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="1" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="421,-338,0,0">
+                <TextBlock Text="A" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="B" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="C" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="D" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
+                <TextBlock Text="E" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Margin="0,10,8,0"/>
             </StackPanel>
         </StackPanel>
         <Rectangle Name="inProgress_cart34_border" HorizontalAlignment="Center" Height="250" Margin="0,527,0,0" Stroke="Black" VerticalAlignment="Top" Width="350" Visibility="Hidden"/>
