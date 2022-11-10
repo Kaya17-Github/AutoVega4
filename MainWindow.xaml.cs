@@ -1618,6 +1618,25 @@ namespace AutoVega4
                 // Add headers to output file
                 File.AppendAllText(outputFilePath, outputFileDataHeaders);
 
+                // Remove In Progress Boxes and Show Test Results Grid
+                inProgressBG_r.Visibility = Visibility.Hidden;
+                inProgress_stack.Visibility = Visibility.Hidden;
+                inProgress_cart34.Visibility = Visibility.Hidden;
+                inProgress_cart34_border.Visibility = Visibility.Hidden;
+
+                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
+
+                results_grid.Visibility = Visibility.Visible;
+
+                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
+
+                if (switchResults_cb.IsChecked == true)
+                {
+                    results_grid.Visibility = Visibility.Hidden;
+                    resultsDisplay_cart34_border.Visibility = Visibility.Visible;
+                    resultsDisplay_cart34.Visibility = Visibility.Visible;
+                }
+
                 //MessageBox.Show("Reading samples in all wells");
                 AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
                 File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
@@ -1797,27 +1816,8 @@ namespace AutoVega4
                 moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.A4] + yPos[(int)steppingPositions.Dispense_to_Read]));
 
                 //MessageBox.Show("Reading complete, displaying results");
-                AutoClosingMessageBox.Show("Reading complete, displaying results", "Results", 2000);
-                File.AppendAllText(logFilePath, "Reading complete, displaying results" + Environment.NewLine);
-
-                // Remove In Progress Boxes and Show Test Results Grid
-                inProgressBG_r.Visibility = Visibility.Hidden;
-                inProgress_stack.Visibility = Visibility.Hidden;
-                inProgress_cart34.Visibility = Visibility.Hidden;
-                inProgress_cart34_border.Visibility = Visibility.Hidden;
-
-                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
-
-                results_grid.Visibility = Visibility.Visible;
-
-                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
-
-                if (switchResults_cb.IsChecked == true)
-                {
-                    results_grid.Visibility = Visibility.Hidden;
-                    resultsDisplay_cart34_border.Visibility = Visibility.Visible;
-                    resultsDisplay_cart34.Visibility = Visibility.Visible;
-                }
+                AutoClosingMessageBox.Show("Reading complete", "Results", 2000);
+                File.AppendAllText(logFilePath, "Reading complete" + Environment.NewLine);
 
                 isReading = false;
                 File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);
