@@ -763,18 +763,18 @@ namespace AutoVega4
                 moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
                 moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
 
-                // Draw HBSS for rows 2, 3, and 4
+                // Draw HBSS for row 2
                 AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
                 File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
 
-                // Lower Z by 9500 steps
-                lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+                // Lower Z by 8000 steps
+                lowerZPosition(8000);
 
-                // Draw 2430 steps (4.5mL)
-                drawLiquid(2430);
+                // Draw 850 steps (1.5mL + extra)
+                drawLiquid(850);
 
-                // Raise Z by 9500 steps
-                raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+                // Raise Z by 8000 steps
+                raiseZPosition(8000);
 
                 // Change HBSS Dispense Box to in progress color
                 hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -807,6 +807,31 @@ namespace AutoVega4
 
                     // Change current well to in progress color
                     inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    // Before dispensing in A3, go back to HBSS bottle and draw more
+                    if (i == 19)
+                    {
+                        // Move from A3 to HBSS bottle
+                        moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.A3]);
+                        moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.A3]);
+
+                        // Draw HBSS for rows 3 and 4
+                        AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
+                        File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
+
+                        // Lower z position by 9800 steps
+                        lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+
+                        // Draw 1620 steps (3mL)
+                        drawLiquid(1620);
+
+                        // Raise by 9800 steps
+                        raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+
+                        // Move back to A3
+                        moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.Probe_Bottle]);
+                        moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.Probe_Bottle]);
+                    }
 
                     AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
 
@@ -1126,18 +1151,18 @@ namespace AutoVega4
                 moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
                 moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
 
-                // Draw Probe for rows 2, 3, and 4
+                // Draw Probe for row 2
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
                 File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
 
-                // Lower Z by 9500 steps
-                lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
+                // Lower Z by 8000 steps
+                lowerZPosition(8000);
 
-                // Draw 2430 steps (4.5mL)
-                drawLiquid(2430);
+                // Draw 850 steps (1.5mL + extra)
+                drawLiquid(850);
 
-                // Raise Z by 9500 steps
-                raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
+                // Raise Z by 8000 steps
+                raiseZPosition(8000);
 
                 //**E2**//
                 // Move from Probe bottle to E2
@@ -1164,6 +1189,31 @@ namespace AutoVega4
 
                     // Change current well to in progress color
                     inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    // Before dispensing in A3, go back to Probe bottle and draw more
+                    if (i == 19)
+                    {
+                        // Move from A3 to HBSS bottle
+                        moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.A3]);
+                        moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.A3]);
+
+                        // Draw HBSS for rows 3 and 4
+                        AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
+                        File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
+
+                        // Lower z position by 9800 steps
+                        lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+
+                        // Draw 1620 steps (3mL)
+                        drawLiquid(1620);
+
+                        // Raise by 9800 steps
+                        raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
+
+                        // Move back to A3
+                        moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                        moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.HBSS_Bottle]);
+                    }
 
                     AutoClosingMessageBox.Show("Dispensing Probe in " + positions[i], "Dispensing", 1000);
 
