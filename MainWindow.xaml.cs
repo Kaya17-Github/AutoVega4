@@ -1646,6 +1646,7 @@ namespace AutoVega4
                 moveY((yPos[(int)steppingPositions.E2] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.Wash_Bottle]);
 
                 inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                resultsTextboxes[4].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
                 AutoClosingMessageBox.Show("Reading E2", "Reading", 2000);
                 File.AppendAllText(logFilePath, "Reading E2" + Environment.NewLine);
@@ -1670,6 +1671,7 @@ namespace AutoVega4
                 }
 
                 inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                resultsTextboxes[4].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
                 // Update Results Grid
                 raw_avg = (testArrayE2[0] - shiftFactors[(int)shiftsAndScales.E2]) * scaleFactors[(int)shiftsAndScales.E2];
@@ -1710,6 +1712,7 @@ namespace AutoVega4
                 File.AppendAllText(outputFilePath, outputFileData);
 
                 resultsTextboxes[4].Text = raw_avg.ToString();
+                resultsTextboxes[4].Foreground = Brushes.Black;
 
                 // Loop through rest of reading steps
                 for (int i = 15; i < 29; i++)
@@ -1720,6 +1723,7 @@ namespace AutoVega4
 
                     // Change current well to in progress color
                     inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
                     AutoClosingMessageBox.Show("Reading " + positions[i], "Reading", 2000);
                     File.AppendAllText(logFilePath, "Reading " + positions[i] + Environment.NewLine);
@@ -1782,17 +1786,21 @@ namespace AutoVega4
                     File.AppendAllText(outputFilePath, outputFileData);
 
                     resultsTextboxes[i - 10].Text = raw_avg.ToString();
+                    resultsTextboxes[i - 10].Foreground = Brushes.Black;
 
                     // Change current well to finished color and next well to in progress color except for last time
                     if (i == 28)
                     {
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                         File.AppendAllText(dataFilePath, sbR.ToString() + Environment.NewLine);
                     }
                     else
                     {
                         inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                         inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        resultsTextboxes[i - 9].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                     }
                 }
 
