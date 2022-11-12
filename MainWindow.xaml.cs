@@ -608,7 +608,8 @@ namespace AutoVega4
 
         private async void read_button_Click(object sender, RoutedEventArgs e)
         {
-            if (sampleNum_tb.Text == "30")
+            // Enter '234' for all 15 wells
+            if (sampleNum_tb.Text == "234")
             {
                 string inProgressColor = "#F5D5CB";
                 string finishedColor = "#D7ECD9";
@@ -1915,9 +1916,3723 @@ namespace AutoVega4
                 // ** Complete **
             }
 
+            else if (sampleNum_tb.Text == "2")
+            {
+                string inProgressColor = "#F5D5CB";
+                string finishedColor = "#D7ECD9";
+
+                isReading = true;
+                File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
+                List<TestResults> testResults = new List<TestResults>();
+
+                // define array for necessary items from parameter file
+                double[] testArray = new double[17];
+
+                // Show In Progress Boxes
+                inProgressBG_r.Visibility = Visibility.Visible;
+                inProgress_stack.Visibility = Visibility.Visible;
+                inProgress_cart34.Visibility = Visibility.Visible;
+                inProgress_cart34_border.Visibility = Visibility.Visible;
+
+                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
+                                                inProgressE2,inProgressD2,inProgressC2,inProgressB2,inProgressA2,   /*Row 2*/
+                                                inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,   /*Row 3*/
+                                                inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,   /*Row 4*/
+                                                inProgressA5,inProgressB5,inProgressC5,inProgressD5,inProgressE5,   /*Row 5*/
+                                                inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
+                                                inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
+
+                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
+                                              resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
+                                              resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
+                                              resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
+                                              resultsDisplayA5,resultsDisplayB5,resultsDisplayC5,resultsDisplayD5,resultsDisplayE5,   /*Row 5*/ /*19-23*/
+                                              resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
+                                              resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
+
+                File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
+
+                // read parameter file and read in all necessary parameters
+                string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
+                double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
+                double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
+                double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
+                double samplingRate = double.Parse(parameters[3].Substring(0, 5));
+                double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
+                double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
+                double saturation = double.Parse(parameters[8].Substring(0, 8));
+                double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
+                double lowSignal = double.Parse(parameters[29].Substring(0, 5));
+                double readMethod = double.Parse(parameters[9].Substring(0, 1));
+                double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
+                double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
+                double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
+                double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
+                double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
+                double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
+                double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
+                double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
+                double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
+                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
+                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
+                double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
+                double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
+                double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
+                double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
+                double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
+
+                double bgd_rdg = afeShiftFactor;
+                double threshold = viralCountOffsetFactor;
+
+                File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
+
+                testArray[0] = ledOutputRange;
+                testArray[1] = samplingRate;
+                testArray[2] = numSamplesPerReading;
+                testArray[3] = numSamplesForAvg;
+                testArray[4] = errorLimitInMillivolts;
+                testArray[5] = numTempSamplesPerReading;
+                testArray[6] = saturation;
+                testArray[7] = expectedDarkRdg;
+                testArray[8] = lowSignal;
+                testArray[9] = ledOnDuration;
+                testArray[10] = readDelayInMS;
+                testArray[11] = calMinVoltage;
+                testArray[12] = calNomVoltage;
+                testArray[13] = calMaxVoltage;
+                testArray[14] = excMinVoltage;
+                testArray[15] = excNomVoltage;
+                testArray[16] = excMaxVoltage;
+
+                File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
+
+                string inputString = "";
+                foreach (double value in testArray)
+                {
+                    inputString += "Input: " + value + "\n";
+                }
+
+                //MessageBox.Show(inputString);
+                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+
+                IntPtr testPtr = verifyInput(testArray);
+                double[] testArray2 = new double[17];
+                Marshal.Copy(testPtr, testArray2, 0, 17);
+                inputString = "";
+                foreach (double value in testArray)
+                {
+                    inputString += "Verify input: " + value + "\n";
+                }
+
+                //MessageBox.Show(inputString);
+                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+
+                bool settingsBool = testSetSettings(testArray);
+
+                //MessageBox.Show("Test setSettings: " + settingsBool);
+                File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
+
+                string[] positions = new string[map.Length];
+                int[] xPos = new int[map.Length];
+                int[] yPos = new int[map.Length];
+                int[] zPos = new int[map.Length];
+                int[] pump = new int[map.Length];
+
+                for (int i = 0; i < map.Length; i++)
+                {
+                    positions[i] = map[i].Split(',')[0];
+                    xPos[i] = Int32.Parse(map[i].Split(',')[1]);
+                    yPos[i] = Int32.Parse(map[i].Split(',')[2]);
+                    zPos[i] = Int32.Parse(map[i].Split(',')[3]);
+                    pump[i] = Int32.Parse(map[i].Split(',')[4]);
+                }
+
+                double[] shiftFactors = new double[shiftAndScale.Length];
+                double[] scaleFactors = new double[shiftAndScale.Length];
+
+                for (int i = 0; i < shiftAndScale.Length; i++)
+                {
+                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
+                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
+                }
+
+                // 540 steps = 1mL
+
+                // ** Start of moving steps **
+                // ---------------------------
+
+                // ** HBSS Dispensing, Incubation, and Drain **
+                // --------------------------------------------
+
+                // ** HBSS Dispensing **
+                // ---------------------
+
+                // Move to HBSS Bottle
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+
+                // Draw HBSS for row 2
+                AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
+                File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
+
+                // Lower Z by 9500 steps
+                lowerZPosition(9500);
+
+                // Draw 820 steps (1.5mL + extra)
+                drawLiquid(820);
+
+                // Raise Z by 9500 steps
+                raiseZPosition(9500);
+
+                // Change HBSS Dispense Box to in progress color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Foreground = Brushes.Black;
+
+                //**E2**//
+                // Move from HBSS bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
+
+                // Change E2 to in progress color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in E2", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in E2
+                dispenseLiquid(164);
+
+                // Change E2 to finished color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense HBSS in remaining wells
+                for (int i = 15; i < 19; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
+
+                    // dispense remaining liquid in last well
+                    if (i == 18)
+                    {
+                        // Dispense 300ul HBSS + remaining
+                        dispenseLiquid(164);
+
+                        // wait 3 seconds and dispense remaining amount
+                        Task.Delay(3000).Wait();
+
+                        dispenseLiquid(50);
+                    }
+                    else
+                    {
+                        // Dispense 300ul HBSS
+                        dispenseLiquid(164);
+                    }
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 18)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change HBSS Dispense Box to Finished Color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("HBSS Dispensed");
+                AutoClosingMessageBox.Show("HBSS Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Dispensed" + Environment.NewLine);
+
+                // -----------------------------
+                // ** HBSS Dispense Complete **
+
+                // ** HBSS Wash **
+                // ---------------
+
+                // Change wells to gray
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Cleaning Pipette Tip", "Cleaning", 1000);
+
+                // Move from A2 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A2]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A2]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ------------------------
+                // ** HBSS Wash Complete **
+
+                // ** HBSS Incubation and Draining **
+                // ----------------------------------
+
+                // Change HBSS Incubation and Draining Box to in progress color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Foreground = Brushes.Black;
+
+                // Change wells to in progress color
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
+                // Incubate for the amount of time entered
+                incubationMinutes = Int32.Parse(incubationTime_tb.Text);
+                //incubationTime = incubationMinutes * 60 * 1000;
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 1000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
+
+                //MessageBox.Show("Moving to Drain Position");
+                AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
+                File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
+
+                // Move to Drain Position
+                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Lower Pipette Tips to Drain
+                lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                drainMinutes = Int32.Parse(drainTime_tb.Text);
+                drainTime = drainMinutes * 60 * 1000;
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for samples to drain through cartridges" + Environment.NewLine);
+
+                // Turn pump on
+                try
+                {
+                    // Switch to bank 2
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 1);
+                    }
+                    // Send signal to turn on pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 8);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // Leave pump on for 2 minutes
+                Task.Delay(drainTime).Wait();
+
+                // Turn pump off
+                try
+                {
+                    // Send signal to turn off pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                    // Switch back to bank 1
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                MessageBoxResult messageBoxResult = MessageBox.Show("Would you like to drain for 2 more minutes?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    // Turn pump on
+                    try
+                    {
+                        // Switch to bank 2
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 1);
+                        }
+                        // Send signal to turn on pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    // Leave pump on for 2 minutes
+                    Task.Delay(120000).Wait();
+
+                    // Turn pump off
+                    try
+                    {
+                        // Send signal to turn off pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                        // Switch back to bank 1
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+
+                else if (messageBoxResult == MessageBoxResult.No)
+                {
+                    AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
+                }
+
+                // Change HBSS Draining Box to finished color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Change wells to finished color
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                }
+
+                //MessageBox.Show("HBSS Draining Complete");
+                AutoClosingMessageBox.Show("HBSS Draining Complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Draining Complete" + Environment.NewLine);
+
+                // ----------------------------------------
+                // ** HBSS Incubation and Drain Complete **
+
+                // -----------------------------------------------------
+                // ** HBSS Dispensing, Incubation, and Drain Complete **
+
+                // ** Probe Dispensing **
+                // ----------------------
+
+                // Lift Pipette Tips above top of bottles
+                raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                // Change Probe Dispense Box to in progress color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Foreground = Brushes.Black;
+
+                // Change cartridge wells to gray
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                // Move to Probe Bottle
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                // Draw Probe for row 2
+                AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
+                File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
+
+                // Lower Z by 9500 steps
+                lowerZPosition(9500);
+
+                // Draw 820 steps (1.5mL + extra)
+                drawLiquid(820);
+
+                // Raise Z by 9500 steps
+                raiseZPosition(9500);
+
+                //**E2**//
+                // Move from Probe bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
+
+                // Change E2 to in progress color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in E2", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in E2
+                dispenseLiquid(164);
+
+                // Change E2 to finished color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense Probe in remaining wells
+                for (int i = 15; i < 19; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing Probe in " + positions[i], "Dispensing", 1000);
+
+                    // dispense remaining liquid in last well
+                    if (i == 18)
+                    {
+                        // Dispense 300ul Probe + remaining
+                        dispenseLiquid(174);
+
+                        // wait 3 seconds and dispense remaining amount
+                        Task.Delay(3000).Wait();
+
+                        dispenseLiquid(50);
+                    }
+                    else
+                    {
+                        // Dispense 300ul Probe
+                        dispenseLiquid(164);
+                    }
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 18)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change probe dispense box to finished color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("Probe Dispensed");
+                AutoClosingMessageBox.Show("Probe Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "Probe Dispensed" + Environment.NewLine);
+
+                // -----------------------------
+                // ** Probe Dispense Complete **
+
+                // ** Probe Wash **
+                // ----------------
+
+                // Change wells to gray
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
+
+                // Move from A2 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A2]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A2]);
+
+                // Lower pipette tip
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
+
+                // Raise pipette tip
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ------------------------
+                // ** Probe Wash Complete **
+
+                // ** Probe Incubation and Drain **
+                // --------------------------------
+
+                // Change Probe Draining Box and Cartridge to in progress color
+                probeDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_tb.Foreground = Brushes.Black;
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
+
+                //MessageBox.Show("Moving Back to Drain Position");
+                AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 1000);
+                File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
+
+                // Move back to Drain Position
+                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Lower Pipette Tips to Drain
+                lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for probe to drain through cartridges" + Environment.NewLine);
+
+                // Turn pump on
+                try
+                {
+                    // Switch to bank 2
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 1);
+                    }
+                    // Send signal to turn on pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 8);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // Leave pump on for 2 minutes
+                Task.Delay(drainTime).Wait();
+
+                // Turn pump off
+                try
+                {
+                    // Send signal to turn off pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                    // Switch back to bank 1
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                MessageBoxResult messageBoxResult2 = MessageBox.Show("Would you like to drain for 2 more minutes?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                if (messageBoxResult2 == MessageBoxResult.Yes)
+                {
+                    // Turn pump on
+                    try
+                    {
+                        // Switch to bank 2
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 1);
+                        }
+                        // Send signal to turn on pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    // Leave pump on for 2 minutes
+                    Task.Delay(120000).Wait();
+
+                    // Turn pump off
+                    try
+                    {
+                        // Send signal to turn off pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                        // Switch back to bank 1
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+
+                else if (messageBoxResult2 == MessageBoxResult.No)
+                {
+                    AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
+                }
+
+                // Change Probe Draining Box and Cartridge to finished color
+                probeDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                }
+
+                //MessageBox.Show("Draining Complete");
+                AutoClosingMessageBox.Show("Draining complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
+
+                // -----------------------------------------
+                // ** Probe Incubation and Drain Complete **
+
+                // ** RB Dispense **
+                // -----------------
+
+                // Lift Pipette Tips above top of bottles
+                raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                // Move from drain to RB_Bottle
+                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
+
+                // Draw 1145 steps (2.1mL + extra)
+                drawLiquid(1145);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
+
+                // Change RB Dispense Box to in progress color
+                rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_tb.Foreground = Brushes.Black;
+
+                // Change wells back to gray
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Dispensing RB", "Dispensing", 1000);
+
+                //**E2**//
+                // Move from RB bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.RB_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.RB_Bottle]);
+
+                // Change E2 to in progress color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in E2", "Dispensing", 1000);
+
+                // Dispense 420ul RB in E2
+                dispenseLiquid(227);
+
+                // Change E2 to finished color
+                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense RB in remaining wells
+                for (int i = 15; i < 19; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing RB in " + positions[i], "Dispensing", 1000);
+
+                    dispenseLiquid(227);
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 18)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change RB Dispense box to finished color
+                rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("RB Dispensed");
+                AutoClosingMessageBox.Show("Read Buffer Dispensed", "Dispensing Complete", 2000);
+                File.AppendAllText(logFilePath, "Read Buffer Dispensed" + Environment.NewLine);
+
+                // --------------------------
+                // ** RB Dispense Complete **
+
+                // ** RB Wash **
+                // -------------
+
+                // Change Cartridges to gray
+                for (int i = 4; i < 9; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                // Move from A2 to RB_Bottle
+                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.A2]);
+                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.A2]);
+
+                // Dispense remaining RB in bottle
+                dispenseLiquid(200);
+
+                // Move from RB_Bottle to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.RB_Bottle]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.RB_Bottle]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2268 steps (4.2mL)
+                drawLiquid(2268);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.2mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ----------------------
+                // ** RB Wash Complete **
+
+                // ** Read Wells **
+                // ----------------
+
+                // TODO: Check for lid closed
+                MessageBox.Show("Please make sure lid is closed before continuing.");
+
+                // Change Reading box to in progress color
+                reading_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_tb.Foreground = Brushes.Black;
+
+                // Board Initialization
+                AutoClosingMessageBox.Show("Initializing Reader Board", "Initializing", 1000);
+                File.AppendAllText(logFilePath, "Initializing Reader Board");
+
+                StringBuilder sb = new StringBuilder(5000);
+                bool initializeBoardBool = testInitializeBoard(sb, sb.Capacity);
+
+                MessageBox.Show("Test initializeBoard: " + initializeBoardBool + "\n" + sb.ToString());
+                File.AppendAllText(logFilePath, "Test initializeBoard: " + initializeBoardBool + Environment.NewLine);
+
+                // Define headers for all columns in output file
+                string outputFileDataHeaders = "WellName" + delimiter + "BackgroundReading" + delimiter + "Threshold" + delimiter +
+                                               "RawAvg" + delimiter + "TC_rdg" + delimiter + "TestResult" + Environment.NewLine;
+
+                // Add headers to output file
+                File.AppendAllText(outputFilePath, outputFileDataHeaders);
+
+                // Remove In Progress Boxes and Show Test Results Grid
+                inProgressBG_r.Visibility = Visibility.Hidden;
+                inProgress_stack.Visibility = Visibility.Hidden;
+                inProgress_cart34.Visibility = Visibility.Hidden;
+                inProgress_cart34_border.Visibility = Visibility.Hidden;
+
+                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
+
+                results_grid.Visibility = Visibility.Visible;
+
+                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
+
+                if (switchResults_cb.IsChecked == true)
+                {
+                    results_grid.Visibility = Visibility.Hidden;
+                    resultsDisplay_cart34_border.Visibility = Visibility.Visible;
+                    resultsDisplay_cart34.Visibility = Visibility.Visible;
+                }
+
+                //MessageBox.Show("Reading samples in all wells");
+                AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
+
+                // Move from Wash_Bottle to E2 + Dispense_to_Read
+                moveX((xPos[(int)steppingPositions.E2] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.Wash_Bottle]);
+                moveY((yPos[(int)steppingPositions.E2] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.Wash_Bottle]);
+
+                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                resultsTextboxes[4].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Reading E2", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading E2" + Environment.NewLine);
+
+                StringBuilder sbE2 = new StringBuilder(100000);
+
+                IntPtr testBoardValuePtrE2 = testGetBoardValue(sbE2, sbE2.Capacity, excitationLedVoltage);
+                double[] testArrayE2 = new double[5];
+                Marshal.Copy(testBoardValuePtrE2, testArrayE2, 0, 5);
+                string inputStringE2 = "";
+                inputStringE2 += "Return Value: m_dAvgValue = " + testArrayE2[0] + "\n";
+                inputStringE2 += "Return Value: m_dCumSum = " + testArrayE2[1] + "\n";
+                inputStringE2 += "Return Value: m_dLEDtmp = " + testArrayE2[2] + "\n";
+                inputStringE2 += "Return Value: m_dPDtmp = " + testArrayE2[3] + "\n";
+                inputStringE2 += "Return Value: testGetBoardValue = " + testArrayE2[4] + "\n";
+
+                File.AppendAllText(logFilePath, "E2 GetBoardValue: " + inputStringE2 + Environment.NewLine);
+
+                if (testArrayE2[4] == 0)
+                {
+                    MessageBox.Show("Error reading E2. Check log for specifics");
+                }
+
+                inProgressEllipses[4].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                resultsTextboxes[4].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Update Results Grid
+                raw_avg = (testArrayE2[0] - shiftFactors[(int)shiftsAndScales.E2]) * scaleFactors[(int)shiftsAndScales.E2];
+                raw_avg = Math.Round(raw_avg, 3);
+
+                TC_rdg = raw_avg;
+
+                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                testResult = "NEG";
+
+                if (diff > threshold)
+                {
+                    testResult = "POS";
+                }
+
+                sampleName = positions[(int)steppingPositions.E2];
+
+                testResults.Add(new TestResults()
+                {
+                    WellName = positions[(int)steppingPositions.E2],
+                    BackgroundReading = bgd_rdg.ToString(),
+                    Threshold = threshold.ToString(),
+                    RawAvg = raw_avg.ToString(),
+                    TC_rdg = TC_rdg.ToString(),
+                    TestResult = testResult,
+                    SampleName = sampleName
+                });
+
+                results_grid.ItemsSource = testResults;
+                results_grid.Items.Refresh();
+                // Result for E2 added to results grid
+
+                // Add results grid data for E2 to output file
+                outputFileData = positions[(int)steppingPositions.E2] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                File.AppendAllText(outputFilePath, outputFileData);
+
+                resultsTextboxes[4].Text = raw_avg.ToString();
+                resultsTextboxes[4].Foreground = Brushes.Black;
+
+                // Loop through rest of reading steps
+                for (int i = 15; i < 19; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Reading " + positions[i], "Reading", 2000);
+                    File.AppendAllText(logFilePath, "Reading " + positions[i] + Environment.NewLine);
+
+                    // Read sample in current well
+                    StringBuilder sbR = new StringBuilder(100000);
+
+                    IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity, excitationLedVoltage);
+                    double[] readingValues = new double[5];
+                    Marshal.Copy(boardValuePtr, readingValues, 0, 5);
+                    string readingInputString = "";
+                    readingInputString += "Return Value: m_dAvgValue = " + readingValues[0] + "\n";
+                    readingInputString += "Return Value: m_dCumSum = " + readingValues[1] + "\n";
+                    readingInputString += "Return Value: m_dLEDtmp = " + readingValues[2] + "\n";
+                    readingInputString += "Return Value: m_dPDtmp = " + readingValues[3] + "\n";
+                    readingInputString += "Return Value: testGetBoardValue = " + readingValues[4] + "\n";
+
+                    File.AppendAllText(logFilePath, positions[i] + " GetBoardValue: " + readingInputString + Environment.NewLine);
+
+                    if (readingValues[4] == 0)
+                    {
+                        MessageBox.Show("Error reading " + positions[i] + ". Check log for specifics.");
+                    }
+
+                    // Update Results Grid for current well
+                    raw_avg = (readingValues[0] - shiftFactors[i - 10]) * scaleFactors[i - 10];
+                    raw_avg = Math.Round(raw_avg, 3);
+
+                    TC_rdg = raw_avg;
+
+                    diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                    testResult = "NEG";
+
+                    if (diff > threshold)
+                    {
+                        testResult = "POS";
+                    }
+
+                    sampleName = positions[i];
+
+                    testResults.Add(new TestResults()
+                    {
+                        WellName = positions[i],
+                        BackgroundReading = bgd_rdg.ToString(),
+                        Threshold = threshold.ToString(),
+                        RawAvg = raw_avg.ToString(),
+                        TC_rdg = TC_rdg.ToString(),
+                        TestResult = testResult,
+                        SampleName = sampleName
+                    });
+
+                    results_grid.ItemsSource = testResults;
+                    results_grid.Items.Refresh();
+
+                    // Add results grid data for current well to output file
+                    outputFileData = positions[i] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                    File.AppendAllText(outputFilePath, outputFileData);
+
+                    resultsTextboxes[i - 10].Text = raw_avg.ToString();
+                    resultsTextboxes[i - 10].Foreground = Brushes.Black;
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 18)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        File.AppendAllText(dataFilePath, sbR.ToString() + Environment.NewLine);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        resultsTextboxes[i - 9].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                AutoClosingMessageBox.Show("All wells read", "Reading Complete", 2000);
+                File.AppendAllText(logFilePath, "All wells read" + Environment.NewLine);
+
+                testCloseTasksAndChannels();
+
+                // ----------------------------
+                // ** Reading Wells Complete **
+
+                // ** Move Back to Load **
+                // -----------------------
+
+                //MessageBox.Show("Moving back to load position");
+                AutoClosingMessageBox.Show("Moving back to load position", "Moving", 2000);
+                File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
+
+                // Move back to Load Position
+                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.A2] + xPos[(int)steppingPositions.Dispense_to_Read]));
+                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.A2] + yPos[(int)steppingPositions.Dispense_to_Read]));
+
+                //MessageBox.Show("Reading complete, displaying results");
+                AutoClosingMessageBox.Show("Reading complete", "Results", 2000);
+                File.AppendAllText(logFilePath, "Reading complete" + Environment.NewLine);
+
+                isReading = false;
+                File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);
+
+                // --------------
+                // ** Complete **
+            }
+
+            else if (sampleNum_tb.Text == "3")
+            {
+                string inProgressColor = "#F5D5CB";
+                string finishedColor = "#D7ECD9";
+
+                isReading = true;
+                File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
+                List<TestResults> testResults = new List<TestResults>();
+
+                // define array for necessary items from parameter file
+                double[] testArray = new double[17];
+
+                // Show In Progress Boxes
+                inProgressBG_r.Visibility = Visibility.Visible;
+                inProgress_stack.Visibility = Visibility.Visible;
+                inProgress_cart34.Visibility = Visibility.Visible;
+                inProgress_cart34_border.Visibility = Visibility.Visible;
+
+                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
+                                                inProgressE2,inProgressD2,inProgressC2,inProgressB2,inProgressA2,   /*Row 2*/
+                                                inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,   /*Row 3*/
+                                                inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,   /*Row 4*/
+                                                inProgressA5,inProgressB5,inProgressC5,inProgressD5,inProgressE5,   /*Row 5*/
+                                                inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
+                                                inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
+
+                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
+                                              resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
+                                              resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
+                                              resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
+                                              resultsDisplayA5,resultsDisplayB5,resultsDisplayC5,resultsDisplayD5,resultsDisplayE5,   /*Row 5*/ /*19-23*/
+                                              resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
+                                              resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
+
+                File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
+
+                // read parameter file and read in all necessary parameters
+                string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
+                double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
+                double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
+                double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
+                double samplingRate = double.Parse(parameters[3].Substring(0, 5));
+                double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
+                double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
+                double saturation = double.Parse(parameters[8].Substring(0, 8));
+                double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
+                double lowSignal = double.Parse(parameters[29].Substring(0, 5));
+                double readMethod = double.Parse(parameters[9].Substring(0, 1));
+                double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
+                double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
+                double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
+                double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
+                double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
+                double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
+                double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
+                double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
+                double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
+                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
+                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
+                double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
+                double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
+                double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
+                double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
+                double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
+
+                double bgd_rdg = afeShiftFactor;
+                double threshold = viralCountOffsetFactor;
+
+                File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
+
+                testArray[0] = ledOutputRange;
+                testArray[1] = samplingRate;
+                testArray[2] = numSamplesPerReading;
+                testArray[3] = numSamplesForAvg;
+                testArray[4] = errorLimitInMillivolts;
+                testArray[5] = numTempSamplesPerReading;
+                testArray[6] = saturation;
+                testArray[7] = expectedDarkRdg;
+                testArray[8] = lowSignal;
+                testArray[9] = ledOnDuration;
+                testArray[10] = readDelayInMS;
+                testArray[11] = calMinVoltage;
+                testArray[12] = calNomVoltage;
+                testArray[13] = calMaxVoltage;
+                testArray[14] = excMinVoltage;
+                testArray[15] = excNomVoltage;
+                testArray[16] = excMaxVoltage;
+
+                File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
+
+                string inputString = "";
+                foreach (double value in testArray)
+                {
+                    inputString += "Input: " + value + "\n";
+                }
+
+                //MessageBox.Show(inputString);
+                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+
+                IntPtr testPtr = verifyInput(testArray);
+                double[] testArray2 = new double[17];
+                Marshal.Copy(testPtr, testArray2, 0, 17);
+                inputString = "";
+                foreach (double value in testArray)
+                {
+                    inputString += "Verify input: " + value + "\n";
+                }
+
+                //MessageBox.Show(inputString);
+                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+
+                bool settingsBool = testSetSettings(testArray);
+
+                //MessageBox.Show("Test setSettings: " + settingsBool);
+                File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
+
+                string[] positions = new string[map.Length];
+                int[] xPos = new int[map.Length];
+                int[] yPos = new int[map.Length];
+                int[] zPos = new int[map.Length];
+                int[] pump = new int[map.Length];
+
+                for (int i = 0; i < map.Length; i++)
+                {
+                    positions[i] = map[i].Split(',')[0];
+                    xPos[i] = Int32.Parse(map[i].Split(',')[1]);
+                    yPos[i] = Int32.Parse(map[i].Split(',')[2]);
+                    zPos[i] = Int32.Parse(map[i].Split(',')[3]);
+                    pump[i] = Int32.Parse(map[i].Split(',')[4]);
+                }
+
+                double[] shiftFactors = new double[shiftAndScale.Length];
+                double[] scaleFactors = new double[shiftAndScale.Length];
+
+                for (int i = 0; i < shiftAndScale.Length; i++)
+                {
+                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
+                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
+                }
+
+                // 540 steps = 1mL
+
+                // ** Start of moving steps **
+                // ---------------------------
+
+                // ** HBSS Dispensing, Incubation, and Drain **
+                // --------------------------------------------
+
+                // ** HBSS Dispensing **
+                // ---------------------
+
+                // Move to HBSS Bottle
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+
+                // Draw HBSS for row 3
+                AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
+                File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
+
+                // Lower Z by 9500 steps
+                lowerZPosition(9500);
+
+                // Draw 820 steps (1.5mL + extra)
+                drawLiquid(820);
+
+                // Raise Z by 9500 steps
+                raiseZPosition(9500);
+
+                // Change HBSS Dispense Box to in progress color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Foreground = Brushes.Black;
+
+                //**A3**//
+                // Move from HBSS bottle to A3
+                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.Probe_Bottle]);
+
+                // Change A3 to in progress color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in A3", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in A3
+                dispenseLiquid(164);
+
+                // Change A3 to finished color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense HBSS in remaining wells
+                for (int i = 20; i < 24; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
+
+                    // dispense remaining liquid in last well
+                    if (i == 23)
+                    {
+                        // Dispense 300ul HBSS + remaining
+                        dispenseLiquid(164);
+
+                        // wait 3 seconds and dispense remaining amount
+                        Task.Delay(3000).Wait();
+
+                        dispenseLiquid(50);
+                    }
+                    else
+                    {
+                        // Dispense 300ul HBSS
+                        dispenseLiquid(164);
+                    }
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 23)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change HBSS Dispense Box to Finished Color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("HBSS Dispensed");
+                AutoClosingMessageBox.Show("HBSS Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Dispensed" + Environment.NewLine);
+
+                // -----------------------------
+                // ** HBSS Dispense Complete **
+
+                // ** HBSS Wash **
+                // ---------------
+
+                // Change wells to gray
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Cleaning Pipette Tip", "Cleaning", 1000);
+
+                // Move from E3 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.E3]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ------------------------
+                // ** HBSS Wash Complete **
+
+                // ** HBSS Incubation and Draining **
+                // ----------------------------------
+
+                // Change HBSS Incubation and Draining Box to in progress color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Foreground = Brushes.Black;
+
+                // Change wells to in progress color
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
+                // Incubate for the amount of time entered
+                incubationMinutes = Int32.Parse(incubationTime_tb.Text);
+                //incubationTime = incubationMinutes * 60 * 1000;
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 1000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
+
+                //MessageBox.Show("Moving to Drain Position");
+                AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
+                File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
+
+                // Move to Drain Position
+                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Lower Pipette Tips to Drain
+                lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                drainMinutes = Int32.Parse(drainTime_tb.Text);
+                drainTime = drainMinutes * 60 * 1000;
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for samples to drain through cartridges" + Environment.NewLine);
+
+                // Turn pump on
+                try
+                {
+                    // Switch to bank 2
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 1);
+                    }
+                    // Send signal to turn on pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 8);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // Leave pump on for 2 minutes
+                Task.Delay(drainTime).Wait();
+
+                // Turn pump off
+                try
+                {
+                    // Send signal to turn off pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                    // Switch back to bank 1
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                MessageBoxResult messageBoxResult = MessageBox.Show("Would you like to drain for 2 more minutes?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    // Turn pump on
+                    try
+                    {
+                        // Switch to bank 2
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 1);
+                        }
+                        // Send signal to turn on pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    // Leave pump on for 2 minutes
+                    Task.Delay(120000).Wait();
+
+                    // Turn pump off
+                    try
+                    {
+                        // Send signal to turn off pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                        // Switch back to bank 1
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+
+                else if (messageBoxResult == MessageBoxResult.No)
+                {
+                    AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
+                }
+
+                // Change HBSS Draining Box to finished color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Change wells to finished color
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                }
+
+                //MessageBox.Show("HBSS Draining Complete");
+                AutoClosingMessageBox.Show("HBSS Draining Complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Draining Complete" + Environment.NewLine);
+
+                // ----------------------------------------
+                // ** HBSS Incubation and Drain Complete **
+
+                // -----------------------------------------------------
+                // ** HBSS Dispensing, Incubation, and Drain Complete **
+
+                // ** Probe Dispensing **
+                // ----------------------
+
+                // Lift Pipette Tips above top of bottles
+                raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                // Change Probe Dispense Box to in progress color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Foreground = Brushes.Black;
+
+                // Change cartridge wells to gray
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                // Move to Probe Bottle
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                // Draw Probe for row 3
+                AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
+                File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
+
+                // Lower Z by 9500 steps
+                lowerZPosition(9500);
+
+                // Draw 820 steps (1.5mL + extra)
+                drawLiquid(820);
+
+                // Raise Z by 9500 steps
+                raiseZPosition(9500);
+
+                //**A3**//
+                // Move from Probe bottle to A3
+                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.HBSS_Bottle]);
+
+                // Change A3 to in progress color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in A3", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in A3
+                dispenseLiquid(164);
+
+                // Change A3 to finished color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense Probe in remaining wells
+                for (int i = 20; i < 24; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing Probe in " + positions[i], "Dispensing", 1000);
+
+                    // dispense remaining liquid in last well
+                    if (i == 23)
+                    {
+                        // Dispense 300ul Probe + remaining
+                        dispenseLiquid(174);
+
+                        // wait 3 seconds and dispense remaining amount
+                        Task.Delay(3000).Wait();
+
+                        dispenseLiquid(50);
+                    }
+                    else
+                    {
+                        // Dispense 300ul Probe
+                        dispenseLiquid(164);
+                    }
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 23)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change probe dispense box to finished color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("Probe Dispensed");
+                AutoClosingMessageBox.Show("Probe Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "Probe Dispensed" + Environment.NewLine);
+
+                // -----------------------------
+                // ** Probe Dispense Complete **
+
+                // ** Probe Wash **
+                // ----------------
+
+                // Change wells to gray
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
+
+                // Move from E3 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.E3]);
+
+                // Lower pipette tip
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
+
+                // Raise pipette tip
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ------------------------
+                // ** Probe Wash Complete **
+
+                // ** Probe Incubation and Drain **
+                // --------------------------------
+
+                // Change Probe Draining Box and Cartridge to in progress color
+                probeDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_tb.Foreground = Brushes.Black;
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
+
+                //MessageBox.Show("Moving Back to Drain Position");
+                AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 1000);
+                File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
+
+                // Move back to Drain Position
+                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Lower Pipette Tips to Drain
+                lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for probe to drain through cartridges" + Environment.NewLine);
+
+                // Turn pump on
+                try
+                {
+                    // Switch to bank 2
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 1);
+                    }
+                    // Send signal to turn on pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 8);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // Leave pump on for 2 minutes
+                Task.Delay(drainTime).Wait();
+
+                // Turn pump off
+                try
+                {
+                    // Send signal to turn off pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                    // Switch back to bank 1
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                MessageBoxResult messageBoxResult2 = MessageBox.Show("Would you like to drain for 2 more minutes?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                if (messageBoxResult2 == MessageBoxResult.Yes)
+                {
+                    // Turn pump on
+                    try
+                    {
+                        // Switch to bank 2
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 1);
+                        }
+                        // Send signal to turn on pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    // Leave pump on for 2 minutes
+                    Task.Delay(120000).Wait();
+
+                    // Turn pump off
+                    try
+                    {
+                        // Send signal to turn off pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                        // Switch back to bank 1
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+
+                else if (messageBoxResult2 == MessageBoxResult.No)
+                {
+                    AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
+                }
+
+                // Change Probe Draining Box and Cartridge to finished color
+                probeDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                }
+
+                //MessageBox.Show("Draining Complete");
+                AutoClosingMessageBox.Show("Draining complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
+
+                // -----------------------------------------
+                // ** Probe Incubation and Drain Complete **
+
+                // ** RB Dispense **
+                // -----------------
+
+                // Lift Pipette Tips above top of bottles
+                raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                // Move from drain to RB_Bottle
+                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
+
+                // Draw 1145 steps (2.1mL + extra)
+                drawLiquid(1145);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
+
+                // Change RB Dispense Box to in progress color
+                rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_tb.Foreground = Brushes.Black;
+
+                // Change wells back to gray
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Dispensing RB", "Dispensing", 1000);
+
+                //**A3**//
+                // Move from RB bottle to A3
+                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.RB_Bottle]);
+                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.RB_Bottle]);
+
+                // Change A3 to in progress color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in A3", "Dispensing", 1000);
+
+                // Dispense 420ul RB in A3
+                dispenseLiquid(227);
+
+                // Change A3 to finished color
+                inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense RB in remaining wells
+                for (int i = 20; i < 24; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing RB in " + positions[i], "Dispensing", 1000);
+
+                    dispenseLiquid(227);
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 23)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change RB Dispense box to finished color
+                rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("RB Dispensed");
+                AutoClosingMessageBox.Show("Read Buffer Dispensed", "Dispensing Complete", 2000);
+                File.AppendAllText(logFilePath, "Read Buffer Dispensed" + Environment.NewLine);
+
+                // --------------------------
+                // ** RB Dispense Complete **
+
+                // ** RB Wash **
+                // -------------
+
+                // Change Cartridges to gray
+                for (int i = 9; i < 14; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                // Move from E3 to RB_Bottle
+                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.E3]);
+                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.E3]);
+
+                // Dispense remaining RB in bottle
+                dispenseLiquid(200);
+
+                // Move from RB_Bottle to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.RB_Bottle]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.RB_Bottle]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2268 steps (4.2mL)
+                drawLiquid(2268);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.2mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ----------------------
+                // ** RB Wash Complete **
+
+                // ** Read Wells **
+                // ----------------
+
+                // TODO: Check for lid closed
+                MessageBox.Show("Please make sure lid is closed before continuing.");
+
+                // Change Reading box to in progress color
+                reading_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_tb.Foreground = Brushes.Black;
+
+                // Board Initialization
+                AutoClosingMessageBox.Show("Initializing Reader Board", "Initializing", 1000);
+                File.AppendAllText(logFilePath, "Initializing Reader Board");
+
+                StringBuilder sb = new StringBuilder(5000);
+                bool initializeBoardBool = testInitializeBoard(sb, sb.Capacity);
+
+                MessageBox.Show("Test initializeBoard: " + initializeBoardBool + "\n" + sb.ToString());
+                File.AppendAllText(logFilePath, "Test initializeBoard: " + initializeBoardBool + Environment.NewLine);
+
+                // Define headers for all columns in output file
+                string outputFileDataHeaders = "WellName" + delimiter + "BackgroundReading" + delimiter + "Threshold" + delimiter +
+                                               "RawAvg" + delimiter + "TC_rdg" + delimiter + "TestResult" + Environment.NewLine;
+
+                // Add headers to output file
+                File.AppendAllText(outputFilePath, outputFileDataHeaders);
+
+                // Remove In Progress Boxes and Show Test Results Grid
+                inProgressBG_r.Visibility = Visibility.Hidden;
+                inProgress_stack.Visibility = Visibility.Hidden;
+                inProgress_cart34.Visibility = Visibility.Hidden;
+                inProgress_cart34_border.Visibility = Visibility.Hidden;
+
+                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
+
+                results_grid.Visibility = Visibility.Visible;
+
+                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
+
+                if (switchResults_cb.IsChecked == true)
+                {
+                    results_grid.Visibility = Visibility.Hidden;
+                    resultsDisplay_cart34_border.Visibility = Visibility.Visible;
+                    resultsDisplay_cart34.Visibility = Visibility.Visible;
+                }
+
+                //MessageBox.Show("Reading samples in all wells");
+                AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
+
+                // Move from Wash_Bottle to A3 + Dispense_to_Read
+                moveX((xPos[(int)steppingPositions.A3] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.Wash_Bottle]);
+                moveY((yPos[(int)steppingPositions.A3] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.Wash_Bottle]);
+
+                inProgressEllipses[9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                resultsTextboxes[9].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Reading A3", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading A3" + Environment.NewLine);
+
+                StringBuilder sbA3 = new StringBuilder(100000);
+
+                IntPtr testBoardValuePtrA3 = testGetBoardValue(sbA3, sbA3.Capacity, excitationLedVoltage);
+                double[] testArrayA3 = new double[5];
+                Marshal.Copy(testBoardValuePtrA3, testArrayA3, 0, 5);
+                string inputStringA3 = "";
+                inputStringA3 += "Return Value: m_dAvgValue = " + testArrayA3[0] + "\n";
+                inputStringA3 += "Return Value: m_dCumSum = " + testArrayA3[1] + "\n";
+                inputStringA3 += "Return Value: m_dLEDtmp = " + testArrayA3[2] + "\n";
+                inputStringA3 += "Return Value: m_dPDtmp = " + testArrayA3[3] + "\n";
+                inputStringA3 += "Return Value: testGetBoardValue = " + testArrayA3[4] + "\n";
+
+                File.AppendAllText(logFilePath, "A3 GetBoardValue: " + inputStringA3 + Environment.NewLine);
+
+                if (testArrayA3[4] == 0)
+                {
+                    MessageBox.Show("Error reading A3. Check log for specifics");
+                }
+
+                inProgressEllipses[9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                resultsTextboxes[9].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Update Results Grid
+                raw_avg = (testArrayA3[0] - shiftFactors[(int)shiftsAndScales.A3]) * scaleFactors[(int)shiftsAndScales.A3];
+                raw_avg = Math.Round(raw_avg, 3);
+
+                TC_rdg = raw_avg;
+
+                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                testResult = "NEG";
+
+                if (diff > threshold)
+                {
+                    testResult = "POS";
+                }
+
+                sampleName = positions[(int)steppingPositions.A3];
+
+                testResults.Add(new TestResults()
+                {
+                    WellName = positions[(int)steppingPositions.A3],
+                    BackgroundReading = bgd_rdg.ToString(),
+                    Threshold = threshold.ToString(),
+                    RawAvg = raw_avg.ToString(),
+                    TC_rdg = TC_rdg.ToString(),
+                    TestResult = testResult,
+                    SampleName = sampleName
+                });
+
+                results_grid.ItemsSource = testResults;
+                results_grid.Items.Refresh();
+                // Result for A3 added to results grid
+
+                // Add results grid data for A3 to output file
+                outputFileData = positions[(int)steppingPositions.A3] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                File.AppendAllText(outputFilePath, outputFileData);
+
+                resultsTextboxes[9].Text = raw_avg.ToString();
+                resultsTextboxes[9].Foreground = Brushes.Black;
+
+                // Loop through rest of reading steps
+                for (int i = 20; i < 24; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Reading " + positions[i], "Reading", 2000);
+                    File.AppendAllText(logFilePath, "Reading " + positions[i] + Environment.NewLine);
+
+                    // Read sample in current well
+                    StringBuilder sbR = new StringBuilder(100000);
+
+                    IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity, excitationLedVoltage);
+                    double[] readingValues = new double[5];
+                    Marshal.Copy(boardValuePtr, readingValues, 0, 5);
+                    string readingInputString = "";
+                    readingInputString += "Return Value: m_dAvgValue = " + readingValues[0] + "\n";
+                    readingInputString += "Return Value: m_dCumSum = " + readingValues[1] + "\n";
+                    readingInputString += "Return Value: m_dLEDtmp = " + readingValues[2] + "\n";
+                    readingInputString += "Return Value: m_dPDtmp = " + readingValues[3] + "\n";
+                    readingInputString += "Return Value: testGetBoardValue = " + readingValues[4] + "\n";
+
+                    File.AppendAllText(logFilePath, positions[i] + " GetBoardValue: " + readingInputString + Environment.NewLine);
+
+                    if (readingValues[4] == 0)
+                    {
+                        MessageBox.Show("Error reading " + positions[i] + ". Check log for specifics.");
+                    }
+
+                    // Update Results Grid for current well
+                    raw_avg = (readingValues[0] - shiftFactors[i - 10]) * scaleFactors[i - 10];
+                    raw_avg = Math.Round(raw_avg, 3);
+
+                    TC_rdg = raw_avg;
+
+                    diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                    testResult = "NEG";
+
+                    if (diff > threshold)
+                    {
+                        testResult = "POS";
+                    }
+
+                    sampleName = positions[i];
+
+                    testResults.Add(new TestResults()
+                    {
+                        WellName = positions[i],
+                        BackgroundReading = bgd_rdg.ToString(),
+                        Threshold = threshold.ToString(),
+                        RawAvg = raw_avg.ToString(),
+                        TC_rdg = TC_rdg.ToString(),
+                        TestResult = testResult,
+                        SampleName = sampleName
+                    });
+
+                    results_grid.ItemsSource = testResults;
+                    results_grid.Items.Refresh();
+
+                    // Add results grid data for current well to output file
+                    outputFileData = positions[i] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                    File.AppendAllText(outputFilePath, outputFileData);
+
+                    resultsTextboxes[i - 10].Text = raw_avg.ToString();
+                    resultsTextboxes[i - 10].Foreground = Brushes.Black;
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 23)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        File.AppendAllText(dataFilePath, sbR.ToString() + Environment.NewLine);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        resultsTextboxes[i - 9].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                AutoClosingMessageBox.Show("All wells read", "Reading Complete", 2000);
+                File.AppendAllText(logFilePath, "All wells read" + Environment.NewLine);
+
+                testCloseTasksAndChannels();
+
+                // ----------------------------
+                // ** Reading Wells Complete **
+
+                // ** Move Back to Load **
+                // -----------------------
+
+                //MessageBox.Show("Moving back to load position");
+                AutoClosingMessageBox.Show("Moving back to load position", "Moving", 2000);
+                File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
+
+                // Move back to Load Position
+                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.E3] + xPos[(int)steppingPositions.Dispense_to_Read]));
+                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.E3] + yPos[(int)steppingPositions.Dispense_to_Read]));
+
+                //MessageBox.Show("Reading complete, displaying results");
+                AutoClosingMessageBox.Show("Reading complete", "Results", 2000);
+                File.AppendAllText(logFilePath, "Reading complete" + Environment.NewLine);
+
+                isReading = false;
+                File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);
+
+                // --------------
+                // ** Complete **
+            }
+
+            else if (sampleNum_tb.Text == "4")
+            {
+                string inProgressColor = "#F5D5CB";
+                string finishedColor = "#D7ECD9";
+
+                isReading = true;
+                File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
+                List<TestResults> testResults = new List<TestResults>();
+
+                // define array for necessary items from parameter file
+                double[] testArray = new double[17];
+
+                // Show In Progress Boxes
+                inProgressBG_r.Visibility = Visibility.Visible;
+                inProgress_stack.Visibility = Visibility.Visible;
+                inProgress_cart34.Visibility = Visibility.Visible;
+                inProgress_cart34_border.Visibility = Visibility.Visible;
+
+                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
+                                                inProgressE2,inProgressD2,inProgressC2,inProgressB2,inProgressA2,   /*Row 2*/
+                                                inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,   /*Row 3*/
+                                                inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,   /*Row 4*/
+                                                inProgressA5,inProgressB5,inProgressC5,inProgressD5,inProgressE5,   /*Row 5*/
+                                                inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
+                                                inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
+
+                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
+                                              resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
+                                              resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
+                                              resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
+                                              resultsDisplayA5,resultsDisplayB5,resultsDisplayC5,resultsDisplayD5,resultsDisplayE5,   /*Row 5*/ /*19-23*/
+                                              resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
+                                              resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
+
+                File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
+
+                // read parameter file and read in all necessary parameters
+                string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
+                double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
+                double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
+                double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
+                double samplingRate = double.Parse(parameters[3].Substring(0, 5));
+                double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
+                double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
+                double saturation = double.Parse(parameters[8].Substring(0, 8));
+                double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
+                double lowSignal = double.Parse(parameters[29].Substring(0, 5));
+                double readMethod = double.Parse(parameters[9].Substring(0, 1));
+                double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
+                double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
+                double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
+                double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
+                double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
+                double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
+                double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
+                double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
+                double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
+                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
+                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
+                double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
+                double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
+                double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
+                double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
+                double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
+
+                double bgd_rdg = afeShiftFactor;
+                double threshold = viralCountOffsetFactor;
+
+                File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
+
+                testArray[0] = ledOutputRange;
+                testArray[1] = samplingRate;
+                testArray[2] = numSamplesPerReading;
+                testArray[3] = numSamplesForAvg;
+                testArray[4] = errorLimitInMillivolts;
+                testArray[5] = numTempSamplesPerReading;
+                testArray[6] = saturation;
+                testArray[7] = expectedDarkRdg;
+                testArray[8] = lowSignal;
+                testArray[9] = ledOnDuration;
+                testArray[10] = readDelayInMS;
+                testArray[11] = calMinVoltage;
+                testArray[12] = calNomVoltage;
+                testArray[13] = calMaxVoltage;
+                testArray[14] = excMinVoltage;
+                testArray[15] = excNomVoltage;
+                testArray[16] = excMaxVoltage;
+
+                File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
+
+                string inputString = "";
+                foreach (double value in testArray)
+                {
+                    inputString += "Input: " + value + "\n";
+                }
+
+                //MessageBox.Show(inputString);
+                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+
+                IntPtr testPtr = verifyInput(testArray);
+                double[] testArray2 = new double[17];
+                Marshal.Copy(testPtr, testArray2, 0, 17);
+                inputString = "";
+                foreach (double value in testArray)
+                {
+                    inputString += "Verify input: " + value + "\n";
+                }
+
+                //MessageBox.Show(inputString);
+                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+
+                bool settingsBool = testSetSettings(testArray);
+
+                //MessageBox.Show("Test setSettings: " + settingsBool);
+                File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
+
+                string[] positions = new string[map.Length];
+                int[] xPos = new int[map.Length];
+                int[] yPos = new int[map.Length];
+                int[] zPos = new int[map.Length];
+                int[] pump = new int[map.Length];
+
+                for (int i = 0; i < map.Length; i++)
+                {
+                    positions[i] = map[i].Split(',')[0];
+                    xPos[i] = Int32.Parse(map[i].Split(',')[1]);
+                    yPos[i] = Int32.Parse(map[i].Split(',')[2]);
+                    zPos[i] = Int32.Parse(map[i].Split(',')[3]);
+                    pump[i] = Int32.Parse(map[i].Split(',')[4]);
+                }
+
+                double[] shiftFactors = new double[shiftAndScale.Length];
+                double[] scaleFactors = new double[shiftAndScale.Length];
+
+                for (int i = 0; i < shiftAndScale.Length; i++)
+                {
+                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
+                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
+                }
+
+                // 540 steps = 1mL
+
+                // ** Start of moving steps **
+                // ---------------------------
+
+                // ** HBSS Dispensing, Incubation, and Drain **
+                // --------------------------------------------
+
+                // ** HBSS Dispensing **
+                // ---------------------
+
+                // Move to HBSS Bottle
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+
+                // Draw HBSS for row 4
+                AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
+                File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
+
+                // Lower Z by 9500 steps
+                lowerZPosition(9500);
+
+                // Draw 820 steps (1.5mL + extra)
+                drawLiquid(820);
+
+                // Raise Z by 9500 steps
+                raiseZPosition(9500);
+
+                // Change HBSS Dispense Box to in progress color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDispense_tb.Foreground = Brushes.Black;
+
+                //**E4**//
+                // Move from HBSS bottle to E4
+                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.Probe_Bottle]);
+
+                // Change E4 to in progress color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing HBSS in E4", "Dispensing", 1000);
+
+                // Dispense 300ul HBSS in E4
+                dispenseLiquid(164);
+
+                // Change E4 to finished color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense HBSS in remaining wells
+                for (int i = 25; i < 29; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
+
+                    // dispense remaining liquid in last well
+                    if (i == 28)
+                    {
+                        // Dispense 300ul HBSS + remaining
+                        dispenseLiquid(164);
+
+                        // wait 3 seconds and dispense remaining amount
+                        Task.Delay(3000).Wait();
+
+                        dispenseLiquid(50);
+                    }
+                    else
+                    {
+                        // Dispense 300ul HBSS
+                        dispenseLiquid(164);
+                    }
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 28)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change HBSS Dispense Box to Finished Color
+                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("HBSS Dispensed");
+                AutoClosingMessageBox.Show("HBSS Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Dispensed" + Environment.NewLine);
+
+                // -----------------------------
+                // ** HBSS Dispense Complete **
+
+                // ** HBSS Wash **
+                // ---------------
+
+                // Change wells to gray
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Cleaning Pipette Tip", "Cleaning", 1000);
+
+                // Move from A4 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A4]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A4]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ------------------------
+                // ** HBSS Wash Complete **
+
+                // ** HBSS Incubation and Draining **
+                // ----------------------------------
+
+                // Change HBSS Incubation and Draining Box to in progress color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                hbssDrain_tb.Foreground = Brushes.Black;
+
+                // Change wells to in progress color
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
+                // Incubate for the amount of time entered
+                incubationMinutes = Int32.Parse(incubationTime_tb.Text);
+                //incubationTime = incubationMinutes * 60 * 1000;
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 1000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
+
+                //MessageBox.Show("Moving to Drain Position");
+                AutoClosingMessageBox.Show("Moving to Drain Position", "Moving", 1000);
+                File.AppendAllText(logFilePath, "Moving to Drain Position" + Environment.NewLine);
+
+                // Move to Drain Position
+                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Lower Pipette Tips to Drain
+                lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                drainMinutes = Int32.Parse(drainTime_tb.Text);
+                drainTime = drainMinutes * 60 * 1000;
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for samples to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for samples to drain through cartridges" + Environment.NewLine);
+
+                // Turn pump on
+                try
+                {
+                    // Switch to bank 2
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 1);
+                    }
+                    // Send signal to turn on pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 8);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // Leave pump on for 2 minutes
+                Task.Delay(drainTime).Wait();
+
+                // Turn pump off
+                try
+                {
+                    // Send signal to turn off pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                    // Switch back to bank 1
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                MessageBoxResult messageBoxResult = MessageBox.Show("Would you like to drain for 2 more minutes?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    // Turn pump on
+                    try
+                    {
+                        // Switch to bank 2
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 1);
+                        }
+                        // Send signal to turn on pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    // Leave pump on for 2 minutes
+                    Task.Delay(120000).Wait();
+
+                    // Turn pump off
+                    try
+                    {
+                        // Send signal to turn off pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                        // Switch back to bank 1
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+
+                else if (messageBoxResult == MessageBoxResult.No)
+                {
+                    AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
+                }
+
+                // Change HBSS Draining Box to finished color
+                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Change wells to finished color
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                }
+
+                //MessageBox.Show("HBSS Draining Complete");
+                AutoClosingMessageBox.Show("HBSS Draining Complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "HBSS Draining Complete" + Environment.NewLine);
+
+                // ----------------------------------------
+                // ** HBSS Incubation and Drain Complete **
+
+                // -----------------------------------------------------
+                // ** HBSS Dispensing, Incubation, and Drain Complete **
+
+                // ** Probe Dispensing **
+                // ----------------------
+
+                // Lift Pipette Tips above top of bottles
+                raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                // Change Probe Dispense Box to in progress color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDispense_tb.Foreground = Brushes.Black;
+
+                // Change cartridge wells to gray
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                // Move to Probe Bottle
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                // Draw Probe for row 4
+                AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
+                File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
+
+                // Lower Z by 9500 steps
+                lowerZPosition(9500);
+
+                // Draw 820 steps (1.5mL + extra)
+                drawLiquid(820);
+
+                // Raise Z by 9500 steps
+                raiseZPosition(9500);
+
+                //**E4**//
+                // Move from Probe bottle to E4
+                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.HBSS_Bottle]);
+
+                // Change E4 to in progress color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing Probe in E4", "Dispensing", 1000);
+
+                // Dispense 300ul Probe in E4
+                dispenseLiquid(164);
+
+                // Change E4 to finished color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense Probe in remaining wells
+                for (int i = 25; i < 29; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing Probe in " + positions[i], "Dispensing", 1000);
+
+                    // dispense remaining liquid in last well
+                    if (i == 28)
+                    {
+                        // Dispense 300ul Probe + remaining
+                        dispenseLiquid(174);
+
+                        // wait 3 seconds and dispense remaining amount
+                        Task.Delay(3000).Wait();
+
+                        dispenseLiquid(50);
+                    }
+                    else
+                    {
+                        // Dispense 300ul Probe
+                        dispenseLiquid(164);
+                    }
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 28)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change probe dispense box to finished color
+                probeDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("Probe Dispensed");
+                AutoClosingMessageBox.Show("Probe Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "Probe Dispensed" + Environment.NewLine);
+
+                // -----------------------------
+                // ** Probe Dispense Complete **
+
+                // ** Probe Wash **
+                // ----------------
+
+                // Change wells to gray
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Cleaning Probe Tip", "Cleaning", 1000);
+
+                // Move from A4 to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.A4]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.A4]);
+
+                // Lower pipette tip
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2430 steps (4.5mL)
+                drawLiquid(2430);
+
+                // Raise pipette tip
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.5mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ------------------------
+                // ** Probe Wash Complete **
+
+                // ** Probe Incubation and Drain **
+                // --------------------------------
+
+                // Change Probe Draining Box and Cartridge to in progress color
+                probeDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                probeDrain_tb.Foreground = Brushes.Black;
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                }
+
+                AutoClosingMessageBox.Show("Incubating for " + incubationMinutes + " minutes", "Incubating", 3000);
+
+                for (int i = 0; i < incubationMinutes; i++)
+                {
+                    int remaining = incubationMinutes - i;
+                    incubationRemaining_tb.Text = (remaining).ToString();
+
+                    if (remaining == 1)
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minute remaining", "Incubating", 1000);
+                        MediaPlayer sound1 = new MediaPlayer();
+                        sound1.Open(new Uri(@"C:\Users\Public\Documents\kaya17\bin\one-minute-remaining.mp3"));
+                        sound1.Play();
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show(remaining + " minutes remaining", "Incubating", 1000);
+                    }
+
+                    Task.Delay(60000).Wait();
+                }
+                //Task.Delay(incubationTime).Wait();
+                //Task.Delay(1000).Wait(); // 1 second instead of 20 mins
+
+                incubationRemaining_tb.Text = 0.ToString();
+                AutoClosingMessageBox.Show("Incubation Completed", "Incubation", 1000);
+
+                //MessageBox.Show("Moving Back to Drain Position");
+                AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 1000);
+                File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
+
+                // Move back to Drain Position
+                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.Wash_Bottle]);
+                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Lower Pipette Tips to Drain
+                lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                //MessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges");
+                AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for probe to drain through cartridges", "Draining", 1000);
+                File.AppendAllText(logFilePath, "Wait " + drainMinutes + " minutes for probe to drain through cartridges" + Environment.NewLine);
+
+                // Turn pump on
+                try
+                {
+                    // Switch to bank 2
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 1);
+                    }
+                    // Send signal to turn on pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 8);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // Leave pump on for 2 minutes
+                Task.Delay(drainTime).Wait();
+
+                // Turn pump off
+                try
+                {
+                    // Send signal to turn off pump
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                    // Switch back to bank 1
+                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                    {
+                        //  Create an Digital Output channel and name it.
+                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                            ChannelLineGrouping.OneChannelForAllLines);
+
+                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                        //  of digital data on demand, so no timeout is necessary.
+                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                        writer.WriteSingleSamplePort(true, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                MessageBoxResult messageBoxResult2 = MessageBox.Show("Would you like to drain for 2 more minutes?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                if (messageBoxResult2 == MessageBoxResult.Yes)
+                {
+                    // Turn pump on
+                    try
+                    {
+                        // Switch to bank 2
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 1);
+                        }
+                        // Send signal to turn on pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    // Leave pump on for 2 minutes
+                    Task.Delay(120000).Wait();
+
+                    // Turn pump off
+                    try
+                    {
+                        // Send signal to turn off pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                        // Switch back to bank 1
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+
+                else if (messageBoxResult2 == MessageBoxResult.No)
+                {
+                    AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
+                }
+
+                // Change Probe Draining Box and Cartridge to finished color
+                probeDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                probeDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                }
+
+                //MessageBox.Show("Draining Complete");
+                AutoClosingMessageBox.Show("Draining complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
+
+                // -----------------------------------------
+                // ** Probe Incubation and Drain Complete **
+
+                // ** RB Dispense **
+                // -----------------
+
+                // Lift Pipette Tips above top of bottles
+                raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                // Move from drain to RB_Bottle
+                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
+
+                // Draw 1145 steps (2.1mL + extra)
+                drawLiquid(1145);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.RB_Bottle]);
+
+                // Change RB Dispense Box to in progress color
+                rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                rbDispense_tb.Foreground = Brushes.Black;
+
+                // Change wells back to gray
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                AutoClosingMessageBox.Show("Dispensing RB", "Dispensing", 1000);
+
+                //**E4**//
+                // Move from RB bottle to E4
+                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.RB_Bottle]);
+                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.RB_Bottle]);
+
+                // Change E4 to in progress color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Dispensing RB in E4", "Dispensing", 1000);
+
+                // Dispense 420ul RB in E4
+                dispenseLiquid(227);
+
+                // Change E4 to finished color
+                inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Dispense RB in remaining wells
+                for (int i = 25; i < 29; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing RB in " + positions[i], "Dispensing", 1000);
+
+                    dispenseLiquid(227);
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 28)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                // Change RB Dispense box to finished color
+                rbDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                rbDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                //MessageBox.Show("RB Dispensed");
+                AutoClosingMessageBox.Show("Read Buffer Dispensed", "Dispensing Complete", 2000);
+                File.AppendAllText(logFilePath, "Read Buffer Dispensed" + Environment.NewLine);
+
+                // --------------------------
+                // ** RB Dispense Complete **
+
+                // ** RB Wash **
+                // -------------
+
+                // Change Cartridges to gray
+                for (int i = 14; i < 19; i++)
+                {
+                    inProgressEllipses[i].Fill = Brushes.Gray;
+                }
+
+                // Move from A4 to RB_Bottle
+                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.A4]);
+                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.A4]);
+
+                // Dispense remaining RB in bottle
+                dispenseLiquid(200);
+
+                // Move from RB_Bottle to Wash_Bottle
+                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.RB_Bottle]);
+                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.RB_Bottle]);
+
+                // Lower pipette tips
+                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Draw 2268 steps (4.2mL)
+                drawLiquid(2268);
+
+                // Raise pipette tips
+                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                // Dispense 2500 steps (4.2mL + extra)
+                dispenseLiquid(2500);
+
+                Task.Delay(5000).Wait();
+
+                dispenseLiquid(300);
+
+                // ----------------------
+                // ** RB Wash Complete **
+
+                // ** Read Wells **
+                // ----------------
+
+                // TODO: Check for lid closed
+                MessageBox.Show("Please make sure lid is closed before continuing.");
+
+                // Change Reading box to in progress color
+                reading_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                reading_tb.Foreground = Brushes.Black;
+
+                // Board Initialization
+                AutoClosingMessageBox.Show("Initializing Reader Board", "Initializing", 1000);
+                File.AppendAllText(logFilePath, "Initializing Reader Board");
+
+                StringBuilder sb = new StringBuilder(5000);
+                bool initializeBoardBool = testInitializeBoard(sb, sb.Capacity);
+
+                MessageBox.Show("Test initializeBoard: " + initializeBoardBool + "\n" + sb.ToString());
+                File.AppendAllText(logFilePath, "Test initializeBoard: " + initializeBoardBool + Environment.NewLine);
+
+                // Define headers for all columns in output file
+                string outputFileDataHeaders = "WellName" + delimiter + "BackgroundReading" + delimiter + "Threshold" + delimiter +
+                                               "RawAvg" + delimiter + "TC_rdg" + delimiter + "TestResult" + Environment.NewLine;
+
+                // Add headers to output file
+                File.AppendAllText(outputFilePath, outputFileDataHeaders);
+
+                // Remove In Progress Boxes and Show Test Results Grid
+                inProgressBG_r.Visibility = Visibility.Hidden;
+                inProgress_stack.Visibility = Visibility.Hidden;
+                inProgress_cart34.Visibility = Visibility.Hidden;
+                inProgress_cart34_border.Visibility = Visibility.Hidden;
+
+                File.AppendAllText(logFilePath, "In progress boxes hidden" + Environment.NewLine);
+
+                results_grid.Visibility = Visibility.Visible;
+
+                File.AppendAllText(logFilePath, "Results grid visible" + Environment.NewLine);
+
+                if (switchResults_cb.IsChecked == true)
+                {
+                    results_grid.Visibility = Visibility.Hidden;
+                    resultsDisplay_cart34_border.Visibility = Visibility.Visible;
+                    resultsDisplay_cart34.Visibility = Visibility.Visible;
+                }
+
+                //MessageBox.Show("Reading samples in all wells");
+                AutoClosingMessageBox.Show("Reading samples in all wells", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading samples in all wells" + Environment.NewLine);
+
+                // Move from Wash_Bottle to E4 + Dispense_to_Read
+                moveX((xPos[(int)steppingPositions.E4] + xPos[(int)steppingPositions.Dispense_to_Read]) - xPos[(int)steppingPositions.Wash_Bottle]);
+                moveY((yPos[(int)steppingPositions.E4] + yPos[(int)steppingPositions.Dispense_to_Read]) - yPos[(int)steppingPositions.Wash_Bottle]);
+
+                inProgressEllipses[14].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                resultsTextboxes[14].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                AutoClosingMessageBox.Show("Reading E4", "Reading", 2000);
+                File.AppendAllText(logFilePath, "Reading E4" + Environment.NewLine);
+
+                StringBuilder sbE4 = new StringBuilder(100000);
+
+                IntPtr testBoardValuePtrE4 = testGetBoardValue(sbE4, sbE4.Capacity, excitationLedVoltage);
+                double[] testArrayE4 = new double[5];
+                Marshal.Copy(testBoardValuePtrE4, testArrayE4, 0, 5);
+                string inputStringE4 = "";
+                inputStringE4 += "Return Value: m_dAvgValue = " + testArrayE4[0] + "\n";
+                inputStringE4 += "Return Value: m_dCumSum = " + testArrayE4[1] + "\n";
+                inputStringE4 += "Return Value: m_dLEDtmp = " + testArrayE4[2] + "\n";
+                inputStringE4 += "Return Value: m_dPDtmp = " + testArrayE4[3] + "\n";
+                inputStringE4 += "Return Value: testGetBoardValue = " + testArrayE4[4] + "\n";
+
+                File.AppendAllText(logFilePath, "E4 GetBoardValue: " + inputStringE4 + Environment.NewLine);
+
+                if (testArrayE4[4] == 0)
+                {
+                    MessageBox.Show("Error reading E4. Check log for specifics");
+                }
+
+                inProgressEllipses[14].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                resultsTextboxes[14].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                // Update Results Grid
+                raw_avg = (testArrayE4[0] - shiftFactors[(int)shiftsAndScales.E4]) * scaleFactors[(int)shiftsAndScales.E4];
+                raw_avg = Math.Round(raw_avg, 3);
+
+                TC_rdg = raw_avg;
+
+                diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                testResult = "NEG";
+
+                if (diff > threshold)
+                {
+                    testResult = "POS";
+                }
+
+                sampleName = positions[(int)steppingPositions.E4];
+
+                testResults.Add(new TestResults()
+                {
+                    WellName = positions[(int)steppingPositions.E4],
+                    BackgroundReading = bgd_rdg.ToString(),
+                    Threshold = threshold.ToString(),
+                    RawAvg = raw_avg.ToString(),
+                    TC_rdg = TC_rdg.ToString(),
+                    TestResult = testResult,
+                    SampleName = sampleName
+                });
+
+                results_grid.ItemsSource = testResults;
+                results_grid.Items.Refresh();
+                // Result for E4 added to results grid
+
+                // Add results grid data for E4 to output file
+                outputFileData = positions[(int)steppingPositions.E4] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                File.AppendAllText(outputFilePath, outputFileData);
+
+                resultsTextboxes[14].Text = raw_avg.ToString();
+                resultsTextboxes[14].Foreground = Brushes.Black;
+
+                // Loop through rest of reading steps
+                for (int i = 25; i < 29; i++)
+                {
+                    // Move to next well
+                    moveY(yPos[i] - yPos[i - 1]);
+                    moveX(xPos[i] - xPos[i - 1]);
+
+                    // Change current well to in progress color
+                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Reading " + positions[i], "Reading", 2000);
+                    File.AppendAllText(logFilePath, "Reading " + positions[i] + Environment.NewLine);
+
+                    // Read sample in current well
+                    StringBuilder sbR = new StringBuilder(100000);
+
+                    IntPtr boardValuePtr = testGetBoardValue(sbR, sbR.Capacity, excitationLedVoltage);
+                    double[] readingValues = new double[5];
+                    Marshal.Copy(boardValuePtr, readingValues, 0, 5);
+                    string readingInputString = "";
+                    readingInputString += "Return Value: m_dAvgValue = " + readingValues[0] + "\n";
+                    readingInputString += "Return Value: m_dCumSum = " + readingValues[1] + "\n";
+                    readingInputString += "Return Value: m_dLEDtmp = " + readingValues[2] + "\n";
+                    readingInputString += "Return Value: m_dPDtmp = " + readingValues[3] + "\n";
+                    readingInputString += "Return Value: testGetBoardValue = " + readingValues[4] + "\n";
+
+                    File.AppendAllText(logFilePath, positions[i] + " GetBoardValue: " + readingInputString + Environment.NewLine);
+
+                    if (readingValues[4] == 0)
+                    {
+                        MessageBox.Show("Error reading " + positions[i] + ". Check log for specifics.");
+                    }
+
+                    // Update Results Grid for current well
+                    raw_avg = (readingValues[0] - shiftFactors[i - 10]) * scaleFactors[i - 10];
+                    raw_avg = Math.Round(raw_avg, 3);
+
+                    TC_rdg = raw_avg;
+
+                    diff = (TC_rdg - viralCountOffsetFactor) * viralCountScaleFactor;
+
+                    testResult = "NEG";
+
+                    if (diff > threshold)
+                    {
+                        testResult = "POS";
+                    }
+
+                    sampleName = positions[i];
+
+                    testResults.Add(new TestResults()
+                    {
+                        WellName = positions[i],
+                        BackgroundReading = bgd_rdg.ToString(),
+                        Threshold = threshold.ToString(),
+                        RawAvg = raw_avg.ToString(),
+                        TC_rdg = TC_rdg.ToString(),
+                        TestResult = testResult,
+                        SampleName = sampleName
+                    });
+
+                    results_grid.ItemsSource = testResults;
+                    results_grid.Items.Refresh();
+
+                    // Add results grid data for current well to output file
+                    outputFileData = positions[i] + delimiter + bgd_rdg.ToString() + delimiter + threshold.ToString() +
+                                            delimiter + raw_avg.ToString() + delimiter + TC_rdg.ToString() + delimiter + testResult + Environment.NewLine;
+
+                    File.AppendAllText(outputFilePath, outputFileData);
+
+                    resultsTextboxes[i - 10].Text = raw_avg.ToString();
+                    resultsTextboxes[i - 10].Foreground = Brushes.Black;
+
+                    // Change current well to finished color and next well to in progress color except for last time
+                    if (i == 28)
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        File.AppendAllText(dataFilePath, sbR.ToString() + Environment.NewLine);
+                    }
+                    else
+                    {
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        resultsTextboxes[i - 10].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        resultsTextboxes[i - 9].Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    }
+                }
+
+                AutoClosingMessageBox.Show("All wells read", "Reading Complete", 2000);
+                File.AppendAllText(logFilePath, "All wells read" + Environment.NewLine);
+
+                testCloseTasksAndChannels();
+
+                // ----------------------------
+                // ** Reading Wells Complete **
+
+                // ** Move Back to Load **
+                // -----------------------
+
+                //MessageBox.Show("Moving back to load position");
+                AutoClosingMessageBox.Show("Moving back to load position", "Moving", 2000);
+                File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
+
+                // Move back to Load Position
+                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.A4] + xPos[(int)steppingPositions.Dispense_to_Read]));
+                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.A4] + yPos[(int)steppingPositions.Dispense_to_Read]));
+
+                //MessageBox.Show("Reading complete, displaying results");
+                AutoClosingMessageBox.Show("Reading complete", "Results", 2000);
+                File.AppendAllText(logFilePath, "Reading complete" + Environment.NewLine);
+
+                isReading = false;
+                File.AppendAllText(logFilePath, "Reading completed" + Environment.NewLine);
+
+                // --------------
+                // ** Complete **
+            }
+
             else
             {
-                MessageBox.Show("Please enter either 4 or 30 samples and click read button again.");
+                MessageBox.Show("Please enter a valid row number or 234 for 15 wells.");
             }
         }
 
