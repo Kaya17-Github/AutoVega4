@@ -41,7 +41,7 @@
             <TextBlock Margin="28,240,0,0" TextWrapping="Wrap" Text="Scan QR code or enter patient name" VerticalAlignment="Top" Foreground="Black" TextAlignment="Center" FontSize="20" FontWeight="Bold" Width="262"/>
             <TextBox x:Name="patient_tb" Height="35" Margin="22,251,0,0" TextWrapping="Wrap" Text="Firstname_lastname" VerticalAlignment="Top" Width="244" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" Foreground="Black" FontSize="20" IsEnabled="False" SelectionBrush="White" OpacityMask="Black"/>
             <TextBlock Margin="60,250,0,0" TextWrapping="Wrap" Text="Row to Read" VerticalAlignment="Top" Foreground="Black" FontSize="20" Height="35"/>
-            <TextBox x:Name="sampleNum_tb" VerticalContentAlignment="Center" Height="35" TextWrapping="Wrap" Text="234" VerticalAlignment="Top" Width="58" Margin="20,250,0,0" FontFamily="Arial" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" FontSize="20" Foreground="Black" IsEnabled="False" OpacityMask="Black"/>
+            <TextBox x:Name="sampleNum_tb" VerticalContentAlignment="Center" Height="35" TextWrapping="Wrap" Text="234" VerticalAlignment="Top" Width="58" Margin="20,250,0,0" FontFamily="Arial" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" FontSize="20" Foreground="Black" IsEnabled="True" OpacityMask="Black"/>
         </StackPanel>
         <StackPanel x:Name="Footer" Orientation="Horizontal">
             <TextBlock HorizontalAlignment="Center" Margin="428.675,800,0,0" TextWrapping="Wrap" Text="TEST EARLY" VerticalAlignment="Center" Foreground="Gray" FontSize="28" FontWeight="Bold"/>
