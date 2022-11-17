@@ -608,26 +608,23 @@ namespace AutoVega4
 
         private async void read_button_Click(object sender, RoutedEventArgs e)
         {
-            // Enter '234' for all 15 wells
-            if (sampleNum_tb.Text == "234")
-            {
-                string inProgressColor = "#F5D5CB";
-                string finishedColor = "#D7ECD9";
+            string inProgressColor = "#F5D5CB";
+            string finishedColor = "#D7ECD9";
 
-                isReading = true;
-                File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
-                List<TestResults> testResults = new List<TestResults>();
+            isReading = true;
+            File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
+            List<TestResults> testResults = new List<TestResults>();
 
-                // define array for necessary items from parameter file
-                double[] testArray = new double[17];
+            // define array for necessary items from parameter file
+            double[] testArray = new double[17];
 
-                // Show In Progress Boxes
-                inProgressBG_r.Visibility = Visibility.Visible;
-                inProgress_stack.Visibility = Visibility.Visible;
-                inProgress_cart34.Visibility = Visibility.Visible;
-                inProgress_cart34_border.Visibility = Visibility.Visible;
+            // Show In Progress Boxes
+            inProgressBG_r.Visibility = Visibility.Visible;
+            inProgress_stack.Visibility = Visibility.Visible;
+            inProgress_cart34.Visibility = Visibility.Visible;
+            inProgress_cart34_border.Visibility = Visibility.Visible;
 
-                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
+            Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
                                                 inProgressE2,inProgressD2,inProgressC2,inProgressB2,inProgressA2,   /*Row 2*/
                                                 inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,   /*Row 3*/
                                                 inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,   /*Row 4*/
@@ -635,7 +632,7 @@ namespace AutoVega4
                                                 inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
                                                 inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
 
-                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
+            TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
                                               resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
                                               resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
                                               resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
@@ -643,112 +640,115 @@ namespace AutoVega4
                                               resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
                                               resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
 
-                File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
+            File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
 
-                // read parameter file and read in all necessary parameters
-                string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
-                double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
-                double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
-                double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
-                double samplingRate = double.Parse(parameters[3].Substring(0, 5));
-                double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
-                double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
-                double saturation = double.Parse(parameters[8].Substring(0, 8));
-                double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
-                double lowSignal = double.Parse(parameters[29].Substring(0, 5));
-                double readMethod = double.Parse(parameters[9].Substring(0, 1));
-                double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
-                double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
-                double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
-                double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
-                double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
-                double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
-                double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
-                double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
-                double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
-                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
-                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
-                double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
-                double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
-                double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
-                double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
-                double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
+            // read parameter file and read in all necessary parameters
+            string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
+            double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
+            double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
+            double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
+            double samplingRate = double.Parse(parameters[3].Substring(0, 5));
+            double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
+            double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
+            double saturation = double.Parse(parameters[8].Substring(0, 8));
+            double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
+            double lowSignal = double.Parse(parameters[29].Substring(0, 5));
+            double readMethod = double.Parse(parameters[9].Substring(0, 1));
+            double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
+            double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
+            double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
+            double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
+            double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
+            double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
+            double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
+            double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
+            double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
+            double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
+            double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
+            double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
+            double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
+            double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
+            double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
+            double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
 
-                double bgd_rdg = afeShiftFactor;
-                double threshold = viralCountOffsetFactor;
+            double bgd_rdg = afeShiftFactor;
+            double threshold = viralCountOffsetFactor;
 
-                File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
+            File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
 
-                testArray[0] = ledOutputRange;
-                testArray[1] = samplingRate;
-                testArray[2] = numSamplesPerReading;
-                testArray[3] = numSamplesForAvg;
-                testArray[4] = errorLimitInMillivolts;
-                testArray[5] = numTempSamplesPerReading;
-                testArray[6] = saturation;
-                testArray[7] = expectedDarkRdg;
-                testArray[8] = lowSignal;
-                testArray[9] = ledOnDuration;
-                testArray[10] = readDelayInMS;
-                testArray[11] = calMinVoltage;
-                testArray[12] = calNomVoltage;
-                testArray[13] = calMaxVoltage;
-                testArray[14] = excMinVoltage;
-                testArray[15] = excNomVoltage;
-                testArray[16] = excMaxVoltage;
+            testArray[0] = ledOutputRange;
+            testArray[1] = samplingRate;
+            testArray[2] = numSamplesPerReading;
+            testArray[3] = numSamplesForAvg;
+            testArray[4] = errorLimitInMillivolts;
+            testArray[5] = numTempSamplesPerReading;
+            testArray[6] = saturation;
+            testArray[7] = expectedDarkRdg;
+            testArray[8] = lowSignal;
+            testArray[9] = ledOnDuration;
+            testArray[10] = readDelayInMS;
+            testArray[11] = calMinVoltage;
+            testArray[12] = calNomVoltage;
+            testArray[13] = calMaxVoltage;
+            testArray[14] = excMinVoltage;
+            testArray[15] = excNomVoltage;
+            testArray[16] = excMaxVoltage;
 
-                File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
+            File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
 
-                string inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Input: " + value + "\n";
-                }
+            string inputString = "";
+            foreach (double value in testArray)
+            {
+                inputString += "Input: " + value + "\n";
+            }
 
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+            //MessageBox.Show(inputString);
+            File.AppendAllText(logFilePath, inputString + Environment.NewLine);
 
-                IntPtr testPtr = verifyInput(testArray);
-                double[] testArray2 = new double[17];
-                Marshal.Copy(testPtr, testArray2, 0, 17);
-                inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Verify input: " + value + "\n";
-                }
+            IntPtr testPtr = verifyInput(testArray);
+            double[] testArray2 = new double[17];
+            Marshal.Copy(testPtr, testArray2, 0, 17);
+            inputString = "";
+            foreach (double value in testArray)
+            {
+                inputString += "Verify input: " + value + "\n";
+            }
 
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
+            //MessageBox.Show(inputString);
+            File.AppendAllText(logFilePath, inputString + Environment.NewLine);
 
-                bool settingsBool = testSetSettings(testArray);
+            bool settingsBool = testSetSettings(testArray);
 
-                //MessageBox.Show("Test setSettings: " + settingsBool);
-                File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
+            //MessageBox.Show("Test setSettings: " + settingsBool);
+            File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
 
-                string[] positions = new string[map.Length];
-                int[] xPos = new int[map.Length];
-                int[] yPos = new int[map.Length];
-                int[] zPos = new int[map.Length];
-                int[] pump = new int[map.Length];
+            string[] positions = new string[map.Length];
+            int[] xPos = new int[map.Length];
+            int[] yPos = new int[map.Length];
+            int[] zPos = new int[map.Length];
+            int[] pump = new int[map.Length];
 
-                for (int i = 0; i < map.Length; i++)
-                {
-                    positions[i] = map[i].Split(',')[0];
-                    xPos[i] = Int32.Parse(map[i].Split(',')[1]);
-                    yPos[i] = Int32.Parse(map[i].Split(',')[2]);
-                    zPos[i] = Int32.Parse(map[i].Split(',')[3]);
-                    pump[i] = Int32.Parse(map[i].Split(',')[4]);
-                }
+            for (int i = 0; i < map.Length; i++)
+            {
+                positions[i] = map[i].Split(',')[0];
+                xPos[i] = Int32.Parse(map[i].Split(',')[1]);
+                yPos[i] = Int32.Parse(map[i].Split(',')[2]);
+                zPos[i] = Int32.Parse(map[i].Split(',')[3]);
+                pump[i] = Int32.Parse(map[i].Split(',')[4]);
+            }
 
-                double[] shiftFactors = new double[shiftAndScale.Length];
-                double[] scaleFactors = new double[shiftAndScale.Length];
+            double[] shiftFactors = new double[shiftAndScale.Length];
+            double[] scaleFactors = new double[shiftAndScale.Length];
 
-                for (int i = 0; i < shiftAndScale.Length; i++)
-                {
-                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
-                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
-                }
+            for (int i = 0; i < shiftAndScale.Length; i++)
+            {
+                shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
+                scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
+            }
 
+            // Enter '234' for all 15 wells
+            if (sampleNum_tb.Text == "234")
+            {
                 // 540 steps = 1mL
 
                 // ** Start of moving steps **
@@ -761,8 +761,8 @@ namespace AutoVega4
                 // ---------------------
 
                 // Move to HBSS Bottle
-                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
-                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Load]);
 
                 // Draw HBSS for row 2
                 AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
@@ -785,8 +785,8 @@ namespace AutoVega4
 
                 //**E2**//
                 // Move from HBSS bottle to E2
-                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
-                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
 
                 // Change E2 to in progress color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -813,8 +813,8 @@ namespace AutoVega4
                     if (i == 19)
                     {
                         // Move from A3 to HBSS bottle
-                        moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.A3]);
-                        moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.A3]);
+                        moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.A3]);
+                        moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.A3]);
 
                         // Draw HBSS for rows 3 and 4
                         AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
@@ -830,8 +830,8 @@ namespace AutoVega4
                         raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
 
                         // Move back to A3
-                        moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.Probe_Bottle]);
-                        moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.Probe_Bottle]);
+                        moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                        moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.HBSS_Bottle]);
                     }
 
                     AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
@@ -1163,8 +1163,8 @@ namespace AutoVega4
                 }
 
                 // Move to Probe Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Drain]);
 
                 // Draw Probe for row 2
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
@@ -1181,8 +1181,8 @@ namespace AutoVega4
 
                 //**E2**//
                 // Move from Probe bottle to E2
-                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
 
                 // Change E2 to in progress color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -1209,8 +1209,8 @@ namespace AutoVega4
                     if (i == 19)
                     {
                         // Move from A3 to HBSS bottle
-                        moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.A3]);
-                        moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.A3]);
+                        moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.A3]);
+                        moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.A3]);
 
                         // Draw HBSS for rows 3 and 4
                         AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
@@ -1226,8 +1226,8 @@ namespace AutoVega4
                         raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle]);
 
                         // Move back to A3
-                        moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                        moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.HBSS_Bottle]);
+                        moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.Probe_Bottle]);
+                        moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.Probe_Bottle]);
                     }
 
                     AutoClosingMessageBox.Show("Dispensing Probe in " + positions[i], "Dispensing", 1000);
@@ -1917,163 +1917,25 @@ namespace AutoVega4
             }
 
             else if (sampleNum_tb.Text == "2")
-            {
-                string inProgressColor = "#F5D5CB";
-                string finishedColor = "#D7ECD9";
-
-                isReading = true;
-                File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
-                List<TestResults> testResults = new List<TestResults>();
-
-                // define array for necessary items from parameter file
-                double[] testArray = new double[17];
-
-                // Show In Progress Boxes
-                inProgressBG_r.Visibility = Visibility.Visible;
-                inProgress_stack.Visibility = Visibility.Visible;
-                inProgress_cart34.Visibility = Visibility.Visible;
-                inProgress_cart34_border.Visibility = Visibility.Visible;
-
-                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
-                                                inProgressE2,inProgressD2,inProgressC2,inProgressB2,inProgressA2,   /*Row 2*/
-                                                inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,   /*Row 3*/
-                                                inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,   /*Row 4*/
-                                                inProgressA5,inProgressB5,inProgressC5,inProgressD5,inProgressE5,   /*Row 5*/
-                                                inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
-                                                inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
-
-                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
-                                              resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
-                                              resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
-                                              resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
-                                              resultsDisplayA5,resultsDisplayB5,resultsDisplayC5,resultsDisplayD5,resultsDisplayE5,   /*Row 5*/ /*19-23*/
-                                              resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
-                                              resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
-
-                File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
-
-                // read parameter file and read in all necessary parameters
-                string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
-                double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
-                double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
-                double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
-                double samplingRate = double.Parse(parameters[3].Substring(0, 5));
-                double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
-                double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
-                double saturation = double.Parse(parameters[8].Substring(0, 8));
-                double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
-                double lowSignal = double.Parse(parameters[29].Substring(0, 5));
-                double readMethod = double.Parse(parameters[9].Substring(0, 1));
-                double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
-                double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
-                double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
-                double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
-                double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
-                double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
-                double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
-                double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
-                double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
-                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
-                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
-                double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
-                double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
-                double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
-                double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
-                double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
-
-                double bgd_rdg = afeShiftFactor;
-                double threshold = viralCountOffsetFactor;
-
-                File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
-
-                testArray[0] = ledOutputRange;
-                testArray[1] = samplingRate;
-                testArray[2] = numSamplesPerReading;
-                testArray[3] = numSamplesForAvg;
-                testArray[4] = errorLimitInMillivolts;
-                testArray[5] = numTempSamplesPerReading;
-                testArray[6] = saturation;
-                testArray[7] = expectedDarkRdg;
-                testArray[8] = lowSignal;
-                testArray[9] = ledOnDuration;
-                testArray[10] = readDelayInMS;
-                testArray[11] = calMinVoltage;
-                testArray[12] = calNomVoltage;
-                testArray[13] = calMaxVoltage;
-                testArray[14] = excMinVoltage;
-                testArray[15] = excNomVoltage;
-                testArray[16] = excMaxVoltage;
-
-                File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
-
-                string inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Input: " + value + "\n";
-                }
-
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
-
-                IntPtr testPtr = verifyInput(testArray);
-                double[] testArray2 = new double[17];
-                Marshal.Copy(testPtr, testArray2, 0, 17);
-                inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Verify input: " + value + "\n";
-                }
-
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
-
-                bool settingsBool = testSetSettings(testArray);
-
-                //MessageBox.Show("Test setSettings: " + settingsBool);
-                File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
-
-                string[] positions = new string[map.Length];
-                int[] xPos = new int[map.Length];
-                int[] yPos = new int[map.Length];
-                int[] zPos = new int[map.Length];
-                int[] pump = new int[map.Length];
-
-                for (int i = 0; i < map.Length; i++)
-                {
-                    positions[i] = map[i].Split(',')[0];
-                    xPos[i] = Int32.Parse(map[i].Split(',')[1]);
-                    yPos[i] = Int32.Parse(map[i].Split(',')[2]);
-                    zPos[i] = Int32.Parse(map[i].Split(',')[3]);
-                    pump[i] = Int32.Parse(map[i].Split(',')[4]);
-                }
-
-                double[] shiftFactors = new double[shiftAndScale.Length];
-                double[] scaleFactors = new double[shiftAndScale.Length];
-
-                for (int i = 0; i < shiftAndScale.Length; i++)
-                {
-                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
-                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
-                }
-
+            {                
                 // 540 steps = 1mL
 
                 // ** Start of moving steps **
                 // ---------------------------
 
-                // ** HBSS Dispensing, Incubation, and Drain **
+                // ** Sample Dispensing, Incubation, and Drain **
                 // --------------------------------------------
 
-                // ** HBSS Dispensing **
+                // ** Sample Dispensing **
                 // ---------------------
 
-                // Move to HBSS Bottle
-                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
-                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+                // Move to Sample Bottle
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Load]);
 
-                // Draw HBSS for row 2
-                AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
-                File.AppendAllText(logFilePath, "Drawing HBSS" + Environment.NewLine);
+                // Draw Sample for row 2
+                AutoClosingMessageBox.Show("Drawing Sample", "Drawing Sample", 1000);
+                File.AppendAllText(logFilePath, "Drawing Sample" + Environment.NewLine);
 
                 // Lower Z by 9500 steps
                 lowerZPosition(9500);
@@ -2084,29 +1946,29 @@ namespace AutoVega4
                 // Raise Z by 9500 steps
                 raiseZPosition(9500);
 
-                // Change HBSS Dispense Box to in progress color
+                // Change Sample Dispense Box to in progress color
                 hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 hbssDispense_tb.Foreground = Brushes.Black;
 
                 //**E2**//
-                // Move from HBSS bottle to E2
-                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
-                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
+                // Move from Sample bottle to E2
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
 
                 // Change E2 to in progress color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                AutoClosingMessageBox.Show("Dispensing HBSS in E2", "Dispensing", 1000);
+                AutoClosingMessageBox.Show("Dispensing Sample in E2", "Dispensing", 1000);
 
-                // Dispense 300ul HBSS in E2
+                // Dispense 300ul Sample in E2
                 dispenseLiquid(164);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
-                // Dispense HBSS in remaining wells
+                // Dispense Sample in remaining wells
                 for (int i = 15; i < 19; i++)
                 {
                     // Move to next well
@@ -2116,12 +1978,12 @@ namespace AutoVega4
                     // Change current well to in progress color
                     inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
 
-                    AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
+                    AutoClosingMessageBox.Show("Dispensing Sample in " + positions[i], "Dispensing", 1000);
 
                     // dispense remaining liquid in last well
                     if (i == 18)
                     {
-                        // Dispense 300ul HBSS + remaining
+                        // Dispense 300ul Sample + remaining
                         dispenseLiquid(164);
 
                         // wait 3 seconds and dispense remaining amount
@@ -2131,7 +1993,7 @@ namespace AutoVega4
                     }
                     else
                     {
-                        // Dispense 300ul HBSS
+                        // Dispense 300ul Sample
                         dispenseLiquid(164);
                     }
 
@@ -2147,19 +2009,19 @@ namespace AutoVega4
                     }
                 }
 
-                // Change HBSS Dispense Box to Finished Color
+                // Change Sample Dispense Box to Finished Color
                 hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
 
-                //MessageBox.Show("HBSS Dispensed");
-                AutoClosingMessageBox.Show("HBSS Dispensed", "Dispensing Complete", 1000);
-                File.AppendAllText(logFilePath, "HBSS Dispensed" + Environment.NewLine);
+                //MessageBox.Show("Sample Dispensed");
+                AutoClosingMessageBox.Show("Sample Dispensed", "Dispensing Complete", 1000);
+                File.AppendAllText(logFilePath, "Sample Dispensed" + Environment.NewLine);
 
                 // -----------------------------
-                // ** HBSS Dispense Complete **
+                // ** Sample Dispense Complete **
 
-                // ** HBSS Wash **
+                // ** Sample Wash **
                 // ---------------
 
                 // Change wells to gray
@@ -2191,12 +2053,12 @@ namespace AutoVega4
                 dispenseLiquid(300);
 
                 // ------------------------
-                // ** HBSS Wash Complete **
+                // ** Sample Wash Complete **
 
-                // ** HBSS Incubation and Draining **
+                // ** Sample Incubation and Draining **
                 // ----------------------------------
 
-                // Change HBSS Incubation and Draining Box to in progress color
+                // Change Sample Incubation and Draining Box to in progress color
                 hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
                 hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -2405,7 +2267,7 @@ namespace AutoVega4
                     AutoClosingMessageBox.Show("Continuing", "Continuing", 1000);
                 }
 
-                // Change HBSS Draining Box to finished color
+                // Change Sample Draining Box to finished color
                 hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -2416,15 +2278,15 @@ namespace AutoVega4
                     inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 }
 
-                //MessageBox.Show("HBSS Draining Complete");
-                AutoClosingMessageBox.Show("HBSS Draining Complete", "Draining Complete", 1000);
-                File.AppendAllText(logFilePath, "HBSS Draining Complete" + Environment.NewLine);
+                //MessageBox.Show("Sample Draining Complete");
+                AutoClosingMessageBox.Show("Sample Draining Complete", "Draining Complete", 1000);
+                File.AppendAllText(logFilePath, "Sample Draining Complete" + Environment.NewLine);
 
                 // ----------------------------------------
-                // ** HBSS Incubation and Drain Complete **
+                // ** Sample Incubation and Drain Complete **
 
                 // -----------------------------------------------------
-                // ** HBSS Dispensing, Incubation, and Drain Complete **
+                // ** Sample Dispensing, Incubation, and Drain Complete **
 
                 // ** Probe Dispensing **
                 // ----------------------
@@ -2445,8 +2307,8 @@ namespace AutoVega4
                 }
 
                 // Move to Probe Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Drain]);
 
                 // Draw Probe for row 2
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
@@ -2463,8 +2325,8 @@ namespace AutoVega4
 
                 //**E2**//
                 // Move from Probe bottle to E2
-                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
+                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.Probe_Bottle]);
 
                 // Change E2 to in progress color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -3155,145 +3017,7 @@ namespace AutoVega4
             }
 
             else if (sampleNum_tb.Text == "3")
-            {
-                string inProgressColor = "#F5D5CB";
-                string finishedColor = "#D7ECD9";
-
-                isReading = true;
-                File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
-                List<TestResults> testResults = new List<TestResults>();
-
-                // define array for necessary items from parameter file
-                double[] testArray = new double[17];
-
-                // Show In Progress Boxes
-                inProgressBG_r.Visibility = Visibility.Visible;
-                inProgress_stack.Visibility = Visibility.Visible;
-                inProgress_cart34.Visibility = Visibility.Visible;
-                inProgress_cart34_border.Visibility = Visibility.Visible;
-
-                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
-                                                inProgressE2,inProgressD2,inProgressC2,inProgressB2,inProgressA2,   /*Row 2*/
-                                                inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,   /*Row 3*/
-                                                inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,   /*Row 4*/
-                                                inProgressA5,inProgressB5,inProgressC5,inProgressD5,inProgressE5,   /*Row 5*/
-                                                inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
-                                                inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
-
-                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
-                                              resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
-                                              resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
-                                              resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
-                                              resultsDisplayA5,resultsDisplayB5,resultsDisplayC5,resultsDisplayD5,resultsDisplayE5,   /*Row 5*/ /*19-23*/
-                                              resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
-                                              resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
-
-                File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
-
-                // read parameter file and read in all necessary parameters
-                string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
-                double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
-                double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
-                double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
-                double samplingRate = double.Parse(parameters[3].Substring(0, 5));
-                double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
-                double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
-                double saturation = double.Parse(parameters[8].Substring(0, 8));
-                double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
-                double lowSignal = double.Parse(parameters[29].Substring(0, 5));
-                double readMethod = double.Parse(parameters[9].Substring(0, 1));
-                double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
-                double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
-                double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
-                double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
-                double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
-                double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
-                double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
-                double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
-                double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
-                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
-                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
-                double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
-                double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
-                double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
-                double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
-                double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
-
-                double bgd_rdg = afeShiftFactor;
-                double threshold = viralCountOffsetFactor;
-
-                File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
-
-                testArray[0] = ledOutputRange;
-                testArray[1] = samplingRate;
-                testArray[2] = numSamplesPerReading;
-                testArray[3] = numSamplesForAvg;
-                testArray[4] = errorLimitInMillivolts;
-                testArray[5] = numTempSamplesPerReading;
-                testArray[6] = saturation;
-                testArray[7] = expectedDarkRdg;
-                testArray[8] = lowSignal;
-                testArray[9] = ledOnDuration;
-                testArray[10] = readDelayInMS;
-                testArray[11] = calMinVoltage;
-                testArray[12] = calNomVoltage;
-                testArray[13] = calMaxVoltage;
-                testArray[14] = excMinVoltage;
-                testArray[15] = excNomVoltage;
-                testArray[16] = excMaxVoltage;
-
-                File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
-
-                string inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Input: " + value + "\n";
-                }
-
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
-
-                IntPtr testPtr = verifyInput(testArray);
-                double[] testArray2 = new double[17];
-                Marshal.Copy(testPtr, testArray2, 0, 17);
-                inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Verify input: " + value + "\n";
-                }
-
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
-
-                bool settingsBool = testSetSettings(testArray);
-
-                //MessageBox.Show("Test setSettings: " + settingsBool);
-                File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
-
-                string[] positions = new string[map.Length];
-                int[] xPos = new int[map.Length];
-                int[] yPos = new int[map.Length];
-                int[] zPos = new int[map.Length];
-                int[] pump = new int[map.Length];
-
-                for (int i = 0; i < map.Length; i++)
-                {
-                    positions[i] = map[i].Split(',')[0];
-                    xPos[i] = Int32.Parse(map[i].Split(',')[1]);
-                    yPos[i] = Int32.Parse(map[i].Split(',')[2]);
-                    zPos[i] = Int32.Parse(map[i].Split(',')[3]);
-                    pump[i] = Int32.Parse(map[i].Split(',')[4]);
-                }
-
-                double[] shiftFactors = new double[shiftAndScale.Length];
-                double[] scaleFactors = new double[shiftAndScale.Length];
-
-                for (int i = 0; i < shiftAndScale.Length; i++)
-                {
-                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
-                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
-                }
-
+            {                
                 // 540 steps = 1mL
 
                 // ** Start of moving steps **
@@ -3306,8 +3030,8 @@ namespace AutoVega4
                 // ---------------------
 
                 // Move to HBSS Bottle
-                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
-                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Load]);
 
                 // Draw HBSS for row 3
                 AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
@@ -3330,8 +3054,8 @@ namespace AutoVega4
 
                 //**A3**//
                 // Move from HBSS bottle to A3
-                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.Probe_Bottle]);
-                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.Probe_Bottle]);
+                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.HBSS_Bottle]);
 
                 // Change A3 to in progress color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -3683,8 +3407,8 @@ namespace AutoVega4
                 }
 
                 // Move to Probe Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Drain]);
 
                 // Draw Probe for row 3
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
@@ -3701,8 +3425,8 @@ namespace AutoVega4
 
                 //**A3**//
                 // Move from Probe bottle to A3
-                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.HBSS_Bottle]);
+                moveY(yPos[(int)steppingPositions.A3] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.A3] - xPos[(int)steppingPositions.Probe_Bottle]);
 
                 // Change A3 to in progress color
                 inProgressA3.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -4393,145 +4117,7 @@ namespace AutoVega4
             }
 
             else if (sampleNum_tb.Text == "4")
-            {
-                string inProgressColor = "#F5D5CB";
-                string finishedColor = "#D7ECD9";
-
-                isReading = true;
-                File.AppendAllText(logFilePath, "Reading started" + Environment.NewLine);
-                List<TestResults> testResults = new List<TestResults>();
-
-                // define array for necessary items from parameter file
-                double[] testArray = new double[17];
-
-                // Show In Progress Boxes
-                inProgressBG_r.Visibility = Visibility.Visible;
-                inProgress_stack.Visibility = Visibility.Visible;
-                inProgress_cart34.Visibility = Visibility.Visible;
-                inProgress_cart34_border.Visibility = Visibility.Visible;
-
-                Ellipse[] inProgressEllipses = {inProgressA1,inProgressB1,inProgressC1,inProgressD1,                /*Row 1*/
-                                                inProgressE2,inProgressD2,inProgressC2,inProgressB2,inProgressA2,   /*Row 2*/
-                                                inProgressA3,inProgressB3,inProgressC3,inProgressD3,inProgressE3,   /*Row 3*/
-                                                inProgressE4,inProgressD4,inProgressC4,inProgressB4,inProgressA4,   /*Row 4*/
-                                                inProgressA5,inProgressB5,inProgressC5,inProgressD5,inProgressE5,   /*Row 5*/
-                                                inProgressE6,inProgressD6,inProgressC6,inProgressB6,inProgressA6,   /*Row 6*/
-                                                inProgressA7,inProgressB7,inProgressC7,inProgressD7,inProgressE7};  /*Row 7*/
-
-                TextBox[] resultsTextboxes = {resultsDisplayA1,resultsDisplayB1,resultsDisplayC1,resultsDisplayD1,                    /*Row 1*/ /*0-3*/
-                                              resultsDisplayE2,resultsDisplayD2,resultsDisplayC2,resultsDisplayB2,resultsDisplayA2,   /*Row 2*/ /*4-8*/
-                                              resultsDisplayA3,resultsDisplayB3,resultsDisplayC3,resultsDisplayD3,resultsDisplayE3,   /*Row 3*/ /*9-13*/
-                                              resultsDisplayE4,resultsDisplayD4,resultsDisplayC4,resultsDisplayB4,resultsDisplayA4,   /*Row 4*/ /*14-18*/
-                                              resultsDisplayA5,resultsDisplayB5,resultsDisplayC5,resultsDisplayD5,resultsDisplayE5,   /*Row 5*/ /*19-23*/
-                                              resultsDisplayE6,resultsDisplayD6,resultsDisplayC6,resultsDisplayB6,resultsDisplayA6,   /*Row 6*/ /*24-28*/
-                                              resultsDisplayA7,resultsDisplayB7,resultsDisplayC7,resultsDisplayD7,resultsDisplayE7};  /*Row 7*/ /*29-33*/
-
-                File.AppendAllText(logFilePath, "In progress information visible" + Environment.NewLine);
-
-                // read parameter file and read in all necessary parameters
-                string[] parameters = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\Kaya17Covi2V.txt");
-                double ledOutputRange = double.Parse(parameters[0].Substring(0, 3));
-                double numSamplesPerReading = double.Parse(parameters[1].Substring(0, 3));
-                double numTempSamplesPerReading = double.Parse(parameters[2].Substring(0, 2));
-                double samplingRate = double.Parse(parameters[3].Substring(0, 5));
-                double numSamplesForAvg = double.Parse(parameters[4].Substring(0, 3));
-                double errorLimitInMillivolts = double.Parse(parameters[5].Substring(0, 2));
-                double saturation = double.Parse(parameters[8].Substring(0, 8));
-                double expectedDarkRdg = double.Parse(parameters[6].Substring(0, 4));
-                double lowSignal = double.Parse(parameters[29].Substring(0, 5));
-                double readMethod = double.Parse(parameters[9].Substring(0, 1));
-                double ledOnDuration = double.Parse(parameters[9].Substring(4, 3));
-                double readDelayInMS = double.Parse(parameters[9].Substring(8, 1));
-                double excitationLedVoltage = double.Parse(parameters[33].Substring(0, 5));
-                double excMinVoltage = double.Parse(parameters[26].Substring(0, 3));
-                double excNomVoltage = double.Parse(parameters[25].Substring(0, 4));
-                double excMaxVoltage = double.Parse(parameters[24].Substring(0, 3));
-                double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
-                double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
-                double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
-                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
-                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
-                double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
-                double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
-                double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
-                double antigenNoiseMargin = double.Parse(parameters[48].Substring(0, 1));
-                double antigenControlMargin = double.Parse(parameters[49].Substring(0, 2));
-
-                double bgd_rdg = afeShiftFactor;
-                double threshold = viralCountOffsetFactor;
-
-                File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
-
-                testArray[0] = ledOutputRange;
-                testArray[1] = samplingRate;
-                testArray[2] = numSamplesPerReading;
-                testArray[3] = numSamplesForAvg;
-                testArray[4] = errorLimitInMillivolts;
-                testArray[5] = numTempSamplesPerReading;
-                testArray[6] = saturation;
-                testArray[7] = expectedDarkRdg;
-                testArray[8] = lowSignal;
-                testArray[9] = ledOnDuration;
-                testArray[10] = readDelayInMS;
-                testArray[11] = calMinVoltage;
-                testArray[12] = calNomVoltage;
-                testArray[13] = calMaxVoltage;
-                testArray[14] = excMinVoltage;
-                testArray[15] = excNomVoltage;
-                testArray[16] = excMaxVoltage;
-
-                File.AppendAllText(logFilePath, "Parameter array set" + Environment.NewLine);
-
-                string inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Input: " + value + "\n";
-                }
-
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
-
-                IntPtr testPtr = verifyInput(testArray);
-                double[] testArray2 = new double[17];
-                Marshal.Copy(testPtr, testArray2, 0, 17);
-                inputString = "";
-                foreach (double value in testArray)
-                {
-                    inputString += "Verify input: " + value + "\n";
-                }
-
-                //MessageBox.Show(inputString);
-                File.AppendAllText(logFilePath, inputString + Environment.NewLine);
-
-                bool settingsBool = testSetSettings(testArray);
-
-                //MessageBox.Show("Test setSettings: " + settingsBool);
-                File.AppendAllText(logFilePath, "Test setSettings: " + settingsBool + Environment.NewLine);
-
-                string[] positions = new string[map.Length];
-                int[] xPos = new int[map.Length];
-                int[] yPos = new int[map.Length];
-                int[] zPos = new int[map.Length];
-                int[] pump = new int[map.Length];
-
-                for (int i = 0; i < map.Length; i++)
-                {
-                    positions[i] = map[i].Split(',')[0];
-                    xPos[i] = Int32.Parse(map[i].Split(',')[1]);
-                    yPos[i] = Int32.Parse(map[i].Split(',')[2]);
-                    zPos[i] = Int32.Parse(map[i].Split(',')[3]);
-                    pump[i] = Int32.Parse(map[i].Split(',')[4]);
-                }
-
-                double[] shiftFactors = new double[shiftAndScale.Length];
-                double[] scaleFactors = new double[shiftAndScale.Length];
-
-                for (int i = 0; i < shiftAndScale.Length; i++)
-                {
-                    shiftFactors[i] = double.Parse(shiftAndScale[i].Split(',')[1]);
-                    scaleFactors[i] = double.Parse(shiftAndScale[i].Split(',')[2]);
-                }
-
+            {                
                 // 540 steps = 1mL
 
                 // ** Start of moving steps **
@@ -4544,8 +4130,8 @@ namespace AutoVega4
                 // ---------------------
 
                 // Move to HBSS Bottle
-                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Load]);
-                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Load]);
+                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Load]);
+                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Load]);
 
                 // Draw HBSS for row 4
                 AutoClosingMessageBox.Show("Drawing HBSS", "Drawing HBSS", 1000);
@@ -4568,8 +4154,8 @@ namespace AutoVega4
 
                 //**E4**//
                 // Move from HBSS bottle to E4
-                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.Probe_Bottle]);
-                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.Probe_Bottle]);
+                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.HBSS_Bottle]);
 
                 // Change E4 to in progress color
                 inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
@@ -4921,8 +4507,8 @@ namespace AutoVega4
                 }
 
                 // Move to Probe Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Drain]);
+                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Drain]);
 
                 // Draw Probe for row 4
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
@@ -4939,8 +4525,8 @@ namespace AutoVega4
 
                 //**E4**//
                 // Move from Probe bottle to E4
-                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.HBSS_Bottle]);
+                moveY(yPos[(int)steppingPositions.E4] - yPos[(int)steppingPositions.Probe_Bottle]);
+                moveX(xPos[(int)steppingPositions.E4] - xPos[(int)steppingPositions.Probe_Bottle]);
 
                 // Change E4 to in progress color
                 inProgressE4.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
