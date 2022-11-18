@@ -1973,8 +1973,8 @@ namespace AutoVega4
                 double calMinVoltage = double.Parse(parameters[18].Substring(0, 3));
                 double calNomVoltage = double.Parse(parameters[17].Substring(0, 3));
                 double calMaxVoltage = double.Parse(parameters[16].Substring(0, 3));
-                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 3));
-                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 4));
+                double afeScaleFactor = double.Parse(parameters[35].Substring(0, 4));
+                double afeShiftFactor = double.Parse(parameters[36].Substring(0, 6));
                 double viralCountScaleFactor = double.Parse(parameters[45].Substring(0, 5));
                 double viralCountOffsetFactor = double.Parse(parameters[46].Substring(0, 4));
                 double antigenCutoffFactor = double.Parse(parameters[47].Substring(0, 1));
