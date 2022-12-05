@@ -31,11 +31,11 @@
         <Rectangle x:Name="testType_Border" Height="50" Width="477" Margin="200,148,0,0" Fill="#FFF6F6EB" HorizontalAlignment="Left" VerticalAlignment="Top" Stroke="White" ></Rectangle>
         <StackPanel Name="Test_Type" Orientation="Horizontal">
             <TextBlock Margin="237,162,0,0" TextWrapping="Wrap" Text="Covid 19" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
-            <RadioButton x:Name="Covid19_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" Width="15" IsChecked="True" />
+            <RadioButton x:Name="Covid19_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" Width="15" IsChecked="False" />
             <TextBlock HorizontalAlignment="Left" Margin="55,162,0,0" TextWrapping="Wrap" Text="Allergy" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
             <RadioButton x:Name="Allergy_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" IsEnabled="False" Width="15"/>
             <TextBlock HorizontalAlignment="Left" Margin="55,162,0,0" TextWrapping="Wrap" Text="Ovarian Panel" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
-            <RadioButton x:Name="Ovarian_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" IsEnabled="False" Width="15" Height="15"/>
+            <RadioButton x:Name="Ovarian_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" IsEnabled="False" Width="15" Height="15" IsChecked="True"/>
         </StackPanel>
         <StackPanel Name="Patient_Info" Orientation="Horizontal">
             <TextBlock Margin="28,240,0,0" TextWrapping="Wrap" Text="Scan QR code or enter patient name" VerticalAlignment="Top" Foreground="Black" TextAlignment="Center" FontSize="20" FontWeight="Bold" Width="262"/>
@@ -462,12 +462,14 @@
                 </TextBox>
             </StackPanel>
         </StackPanel>
-        <CheckBox x:Name="switchResults_cb" Content="Visual Results" HorizontalAlignment="Left" Margin="1009,145,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <TextBlock Text="Incubation Time (minutes): " Height="20" Margin="970,166,86,714" Width="140"/>
-        <TextBox x:Name="incubationTime_tb" Height="20" Width="25" Margin="1114,164,60,715" Text="20" TextAlignment="Center"/>
-        <TextBlock Text="Draining Time (minutes): " Margin="982,186,90,694" Height="20" Width="138"/>
-        <TextBox x:Name="drainTime_tb" Height="20" Width="25" Margin="1114,184,60,696" Text="4" TextAlignment="Center"/>
-        <TextBlock Text="Incubation Time Remaining: " Margin="964,-463,-12,0" Height="20"/>
-        <TextBox x:Name="incubationRemaining_tb" Height="20" Width="25" Margin="1114,204,60,671" TextAlignment="Center" IsReadOnly="True"/>
+        <CheckBox x:Name="switchResults_cb" Content="Visual Results" HorizontalAlignment="Left" Margin="1009,123,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <TextBlock Text="1st Incubation Time (minutes): " Height="20" Margin="953,141,88,739"/>
+        <TextBox x:Name="incubationTime1_tb" Height="20" Width="25" Margin="1114,116,60,715" Text="30" TextAlignment="Center"/>
+        <TextBlock Text="2nd Incubation Time (minutes): " Height="20" Margin="948,163,88,717"/>
+        <TextBox x:Name="incubationTime2_tb" Height="20" Width="25" Margin="1114,160,60,715" Text="30" TextAlignment="Center"/>
+        <TextBlock Text="Draining Time (minutes): " Margin="982,184,90,694" Height="20" Width="138"/>
+        <TextBox x:Name="drainTime_tb" Height="20" Width="25" Margin="1114,185,60,696" Text="4" TextAlignment="Center"/>
+        <TextBlock Text="Incubation Time Remaining: " Margin="964,-464,-12,0" Height="20"/>
+        <TextBox x:Name="incubationRemaining_tb" Height="20" Width="25" Margin="1114,206,60,671" TextAlignment="Center" IsReadOnly="True"/>
     </Grid>
 </Window>
