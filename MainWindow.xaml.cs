@@ -374,7 +374,6 @@ namespace AutoVega4
 
         private void MoveToHomePosition()
         {
-            string[] map = File.ReadAllLines(@"C:\Users\Public\Documents\kaya17\bin\34_well_cartridge_steps_1row_test.csv");
             string[] positions = new string[map.Length];
             int[] xPos = new int[map.Length];
             int[] yPos = new int[map.Length];
@@ -563,7 +562,6 @@ namespace AutoVega4
 
         private void MoveToLoadPosition()
         {
-            string[] map = File.ReadAllLines("../../Auto Vega/34_well_cartridge_steps_1row_test.csv");
             string[] positions = new string[map.Length];
             int[] xPos = new int[map.Length];
             int[] yPos = new int[map.Length];
