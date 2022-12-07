@@ -11,41 +11,41 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <Grid Background="#FFBED1F2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1200" Height="900">
-        <StackPanel Name="First_Row" Orientation="Horizontal">
+        <StackPanel Name="First_Row" Orientation="Horizontal" Height="200" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Image Height="150" Margin="20,20,0,0" VerticalAlignment="Top" Width="150" Source="Resources/Kaya17Logo_icon.ico" />
             <TextBlock Margin="272.867,10,0,0" TextWrapping="Wrap" Text="AUTO VEGA 4" VerticalAlignment="Top" Foreground="Gray" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"/>
             <TextBlock Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" FontSize="28" FontWeight="Bold" Height="37.2433333333333"><Run Text="Reader Software V1.2"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
         </StackPanel>
-        <StackPanel Name="Textbox_Headers" Orientation="Horizontal">
-            <TextBlock Margin="274,55,0,0" TextWrapping="Wrap" Text="Test Name" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
-            <TextBlock HorizontalAlignment="Left" Margin="153,55,0,0" TextWrapping="Wrap" Text="Operator ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
-            <TextBlock HorizontalAlignment="Left" Margin="143,55,0,0" TextWrapping="Wrap" Text="Kit ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
-            <TextBlock HorizontalAlignment="Left" Margin="161,55,0,0" TextWrapping="Wrap" Text="Reader ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
+        <StackPanel Name="Textbox_Headers" Orientation="Horizontal" Width="814" Height="29" Margin="156,-761,0,0">
+            <TextBlock TextWrapping="Wrap" Text="Test Name" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
+            <TextBlock HorizontalAlignment="Left" Margin="153,0,0,0" TextWrapping="Wrap" Text="Operator ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
+            <TextBlock HorizontalAlignment="Left" Margin="143,0,0,0" TextWrapping="Wrap" Text="Kit ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
+            <TextBlock HorizontalAlignment="Left" Margin="161,0,0,0" TextWrapping="Wrap" Text="Reader ID" VerticalAlignment="Top" Foreground="Black" FontSize="20" FontWeight="Bold"/>
         </StackPanel>
-        <StackPanel Name="Test_Info_Boxes" Orientation="Horizontal">
-            <TextBox x:Name="testname_tb" Height="34" Margin="200,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center" OpacityMask="Black"/>
-            <TextBox x:Name="operator_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Your Badge" VerticalAlignment="Top" Background="#FFF6F6EB" SelectionBrush="#FF120303" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" TextChanged="operator_tb_TextChanged" OpacityMask="Black" Width="200" BorderBrush="#FFFFC300" FontSize="16"/>
-            <TextBox x:Name="kit_tb" VerticalContentAlignment="Center" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Kit QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="kit_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
-            <TextBox x:Name="reader_tb" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="34" Margin="30,84,0,0" TextWrapping="Wrap" Text="Scan Reader QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="reader_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
+        <StackPanel Name="Test_Info_Boxes" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="134,84,0,0">
+            <TextBox x:Name="testname_tb" Height="34" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center" OpacityMask="Black"/>
+            <TextBox x:Name="operator_tb" VerticalContentAlignment="Center" Height="34" Margin="30,0,0,0" TextWrapping="Wrap" Text="Scan Your Badge" VerticalAlignment="Top" SelectionBrush="#FF120303" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" TextChanged="operator_tb_TextChanged" OpacityMask="Black" Width="200" BorderBrush="#FFFFC300" FontSize="16"/>
+            <TextBox x:Name="kit_tb" VerticalContentAlignment="Center" Height="34" Margin="30,0,0,0" TextWrapping="Wrap" Text="Scan Kit QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="kit_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
+            <TextBox x:Name="reader_tb" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="34" Margin="30,0,0,0" TextWrapping="Wrap" Text="Scan Reader QR Code" VerticalAlignment="Top" Width="200" Background="#FFF6F6EB" Foreground="Black" FontFamily="Arial" FontWeight="Bold" TextAlignment="Center" IsEnabled="False" TextChanged="reader_tb_TextChanged" OpacityMask="Black" BorderBrush="White" FontSize="16"/>
         </StackPanel>
         <Rectangle x:Name="testType_Border" Height="50" Width="477" Margin="200,148,0,0" Fill="#FFF6F6EB" HorizontalAlignment="Left" VerticalAlignment="Top" Stroke="White" ></Rectangle>
-        <StackPanel Name="Test_Type" Orientation="Horizontal">
-            <TextBlock Margin="237,162,0,0" TextWrapping="Wrap" Text="Covid 19" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
-            <RadioButton x:Name="Covid19_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" Width="15" IsChecked="False" />
-            <TextBlock HorizontalAlignment="Left" Margin="55,162,0,0" TextWrapping="Wrap" Text="Allergy" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
-            <RadioButton x:Name="Allergy_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" IsEnabled="False" Width="15"/>
-            <TextBlock HorizontalAlignment="Left" Margin="55,162,0,0" TextWrapping="Wrap" Text="Ovarian Panel" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
-            <RadioButton x:Name="Ovarian_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,167,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" IsEnabled="False" Width="15" Height="15" IsChecked="True"/>
+        <StackPanel Name="Test_Type" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-308,163,0,0">
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Ovarian Panel" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
+            <RadioButton x:Name="Ovarian_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" IsEnabled="False" Width="15" Height="15" IsChecked="True"/>
+            <TextBlock TextWrapping="Wrap" Text="Covid 19" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal" Margin="55,0,0,0"/>
+            <RadioButton x:Name="Covid19_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" Width="15" IsChecked="False" />
+            <TextBlock HorizontalAlignment="Left" Margin="55,0,0,0" TextWrapping="Wrap" Text="Allergy" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
+            <RadioButton x:Name="Allergy_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" IsEnabled="False" Width="15"/>
         </StackPanel>
-        <StackPanel Name="Patient_Info" Orientation="Horizontal">
-            <TextBlock Margin="28,240,0,0" TextWrapping="Wrap" Text="Scan QR code or enter patient name" VerticalAlignment="Top" Foreground="Black" TextAlignment="Center" FontSize="20" FontWeight="Bold" Width="262"/>
-            <TextBox x:Name="patient_tb" Height="35" Margin="22,251,0,0" TextWrapping="Wrap" Text="Firstname_lastname" VerticalAlignment="Top" Width="244" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" Foreground="Black" FontSize="20" IsEnabled="False" SelectionBrush="White" OpacityMask="Black"/>
-            <TextBlock Margin="60,250,0,0" TextWrapping="Wrap" Text="Row to Read" VerticalAlignment="Top" Foreground="Black" FontSize="20" Height="35"/>
-            <TextBox x:Name="sampleNum_tb" VerticalContentAlignment="Center" Height="35" TextWrapping="Wrap" Text="234" VerticalAlignment="Top" Width="58" Margin="20,250,0,0" FontFamily="Arial" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" FontSize="20" Foreground="Black" IsEnabled="True" OpacityMask="Black"/>
+        <StackPanel Name="Patient_Info" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-213,-366,0,0">
+            <TextBlock TextWrapping="Wrap" Text="Scan QR code or enter patient name" VerticalAlignment="Top" Foreground="Black" TextAlignment="Center" FontSize="20" FontWeight="Bold" Width="262"/>
+            <TextBox x:Name="patient_tb" Height="35" Margin="22,9,0,0" TextWrapping="Wrap" Text="Firstname_lastname" VerticalAlignment="Top" Width="244" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" Foreground="Black" FontSize="20" IsEnabled="False" SelectionBrush="White" OpacityMask="Black"/>
+            <TextBlock Margin="60,10,0,0" TextWrapping="Wrap" Text="Row to Read" VerticalAlignment="Top" Foreground="Black" FontSize="20" Height="35"/>
+            <TextBox x:Name="sampleNum_tb" VerticalContentAlignment="Center" Height="35" TextWrapping="Wrap" Text="234" VerticalAlignment="Top" Width="58" Margin="20,10,0,0" FontFamily="Arial" TextAlignment="Center" Background="#FFF6F6EB" BorderBrush="White" FontSize="20" Foreground="Black" IsEnabled="True" OpacityMask="Black"/>
         </StackPanel>
-        <StackPanel x:Name="Footer" Orientation="Horizontal">
-            <TextBlock HorizontalAlignment="Center" Margin="428.675,800,0,0" TextWrapping="Wrap" Text="TEST EARLY" VerticalAlignment="Center" Foreground="Gray" FontSize="28" FontWeight="Bold"/>
-            <TextBlock HorizontalAlignment="Center" Margin="10,800,0,0" TextWrapping="Wrap" Text="TEST SIMPLE" VerticalAlignment="Center" Foreground="Black" FontSize="28" FontWeight="Bold"/>
+        <StackPanel x:Name="Footer" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,827,0,0">
+            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="TEST EARLY" VerticalAlignment="Center" Foreground="Gray" FontSize="28" FontWeight="Bold"/>
+            <TextBlock HorizontalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap" Text="TEST SIMPLE" VerticalAlignment="Center" Foreground="Black" FontSize="28" FontWeight="Bold"/>
         </StackPanel>
         <Button x:Name="start_button" Content="Start Test" HorizontalAlignment="Left" Margin="710,146,0,0" VerticalAlignment="Top" Width="200" Height="50" Background="#FF9DCAEC" BorderBrush="#FF9DCAEC" Foreground="Black" FontSize="20" FontFamily="Arial" Click="start_button_Click" OpacityMask="Black" FontWeight="Bold">
             <Button.Resources>
@@ -77,75 +77,29 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <DataGrid x:Name="results_grid" HorizontalAlignment="Center" Height="430" Margin="0,317,0,0" VerticalAlignment="Top" Width="1150" ItemsSource="{Binding}" Background="#FFF0F0F0" Visibility="Hidden"/>
-        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Hidden"/>
-        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Hidden">
-            <Border Name="hbssDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="45,0,0,0">
-                <TextBlock x:Name="hbssDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Sample" VerticalAlignment="Center" Height="62" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray"/>
+        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0">
+            <Border Name="sampleDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="75" Width="150" Margin="114,-85,0,0">
+                <TextBlock x:Name="sampleDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Sample" VerticalAlignment="Center" Height="62" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <Border Name="hbssDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="35,0,0,0">
-                <TextBlock x:Name="hbssDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubating and Draining Sample" VerticalAlignment="Center" Height="87" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+            <Border Name="sampleDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="75" Width="150" Margin="-150,85,0,0">
+                <TextBlock x:Name="sampleDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubating and Draining Sample" VerticalAlignment="Center" Height="87" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <Border Name="probeDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="35,0,0,0">
+            <Border Name="probeDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="75" Width="150" Margin="114,-85,0,0">
                 <TextBlock x:Name="probeDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Probe" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <Border Name="probeDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="35,0,0,0">
+            <Border Name="probeDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="75" Width="150" Margin="-150,85,0,0">
                 <TextBlock x:Name="probeDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubating and Draining Probe" VerticalAlignment="Center" Height="85" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <Border Name="rbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="35,0,0,0">
+            <Border Name="hbssDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="75" Width="150" Margin="114,-85,0,0">
+                <TextBlock x:Name="hbssDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing HBSS" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+            </Border>
+            <Border Name="hbssDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="75" Width="150" Margin="-150,85,0,0">
+                <TextBlock x:Name="hbssDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Draining  HBSS" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+            </Border>
+            <Border Name="rbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="114,0,0,0">
                 <TextBlock x:Name="rbDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Read Buffer" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
-            <Border Name="reading_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="35,0,0,0">
-                <TextBlock x:Name="reading_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Reading Wells" VerticalAlignment="Center" Height="60" Width="85" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"></TextBlock>
-            </Border>
-        </StackPanel>
-        <StackPanel Name="inProgress_carts" HorizontalAlignment="Left" VerticalAlignment="Top" Height="200" Orientation="Horizontal" Margin="445,545,0,0" Visibility="Hidden">
-            <Ellipse Name="cart1" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="10,0,10,0"/>
-            <Ellipse Name="cart2" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="20,0,10,0"/>
-            <Ellipse Name="cart3" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="20,0,10,0"/>
-            <Ellipse Name="cart4" Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Gray" Margin="20,0,10,0"/>
-        </StackPanel>
-        <StackPanel x:Name="inProgress_carts_borders" Orientation="Horizontal" Visibility="Hidden">
-            <Rectangle Name="cart1_Border" Height="200" Margin="443,545,0,0" Stroke="Black" VerticalAlignment="Top" Width="75" Visibility="Visible" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center">
-                <Rectangle.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Rectangle.RenderTransform>
-            </Rectangle>
-            <Rectangle x:Name="cart2_Border" Height="200" Stroke="Black" Width="75" Visibility="Visible" RenderTransformOrigin="0.5,0.5" Margin="5,545,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Rectangle.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Rectangle.RenderTransform>
-            </Rectangle>
-            <Rectangle x:Name="cart3_Border" Height="200" Stroke="Black" Width="75" Visibility="Visible" RenderTransformOrigin="0.5,0.5" Margin="5,545,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Rectangle.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Rectangle.RenderTransform>
-            </Rectangle>
-            <Rectangle x:Name="cart4_Border" Height="200" Stroke="Black" Width="75" Visibility="Visible" RenderTransformOrigin="0.5,0.5" Margin="5,545,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Rectangle.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Rectangle.RenderTransform>
-            </Rectangle>
         </StackPanel>
         <StackPanel Name="inProgress_cart34" Orientation="Vertical" Visibility="Hidden">
             <StackPanel x:Name="inProgress_cart34A" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,535,0,0" Visibility="Visible">
@@ -462,7 +416,6 @@
                 </TextBox>
             </StackPanel>
         </StackPanel>
-        <CheckBox x:Name="switchResults_cb" Content="Visual Results" HorizontalAlignment="Left" Margin="1009,123,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <TextBlock Text="1st Incubation Time (minutes): " Height="20" Margin="953,141,88,739"/>
         <TextBox x:Name="incubationTime1_tb" Height="20" Width="25" Margin="1114,116,60,715" Text="30" TextAlignment="Center"/>
         <TextBlock Text="2nd Incubation Time (minutes): " Height="20" Margin="948,163,88,717"/>
