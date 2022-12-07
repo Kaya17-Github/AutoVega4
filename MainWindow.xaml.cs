@@ -1509,6 +1509,22 @@ namespace AutoVega4
                 // -----------------------------------------
                 // ** Probe Incubation and Drain Complete **
 
+                // ** HBSS Dispense **
+                // -------------------
+
+
+
+                // ----------------------------
+                // ** HBSS Dispense Complete **
+
+                // ** HBSS Drain **
+                // ----------------
+
+
+
+                // -------------------------
+                // ** HBSS Drain Complete **
+
                 // ** RB Dispense **
                 // -----------------
 
