@@ -77,8 +77,8 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray"/>
-        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0">
+        <Rectangle x:Name="inProgressBG_r" HorizontalAlignment="Center" Height="200" Margin="0,322,0,0" Stroke="Black" VerticalAlignment="Top" Width="1170" Fill="DimGray" Visibility="Hidden"/>
+        <StackPanel x:Name="inProgress_stack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1170" Height="200" Margin="0,322,0,0" Visibility="Hidden">
             <Border Name="sampleDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="15,0,0,0">
                 <TextBlock x:Name="sampleDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Sample" VerticalAlignment="Center" Height="62" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
@@ -92,10 +92,10 @@
                 <TextBlock x:Name="probeDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Incubating and Draining Probe" VerticalAlignment="Center" Height="85" Width="130" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
             <Border Name="hbssDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="15,0,0,0">
-                <TextBlock x:Name="hbssDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing HBSS" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+                <TextBlock x:Name="hbssDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Wash Buffer" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
             <Border Name="hbssDrain_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="15,0,0,0">
-                <TextBlock x:Name="hbssDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Draining  HBSS" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
+                <TextBlock x:Name="hbssDrain_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Draining Wash Buffer" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
             </Border>
             <Border Name="rbDispense_border" CornerRadius="5" BorderThickness="3" BorderBrush="Gray" Background="Gray" Visibility="Visible" Height="160" Width="150" Margin="15,0,0,0">
                 <TextBlock x:Name="rbDispense_tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dispensing Read Buffer" VerticalAlignment="Center" Height="60" Width="125" Background="Gray" FontSize="20" Foreground="LightGray" FontWeight="Normal" Visibility="Visible" TextAlignment="Center"/>
