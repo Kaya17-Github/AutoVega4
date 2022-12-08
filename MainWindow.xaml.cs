@@ -1172,14 +1172,14 @@ namespace AutoVega4
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 1000);
                 File.AppendAllText(logFilePath, "Drawing Probe" + Environment.NewLine);
 
-                // Lower Z by 8000 steps
-                lowerZPosition(8000);
+                // Lower Z slightly less than the full amount
+                lowerZPosition(zPos[(int)steppingPositions.Probe_Bottle] - 1500);
 
                 // Draw 820 steps (1.5mL + extra)
                 drawLiquid(820);
 
-                // Raise Z by 8000 steps
-                raiseZPosition(8000);
+                // Raise Z
+                raiseZPosition(zPos[(int)steppingPositions.Probe_Bottle] - 1500);
 
                 //**E2**//
                 // Move from Probe bottle to E2
