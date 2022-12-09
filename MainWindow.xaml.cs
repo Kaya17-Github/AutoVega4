@@ -1600,6 +1600,10 @@ namespace AutoVega4
                     }
                 }
 
+                Task.Delay(3000).Wait();
+
+                dispenseLiquid(50);
+
                 // Change HBSS Dispense box to finished color
                 hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
                 hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
