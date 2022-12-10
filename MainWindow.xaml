@@ -421,7 +421,7 @@
         <TextBlock Text="2nd Incubation Time (minutes): " Height="20" Margin="948,163,88,717"/>
         <TextBox x:Name="incubationTime2_tb" Height="20" Width="25" Margin="1114,160,60,715" Text="30" TextAlignment="Center"/>
         <TextBlock Text="Draining Time (minutes): " Margin="982,184,90,694" Height="20" Width="138"/>
-        <TextBox x:Name="drainTime_tb" Height="20" Width="25" Margin="1114,185,60,696" Text="4" TextAlignment="Center"/>
+        <TextBox x:Name="drainTime_tb" Height="20" Width="25" Margin="1114,185,60,696" Text="0.5" TextAlignment="Center"/>
         <TextBlock Text="Incubation Time Remaining: " Margin="964,-464,-12,0" Height="20"/>
         <TextBox x:Name="incubationRemaining_tb" Height="20" Width="25" Margin="1114,206,60,671" TextAlignment="Center" IsReadOnly="True"/>
     </Grid>
