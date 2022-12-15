@@ -1571,8 +1571,8 @@ namespace AutoVega4
 
                 AutoClosingMessageBox.Show("Dispensing HBSS in E2", "Dispensing", 1000);
 
-                // Dispense 300ul HBSS in E2
-                dispenseLiquid(162);
+                // Dispense 400ul HBSS in E2
+                dispenseLiquid(216);
 
                 // Change E2 to finished color
                 inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
@@ -1586,8 +1586,6 @@ namespace AutoVega4
 
                     // Change current well to in progress color
                     inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                    AutoClosingMessageBox.Show("Dispensing HBSS in " + positions[i], "Dispensing", 1000);
 
                     // Before dispensing in A3, go back to HBSS bottle and draw more
                     if (i == 19)
@@ -1622,18 +1620,18 @@ namespace AutoVega4
                     // dispense remaining liquid in last well
                     if (i == 28)
                     {
-                        // Dispense 300ul HBSS
-                        dispenseLiquid(162);
+                        // Dispense 400ul HBSS
+                        dispenseLiquid(216);
 
                         // wait 3 seconds and dispense remaining amount
                         Task.Delay(3000).Wait();
 
-                        dispenseLiquid(50);
+                        dispenseLiquid(100);
                     }
                     else
                     {
-                        // Dispense 300ul HBSS
-                        dispenseLiquid(162);
+                        // Dispense 400ul HBSS
+                        dispenseLiquid(216);
                     }
 
                     // Change current well to finished color and next well to in progress color except for last time
