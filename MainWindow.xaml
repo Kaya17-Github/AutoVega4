@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutoVega4"
         mc:Ignorable="d"
-        Title="AutoVega 3" Height="900" Width="1200">
+        Title="AutoVega" Height="900" Width="1200">
     <Window.Resources>
         <Style x:Key="RectangleStyle1" TargetType="{x:Type Rectangle}"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -13,7 +13,7 @@
     <Grid Background="#FFBED1F2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1200" Height="900">
         <StackPanel Name="First_Row" Orientation="Horizontal" Height="200" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Image Height="150" Margin="20,20,0,0" VerticalAlignment="Top" Width="150" Source="Resources/Kaya17Logo_icon.ico" />
-            <TextBlock Margin="272.867,10,0,0" TextWrapping="Wrap" Text="AUTO VEGA 4" VerticalAlignment="Top" Foreground="Gray" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Margin="285,10,0,0" TextWrapping="Wrap" Text="AUTO VEGA" VerticalAlignment="Top" Foreground="Gray" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"/>
             <TextBlock Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" FontSize="28" FontWeight="Bold" Height="37.2433333333333"><Run Text="Reader Software V1.8"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
         </StackPanel>
         <StackPanel Name="Textbox_Headers" Orientation="Horizontal" Width="814" Height="29" Margin="156,-761,0,0">
@@ -31,9 +31,9 @@
         <Rectangle x:Name="testType_Border" Height="50" Width="708" Margin="200,148,0,0" Fill="#FFF6F6EB" HorizontalAlignment="Left" VerticalAlignment="Top" Stroke="White" ></Rectangle>
         <StackPanel Name="Test_Type" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-308,163,0,0">
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="SFLT" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal" Margin="222,0,0,0"/>
-            <RadioButton x:Name="SFLT_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" IsEnabled="False" Width="15" Height="15" IsChecked="True"/>
+            <RadioButton x:Name="SFLT_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Width="15" Height="15" IsChecked="True"/>
             <TextBlock TextWrapping="Wrap" Text="PIGF" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal" Margin="55,0,0,0"/>
-            <RadioButton x:Name="PIGF_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" Width="15" IsChecked="False" />
+            <RadioButton x:Name="PIGF_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" Width="15" IsChecked="False" IsEnabled="False" />
             <TextBlock HorizontalAlignment="Left" Margin="55,0,0,0" TextWrapping="Wrap" Text="CRP" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>
             <RadioButton x:Name="CRP_rb" GroupName="testType" Content="" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Background="#FFD5D6EA" BorderBrush="Black" Height="15" IsEnabled="False" Width="15"/>
             <TextBlock HorizontalAlignment="Left" Margin="55,0,0,0" TextWrapping="Wrap" Text="IL6" VerticalAlignment="Top" Foreground="Black" FontSize="16" FontWeight="Normal"/>

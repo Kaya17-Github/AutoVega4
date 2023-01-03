@@ -39,6 +39,8 @@ using System.Runtime.InteropServices;
 // v1.4
 // v1.5
 // v1.6
+// v1.7
+// v1.8
 
 namespace AutoVega4
 {
@@ -207,9 +209,7 @@ namespace AutoVega4
             testname_tb.FontSize = 16;
 
             File.AppendAllText(logFilePath, "Test type radiobuttons enabled" + Environment.NewLine);
-        }
-
-        
+        }        
 
         private async void start_button_Click(object sender, RoutedEventArgs e)
         {
@@ -218,7 +218,6 @@ namespace AutoVega4
             try
             {
                 File.WriteAllText(outputFilePath, appendOutputHeaders);
-
             }
             catch (Exception ex)
             {
@@ -317,9 +316,6 @@ namespace AutoVega4
 
             AutoClosingMessageBox.Show("Cartridge at load position", "Load", 2000);
             File.AppendAllText(logFilePath, "Cartridge at load position" + Environment.NewLine);
-
-            MessageBox.Show("Open lid, load cartridge(s), close lid, enter patient name and number of samples," +
-                " and press 'read array cartridge' after cartridge is aligned.");
 
             // **TODO: Check for cartridge alignment**
 
@@ -732,7 +728,8 @@ namespace AutoVega4
             double bgd_rdg = afeShiftFactor;
             double threshold = viralCountOffsetFactor;
 
-            string appendInitVals = "Initialization Complete" + delimiter + "Bgd Rdg: " + bgd_rdg + delimiter + "Threshold: " + threshold + delimiter + Environment.NewLine + Environment.NewLine;
+            string appendInitVals = "Initialization Complete" + delimiter + "Bgd Rdg: " + bgd_rdg + delimiter + "Threshold: "
+                                    + threshold + delimiter + Environment.NewLine + Environment.NewLine;
             File.AppendAllText(outputFilePath, appendInitVals);
 
             File.AppendAllText(logFilePath, "Parameters read in" + Environment.NewLine);
@@ -2184,7 +2181,8 @@ namespace AutoVega4
                 });
 
                 // Add results grid data for E2 to output file
-                outputFileData = positions[(int)steppingPositions.E2] + delimiter + resultsTextboxes[4].Text + delimiter + raw_avg.ToString() + delimiter + testResult + delimiter + Environment.NewLine;
+                outputFileData = positions[(int)steppingPositions.E2] + delimiter + resultsTextboxes[4].Text + delimiter + raw_avg.ToString()
+                                    + delimiter + testResult + delimiter + Environment.NewLine;
 
                 File.AppendAllText(outputFilePath, outputFileData);
 
