@@ -3801,8 +3801,8 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Moving back to load position" + Environment.NewLine);
 
                 // Move back to Load Position
-                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.A4] + xPos[(int)steppingPositions.Dispense_to_Read]));
-                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.A4] + yPos[(int)steppingPositions.Dispense_to_Read]));
+                moveX(xPos[(int)steppingPositions.Load] - (xPos[(int)steppingPositions.A2] + xPos[(int)steppingPositions.Dispense_to_Read]));
+                moveY(yPos[(int)steppingPositions.Load] - (yPos[(int)steppingPositions.A2] + yPos[(int)steppingPositions.Dispense_to_Read]));
 
                 AutoClosingMessageBox.Show("Reading complete", "Results", 500);
                 File.AppendAllText(logFilePath, "Reading complete" + Environment.NewLine);
