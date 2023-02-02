@@ -2630,218 +2630,135 @@ namespace AutoVega4
                 // ----------------------------------------
                 // ** Sample Incubation and Drain Complete **
 
-                // ** HBSS Dispense **
-                // -------------------
+                // Ask user if they want to add wash step before probe dispensing
+                MessageBoxResult firstWash = MessageBox.Show("Would you like to wash the cartridge wells before dispensing probe?", "First Wash", MessageBoxButton.YesNo);
 
-                // Lift Pipette Tip above top of bottles
-                raiseZPosition(zPos[(int)steppingPositions.Drain]);
-
-                // Move from drain to HBSS_Bottle
-                moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
-
-                // Lower pipette tips
-                lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Draw 1100 steps (2mL + extra)
-                drawLiquid(1100);
-
-                // Raise pipette tip
-                raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
-
-                // Change HBSS Dispense Box to in progress color
-                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                hbssDispense_tb.Foreground = Brushes.Black;
-
-                // Change wells back to gray
-                for (int i = 4; i < 9; i++)
+                if (firstWash == MessageBoxResult.Yes)
                 {
-                    inProgressEllipses[i].Fill = Brushes.Gray;
-                }
+                    // ** HBSS Dispense **
+                    // -------------------
 
-                AutoClosingMessageBox.Show("Dispensing Wash Buffer", "Dispensing", 500);
+                    // Lift Pipette Tip above top of bottles
+                    raiseZPosition(zPos[(int)steppingPositions.Drain]);
 
-                //**E2**//
-                // Move from HBSS bottle to E2
-                moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
-                moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
+                    // Move from drain to HBSS_Bottle
+                    moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
+                    moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
 
-                // Change E2 to in progress color
-                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    // Lower pipette tips
+                    lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
 
-                AutoClosingMessageBox.Show("Dispensing WB in E2", "Dispensing", 500);
+                    // Draw 1100 steps (2mL + extra)
+                    drawLiquid(1100);
 
-                // Dispense 400ul HBSS in E2
-                dispenseLiquid(216);
+                    // Raise pipette tip
+                    raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
 
-                // Change E2 to finished color
-                inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    // Change first HBSS Box to in progress color
+                    hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    hbssDispense_tb.Foreground = Brushes.Black;
 
-                // Dispense HBSS in remaining wells
-                for (int i = 15; i < 19; i++)
-                {
-                    // Move to next well
-                    moveY(yPos[i] - yPos[i - 1]);
-                    moveX(xPos[i] - xPos[i - 1]);
-
-                    // Change current well to in progress color
-                    inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-
-                    AutoClosingMessageBox.Show("Dispensing WB in " + positions[i], "Dispensing", 500);
-
-                    // dispense remaining liquid in last well
-                    if (i == 18)
+                    // Change wells back to gray
+                    for (int i = 4; i < 9; i++)
                     {
-                        // Dispense 400ul HBSS
-                        dispenseLiquid(216);
+                        inProgressEllipses[i].Fill = Brushes.Gray;
+                    }
 
-                        // wait 3 seconds and dispense remaining amount
-                        Task.Delay(3000).Wait();
+                    AutoClosingMessageBox.Show("Dispensing Wash Buffer", "Dispensing", 500);
 
-                        dispenseLiquid(100);
+                    //**E2**//
+                    // Move from HBSS bottle to E2
+                    moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                    moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
+
+                    // Change E2 to in progress color
+                    inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing WB in E2", "Dispensing", 500);
+
+                    // Dispense 400ul HBSS in E2
+                    dispenseLiquid(216);
+
+                    // Change E2 to finished color
+                    inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                    // Dispense HBSS in remaining wells
+                    for (int i = 15; i < 19; i++)
+                    {
+                        // Move to next well
+                        moveY(yPos[i] - yPos[i - 1]);
+                        moveX(xPos[i] - xPos[i - 1]);
+
+                        // Change current well to in progress color
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                        AutoClosingMessageBox.Show("Dispensing WB in " + positions[i], "Dispensing", 500);
+
+                        // dispense remaining liquid in last well
+                        if (i == 18)
+                        {
+                            // Dispense 400ul HBSS
+                            dispenseLiquid(216);
+
+                            // wait 3 seconds and dispense remaining amount
+                            Task.Delay(3000).Wait();
+
+                            dispenseLiquid(100);
+                        }
+                        else
+                        {
+                            // Dispense 400ul HBSS
+                            dispenseLiquid(216);
+                        }
+
+                        // Change current well to finished color and next well to in progress color except for last time
+                        if (i == 18)
+                        {
+                            inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        }
+                        else
+                        {
+                            inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                            inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        }
+                    }
+
+                    AutoClosingMessageBox.Show("WB Dispensed", "Dispensing Complete", 500);
+                    File.AppendAllText(logFilePath, "WB Dispensed" + Environment.NewLine);
+
+                    // ----------------------------
+                    // ** HBSS Dispense Complete **
+
+                    // ** HBSS Drain **
+                    // ----------------
+
+                    AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 500);
+                    File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
+
+                    // Move back to Drain Position
+                    moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.A2]);
+                    moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.A2]);
+
+                    // Lower Pipette Tips to Drain
+                    lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                    if (drainMinutes < 1)
+                    {
+                        AutoClosingMessageBox.Show("Wait " + drainMinutes * 60 + " seconds for WB to drain through cartridges", "Draining", 500);
+                    }
+                    else if (drainMinutes == 1)
+                    {
+                        AutoClosingMessageBox.Show("Wait " + drainMinutes + " minute for WB to drain through cartridges", "Draining", 500);
                     }
                     else
                     {
-                        // Dispense 400ul HBSS
-                        dispenseLiquid(216);
+                        AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for WB to drain through cartridges", "Draining", 500);
                     }
 
-                    // Change current well to finished color and next well to in progress color except for last time
-                    if (i == 18)
-                    {
-                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                    }
-                    else
-                    {
-                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                        inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                    }
-                }
+                    File.AppendAllText(logFilePath, "Wait for WB to drain through" + Environment.NewLine);
 
-                // Change HBSS Dispense box to finished color
-                hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-
-                AutoClosingMessageBox.Show("WB Dispensed", "Dispensing Complete", 500);
-                File.AppendAllText(logFilePath, "WB Dispensed" + Environment.NewLine);
-
-                // ----------------------------
-                // ** HBSS Dispense Complete **
-
-                // ** HBSS Drain **
-                // ----------------
-
-                // Change HBSS Draining Box and Cartridge to in progress color
-                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                hbssDrain_tb.Foreground = Brushes.Black;
-                for (int i = 4; i < 9; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
-                }
-
-                AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 500);
-                File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
-
-                // Move back to Drain Position
-                moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.A2]);
-                moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.A2]);
-
-                // Lower Pipette Tips to Drain
-                lowerZPosition(zPos[(int)steppingPositions.Drain]);
-
-                if (drainMinutes < 1)
-                {
-                    AutoClosingMessageBox.Show("Wait " + drainMinutes * 60 + " seconds for WB to drain through cartridges", "Draining", 500);
-                }
-                else if (drainMinutes == 1)
-                {
-                    AutoClosingMessageBox.Show("Wait " + drainMinutes + " minute for WB to drain through cartridges", "Draining", 500);
-                }
-                else
-                {
-                    AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for WB to drain through cartridges", "Draining", 500);
-                }
-
-                File.AppendAllText(logFilePath, "Wait for WB to drain through" + Environment.NewLine);
-
-                // Turn pump on
-                try
-                {
-                    // Switch to bank 2
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 1);
-                    }
-                    // Send signal to turn on pump
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 8);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-                // Leave pump on
-                Task.Delay(drainTime).Wait();
-
-                // Turn pump off
-                try
-                {
-                    // Send signal to turn off pump
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 0);
-                    }
-                    // Switch back to bank 1
-                    using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
-                    {
-                        //  Create an Digital Output channel and name it.
-                        digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
-                            ChannelLineGrouping.OneChannelForAllLines);
-
-                        //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
-                        //  of digital data on demand, so no timeout is necessary.
-                        DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
-                        writer.WriteSingleSamplePort(true, 0);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-                MessageBoxResult messageBoxResult2 = MessageBox.Show("Would you like to drain for 1 more minute?", "Add Drain Time", MessageBoxButton.YesNo);
-
-                if (messageBoxResult2 == MessageBoxResult.Yes)
-                {
                     // Turn pump on
                     try
                     {
@@ -2875,8 +2792,8 @@ namespace AutoVega4
                         MessageBox.Show(ex.Message);
                     }
 
-                    // Leave pump on for 1 minute
-                    Task.Delay(60000).Wait();
+                    // Leave pump on
+                    Task.Delay(drainTime).Wait();
 
                     // Turn pump off
                     try
@@ -2911,9 +2828,9 @@ namespace AutoVega4
                         MessageBox.Show(ex.Message);
                     }
 
-                    MessageBoxResult messageBoxResult2Second = MessageBox.Show("Would you like to drain for 1 more minute?", "Add Drain Time", MessageBoxButton.YesNo);
+                    MessageBoxResult messageBoxResult2 = MessageBox.Show("Would you like to drain for 1 more minute?", "Add Drain Time", MessageBoxButton.YesNo);
 
-                    if (messageBoxResult2Second == MessageBoxResult.Yes)
+                    if (messageBoxResult2 == MessageBoxResult.Yes)
                     {
                         // Turn pump on
                         try
@@ -2983,70 +2900,154 @@ namespace AutoVega4
                         {
                             MessageBox.Show(ex.Message);
                         }
+
+                        MessageBoxResult messageBoxResult2Second = MessageBox.Show("Would you like to drain for 1 more minute?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                        if (messageBoxResult2Second == MessageBoxResult.Yes)
+                        {
+                            // Turn pump on
+                            try
+                            {
+                                // Switch to bank 2
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 1);
+                                }
+                                // Send signal to turn on pump
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 8);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+
+                            // Leave pump on for 1 minute
+                            Task.Delay(60000).Wait();
+
+                            // Turn pump off
+                            try
+                            {
+                                // Send signal to turn off pump
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 0);
+                                }
+                                // Switch back to bank 1
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 0);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+
+                        else if (messageBoxResult2Second == MessageBoxResult.No)
+                        {
+                            AutoClosingMessageBox.Show("Continuing", "Continuing", 500);
+                        }
                     }
 
-                    else if (messageBoxResult2Second == MessageBoxResult.No)
+                    else if (messageBoxResult2 == MessageBoxResult.No)
                     {
                         AutoClosingMessageBox.Show("Continuing", "Continuing", 500);
                     }
+
+                    // Change first HBSS Box to finished color
+                    hbssDispense_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    hbssDispense_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    hbssDispense_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                    AutoClosingMessageBox.Show("Draining complete", "Draining Complete", 500);
+                    File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
+
+                    // -------------------------
+                    // ** HBSS Drain Complete **
+
+                    // ** HBSS Wash **
+                    // ----------------
+
+                    // Lift Pipette Tips above top of bottles
+                    raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                    // Change wells to gray
+                    for (int i = 4; i < 9; i++)
+                    {
+                        inProgressEllipses[i].Fill = Brushes.Gray;
+                    }
+
+                    AutoClosingMessageBox.Show("Cleaning Pipette Tip", "Cleaning", 500);
+
+                    // Move to Wash_Bottle
+                    moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.Drain]);
+                    moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                    // Lower pipette tip
+                    lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                    // Draw 2430 steps (4.5mL)
+                    drawLiquid(2430);
+
+                    // Raise pipette tip
+                    raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                    // Dispense 2500 steps (4.5mL + extra)
+                    dispenseLiquid(2500);
+
+                    Task.Delay(2000).Wait();
+
+                    dispenseLiquid(300);
+
+                    // ------------------------
+                    // ** HBSS Wash Complete **
+
+                    // Move to Probe Tube
+                    moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Wash_Bottle]);
+                    moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Wash_Bottle]);
                 }
 
-                else if (messageBoxResult2 == MessageBoxResult.No)
+                else if (firstWash == MessageBoxResult.No)
                 {
-                    AutoClosingMessageBox.Show("Continuing", "Continuing", 500);
-                }
+                    // Lift Pipette Tip above top of bottles
+                    raiseZPosition(zPos[(int)steppingPositions.Drain]);
 
-                // Change HBSS Draining Box and Cartridge to finished color
-                hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                for (int i = 4; i < 9; i++)
-                {
-                    inProgressEllipses[i].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
-                }
-
-                AutoClosingMessageBox.Show("Draining complete", "Draining Complete", 500);
-                File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
-
-                // -------------------------
-                // ** HBSS Drain Complete **
-
-                // ** HBSS Wash **
-                // ----------------
-
-                // Lift Pipette Tips above top of bottles
-                raiseZPosition(zPos[(int)steppingPositions.Drain]);
-
-                // Change wells to gray
-                for (int i = 4; i < 9; i++)
-                {
-                    inProgressEllipses[i].Fill = Brushes.Gray;
-                }
-
-                AutoClosingMessageBox.Show("Cleaning Pipette Tip", "Cleaning", 500);
-
-                // Move to Wash_Bottle
-                moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.Drain]);
-
-                // Lower pipette tip
-                lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
-
-                // Draw 2430 steps (4.5mL)
-                drawLiquid(2430);
-
-                // Raise pipette tip
-                raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
-
-                // Dispense 2500 steps (4.5mL + extra)
-                dispenseLiquid(2500);
-
-                Task.Delay(2000).Wait();
-
-                dispenseLiquid(300);
-
-                // ------------------------
-                // ** HBSS Wash Complete **
+                    // Move from drain to Probe_Bottle
+                    moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Drain]);
+                    moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Drain]);
+                }                
 
                 // ** Probe Dispensing **
                 // ----------------------
@@ -3062,10 +3063,6 @@ namespace AutoVega4
                 {
                     inProgressEllipses[i].Fill = Brushes.Gray;
                 }
-
-                // Move to Probe Tube
-                moveX(xPos[(int)steppingPositions.Probe_Bottle] - xPos[(int)steppingPositions.Wash_Bottle]);
-                moveY(yPos[(int)steppingPositions.Probe_Bottle] - yPos[(int)steppingPositions.Wash_Bottle]);
 
                 // Draw Probe for row 2
                 AutoClosingMessageBox.Show("Drawing Probe", "Drawing Probe", 500);
@@ -3470,7 +3467,7 @@ namespace AutoVega4
                     }
                 }
 
-                else if (messageBoxResult2 == MessageBoxResult.No)
+                else if (messageBoxResult3 == MessageBoxResult.No)
                 {
                     AutoClosingMessageBox.Show("Continuing", "Continuing", 500);
                 }
@@ -3488,17 +3485,429 @@ namespace AutoVega4
                 File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
 
                 // -----------------------------------------
-                // ** Probe Incubation and Drain Complete **                
+                // ** Probe Incubation and Drain Complete **
+
+                // Ask user if they would like to add a second wash step
+                MessageBoxResult secondWash = MessageBox.Show("Would you like to wash the cartridge wells before dispensing RB?", "Second Wash", MessageBoxButton.YesNo);
+
+                if (secondWash == MessageBoxResult.Yes)
+                {
+                    // ** HBSS Dispense **
+                    // -------------------
+
+                    // Lift Pipette Tip above top of bottles
+                    raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                    // Move from drain to HBSS_Bottle
+                    moveX(xPos[(int)steppingPositions.HBSS_Bottle] - xPos[(int)steppingPositions.Drain]);
+                    moveY(yPos[(int)steppingPositions.HBSS_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                    // Lower pipette tips
+                    lowerZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
+
+                    // Draw 1100 steps (2mL + extra)
+                    drawLiquid(1100);
+
+                    // Raise pipette tip
+                    raiseZPosition(zPos[(int)steppingPositions.HBSS_Bottle]);
+
+                    // Change second HBSS Box to in progress color
+                    hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                    hbssDrain_tb.Foreground = Brushes.Black;
+
+                    // Change wells back to gray
+                    for (int i = 4; i < 9; i++)
+                    {
+                        inProgressEllipses[i].Fill = Brushes.Gray;
+                    }
+
+                    AutoClosingMessageBox.Show("Dispensing Wash Buffer", "Dispensing", 500);
+
+                    //**E2**//
+                    // Move from HBSS bottle to E2
+                    moveY(yPos[(int)steppingPositions.E2] - yPos[(int)steppingPositions.HBSS_Bottle]);
+                    moveX(xPos[(int)steppingPositions.E2] - xPos[(int)steppingPositions.HBSS_Bottle]);
+
+                    // Change E2 to in progress color
+                    inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                    AutoClosingMessageBox.Show("Dispensing WB in E2", "Dispensing", 500);
+
+                    // Dispense 400ul HBSS in E2
+                    dispenseLiquid(216);
+
+                    // Change E2 to finished color
+                    inProgressE2.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                    // Dispense HBSS in remaining wells
+                    for (int i = 15; i < 19; i++)
+                    {
+                        // Move to next well
+                        moveY(yPos[i] - yPos[i - 1]);
+                        moveX(xPos[i] - xPos[i - 1]);
+
+                        // Change current well to in progress color
+                        inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+
+                        AutoClosingMessageBox.Show("Dispensing WB in " + positions[i], "Dispensing", 500);
+
+                        // dispense remaining liquid in last well
+                        if (i == 18)
+                        {
+                            // Dispense 400ul HBSS
+                            dispenseLiquid(216);
+
+                            // wait 3 seconds and dispense remaining amount
+                            Task.Delay(3000).Wait();
+
+                            dispenseLiquid(100);
+                        }
+                        else
+                        {
+                            // Dispense 400ul HBSS
+                            dispenseLiquid(216);
+                        }
+
+                        // Change current well to finished color and next well to in progress color except for last time
+                        if (i == 18)
+                        {
+                            inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                        }
+                        else
+                        {
+                            inProgressEllipses[i - 10].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                            inProgressEllipses[i - 9].Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(inProgressColor);
+                        }
+                    }
+
+                    AutoClosingMessageBox.Show("WB Dispensed", "Dispensing Complete", 500);
+                    File.AppendAllText(logFilePath, "WB Dispensed" + Environment.NewLine);
+
+                    // ----------------------------
+                    // ** HBSS Dispense Complete **
+
+                    // ** HBSS Drain **
+                    // ----------------
+
+                    AutoClosingMessageBox.Show("Moving Back to Drain Position", "Moving", 500);
+                    File.AppendAllText(logFilePath, "Moving Back to Drain Position" + Environment.NewLine);
+
+                    // Move back to Drain Position
+                    moveY(yPos[(int)steppingPositions.Drain] - yPos[(int)steppingPositions.A2]);
+                    moveX(xPos[(int)steppingPositions.Drain] - xPos[(int)steppingPositions.A2]);
+
+                    // Lower Pipette Tips to Drain
+                    lowerZPosition(zPos[(int)steppingPositions.Drain]);
+
+                    if (drainMinutes < 1)
+                    {
+                        AutoClosingMessageBox.Show("Wait " + drainMinutes * 60 + " seconds for WB to drain through cartridges", "Draining", 500);
+                    }
+                    else if (drainMinutes == 1)
+                    {
+                        AutoClosingMessageBox.Show("Wait " + drainMinutes + " minute for WB to drain through cartridges", "Draining", 500);
+                    }
+                    else
+                    {
+                        AutoClosingMessageBox.Show("Wait " + drainMinutes + " minutes for WB to drain through cartridges", "Draining", 500);
+                    }
+
+                    File.AppendAllText(logFilePath, "Wait for WB to drain through" + Environment.NewLine);
+
+                    // Turn pump on
+                    try
+                    {
+                        // Switch to bank 2
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 1);
+                        }
+                        // Send signal to turn on pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    // Leave pump on
+                    Task.Delay(drainTime).Wait();
+
+                    // Turn pump off
+                    try
+                    {
+                        // Send signal to turn off pump
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                        // Switch back to bank 1
+                        using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                        {
+                            //  Create an Digital Output channel and name it.
+                            digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                ChannelLineGrouping.OneChannelForAllLines);
+
+                            //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                            //  of digital data on demand, so no timeout is necessary.
+                            DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                            writer.WriteSingleSamplePort(true, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    MessageBoxResult messageBoxResult4 = MessageBox.Show("Would you like to drain for 1 more minute?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                    if (messageBoxResult4 == MessageBoxResult.Yes)
+                    {
+                        // Turn pump on
+                        try
+                        {
+                            // Switch to bank 2
+                            using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                            {
+                                //  Create an Digital Output channel and name it.
+                                digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                    ChannelLineGrouping.OneChannelForAllLines);
+
+                                //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                //  of digital data on demand, so no timeout is necessary.
+                                DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                writer.WriteSingleSamplePort(true, 1);
+                            }
+                            // Send signal to turn on pump
+                            using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                            {
+                                //  Create an Digital Output channel and name it.
+                                digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                    ChannelLineGrouping.OneChannelForAllLines);
+
+                                //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                //  of digital data on demand, so no timeout is necessary.
+                                DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                writer.WriteSingleSamplePort(true, 8);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+                        // Leave pump on for 1 minute
+                        Task.Delay(60000).Wait();
+
+                        // Turn pump off
+                        try
+                        {
+                            // Send signal to turn off pump
+                            using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                            {
+                                //  Create an Digital Output channel and name it.
+                                digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                    ChannelLineGrouping.OneChannelForAllLines);
+
+                                //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                //  of digital data on demand, so no timeout is necessary.
+                                DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                writer.WriteSingleSamplePort(true, 0);
+                            }
+                            // Switch back to bank 1
+                            using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                            {
+                                //  Create an Digital Output channel and name it.
+                                digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                    ChannelLineGrouping.OneChannelForAllLines);
+
+                                //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                //  of digital data on demand, so no timeout is necessary.
+                                DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                writer.WriteSingleSamplePort(true, 0);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+                        MessageBoxResult messageBoxResult4Second = MessageBox.Show("Would you like to drain for 1 more minute?", "Add Drain Time", MessageBoxButton.YesNo);
+
+                        if (messageBoxResult4Second == MessageBoxResult.Yes)
+                        {
+                            // Turn pump on
+                            try
+                            {
+                                // Switch to bank 2
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 1);
+                                }
+                                // Send signal to turn on pump
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 8);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+
+                            // Leave pump on for 1 minute
+                            Task.Delay(60000).Wait();
+
+                            // Turn pump off
+                            try
+                            {
+                                // Send signal to turn off pump
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(writeAllSteps, "port0",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 0);
+                                }
+                                // Switch back to bank 1
+                                using (NationalInstruments.DAQmx.Task digitalWriteTask = new NationalInstruments.DAQmx.Task())
+                                {
+                                    //  Create an Digital Output channel and name it.
+                                    digitalWriteTask.DOChannels.CreateChannel(switchBanks, "port2",
+                                        ChannelLineGrouping.OneChannelForAllLines);
+
+                                    //  Write digital port data. WriteDigitalSingChanSingSampPort writes a single sample
+                                    //  of digital data on demand, so no timeout is necessary.
+                                    DigitalSingleChannelWriter writer = new DigitalSingleChannelWriter(digitalWriteTask.Stream);
+                                    writer.WriteSingleSamplePort(true, 0);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+
+                        else if (messageBoxResult4Second == MessageBoxResult.No)
+                        {
+                            AutoClosingMessageBox.Show("Continuing", "Continuing", 500);
+                        }
+                    }
+
+                    else if (messageBoxResult4 == MessageBoxResult.No)
+                    {
+                        AutoClosingMessageBox.Show("Continuing", "Continuing", 500);
+                    }
+
+                    // Change second HBSS Box to finished color
+                    hbssDrain_border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    hbssDrain_border.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+                    hbssDrain_tb.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(finishedColor);
+
+                    AutoClosingMessageBox.Show("Draining complete", "Draining Complete", 500);
+                    File.AppendAllText(logFilePath, "Draining complete" + Environment.NewLine);
+
+                    // -------------------------
+                    // ** HBSS Drain Complete **
+
+                    // ** HBSS Wash **
+                    // ----------------
+
+                    // Lift Pipette Tips above top of bottles
+                    raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                    // Change wells to gray
+                    for (int i = 4; i < 9; i++)
+                    {
+                        inProgressEllipses[i].Fill = Brushes.Gray;
+                    }
+
+                    AutoClosingMessageBox.Show("Cleaning Pipette Tip", "Cleaning", 500);
+
+                    // Move to Wash_Bottle
+                    moveX(xPos[(int)steppingPositions.Wash_Bottle] - xPos[(int)steppingPositions.Drain]);
+                    moveY(yPos[(int)steppingPositions.Wash_Bottle] - yPos[(int)steppingPositions.Drain]);
+
+                    // Lower pipette tip
+                    lowerZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                    // Draw 2430 steps (4.5mL)
+                    drawLiquid(2430);
+
+                    // Raise pipette tip
+                    raiseZPosition(zPos[(int)steppingPositions.Wash_Bottle]);
+
+                    // Dispense 2500 steps (4.5mL + extra)
+                    dispenseLiquid(2500);
+
+                    Task.Delay(2000).Wait();
+
+                    dispenseLiquid(300);
+
+                    // ------------------------
+                    // ** HBSS Wash Complete **
+
+                    // Move from Wash_Bottle to RB_Bottle
+                    moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.Wash_Bottle]);
+                    moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.Wash_Bottle]);
+                }
+
+                else if (secondWash == MessageBoxResult.No)
+                {
+                    // Lift Pipette Tips above top of bottles
+                    raiseZPosition(zPos[(int)steppingPositions.Drain]);
+
+                    // Move from drain to RB_Bottle
+                    moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.Drain]);
+                    moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.Drain]);
+                }
 
                 // ** RB Dispense **
-                // -----------------
-
-                // Lift Pipette Tips above top of bottles
-                raiseZPosition(zPos[(int)steppingPositions.Drain]);
-
-                // Move from drain to RB_Bottle
-                moveX(xPos[(int)steppingPositions.RB_Bottle] - xPos[(int)steppingPositions.Drain]);
-                moveY(yPos[(int)steppingPositions.RB_Bottle] - yPos[(int)steppingPositions.Drain]);
+                // -----------------                
 
                 // Lower pipette tips
                 lowerZPosition(zPos[(int)steppingPositions.RB_Bottle]);
