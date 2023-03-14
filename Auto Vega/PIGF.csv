@@ -1,0 +1,31 @@
+Sample Incubation (mins),30,1,NA
+Sample Drain Time (mins),0.5,1,NA
+1st WB Draw 1 (2mL + extra),1100,1,multiply WB1 volume (in 킠) by 5 and  0.54 to get steps+ 20
+1st WB Draw 2 (4mL + extra),2200,1,multiply WB1 volume (in 킠) by10 and  0.54 to get steps+ 40
+1st WB Disp (400킠)*,216,1,multiply wb1 volume (in 킠) by 0.54 to get steps
+1st WB Tip Clear,100,1,constant
+1st WB Tip Wash,2400,1,constant
+1st WB Drain Time (mins),0.5,1,NA
+Probe Draw 1 (1.5mL + extra),820,1,multiply probe volume (in 킠) by 5 and  0.54 to get steps+ 10
+Probe Draw 2 (3mL + extra),1640,1,multiply probe volume (in 킠) by10 and  0.54 to get steps+ 20
+Probe Disp (300킠)*,162,1,multiply probe volume (in 킠) by 0.54 to get steps
+Probe Tip Clear,100,1,constant
+Probe Tip Wash,2400,1,constant
+Probe Incubation (mins),30,1,NA
+Probe Drain Time (mins),0.5,1,NA
+2nd WB Draw 1 (2mL + extra),1100,1,multiply WB2 volume (in 킠) by 5 and  0.54 to get steps+ 20
+2nd WB Draw 2 (4mL + extra),2200,1,multiply WB2 volume (in 킠) by10 and  0.54 to get steps+ 40
+2nd WB Disp (400킠)*,216,1,multiplyWB2  volume (in 킠) by 0.54 to get steps
+2nd WB Tip Clear,100,1,constant
+2nd WB Tip Wash,2400,1,constant
+2nd WB Drain Time (mins),0.5,1,NA
+RB Draw 1 (2.1mL + extra),1150,1,multiply RB volume (in 킠) by 5 and  0.54 to get steps+ 15
+RB Draw 2 (4.2mL),2270,1,multiply RB volume (in 킠) by10 and  0.54 to get steps
+RB Disp (420킠)*,227,1,multiply RB volume (in 킠) by 0.54 to get steps
+RB Tip Clear,200,1,constant
+RB Tip Wash,2400,1,constant
+Standard Curve Samp 1 (RFU/pg),0.2,10,NA
+Standard Curve Samp 2 (RFU/pg),0.4,100,NA
+Standard Curve Samp 3 (RFU/pg),0.6,1000,NA
+Standard Curve Samp 4 (RFU/pg),0.8,10000,NA
+Standard Curve Samp 5 (RFU/pg),1,100000,NA
